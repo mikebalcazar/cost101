@@ -1,6 +1,6 @@
 {
   "name": "cost101",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "cost101: costos de obra por análisis de precio unitario (APU). Precios base, cuadrillas, generador de partidas y catálogo, en la base de la empresa (suite101-api). Un Worker de Cloudflare que pide la sesión de la suite, sirve la interfaz y le habla a la API por dentro.",
   "type": "module",

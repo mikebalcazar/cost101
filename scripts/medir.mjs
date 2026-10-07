@@ -11,7 +11,24 @@ if (!base) { console.error('falta STAGING o PROD'); process.exit(1); }
 let fallas = 0;
 const dice = (ok, que, dato = '') => { if (!ok) fallas++; console.log(`${ok ? 'OK   ' : 'FALLA'} ${que}${dato !== '' ? '  →  ' + dato : ''}`); };
 const pausa = (ms) => new Promise((r) => setTimeout(r, ms));
-const pide = (ruta, o = {}) => fetch(base + ruta, { redirect: 'manual', ...o });
+/* Un Worker recién nacido tarda en llegar a todos los bordes de Cloudflare:
+ * durante el primer minuto, de dos peticiones seguidas una contesta el Worker
+ * y la otra la página de «aquí no hay nada» de Cloudflare (un 404 con su
+ * HTML, ~20 KB). Le pasó al primer despliegue de staging el 7-oct-2026: seis
+ * «fallas» que no eran de cost101. Esa página se reconoce y se vuelve a
+ * pedir; un 404 del propio Worker (el de `404.html`) no se reintenta. */
+const esDeCloudflare = (estado, cuerpo) => estado >= 500 || (estado === 404 && /cf-error|no-js ie6|cloudflare/i.test(cuerpo));
+async function pide(ruta, o = {}) {
+  let ultimo = null;
+  for (let i = 0; i < 24; i++) {
+    const r = await fetch((ruta.startsWith('http') ? '' : base) + ruta, { redirect: 'manual', ...o });
+    const copia = r.clone();
+    const cuerpo = r.status === 404 || r.status >= 500 ? await copia.text() : '';
+    if (!esDeCloudflare(r.status, cuerpo)) return r;
+    ultimo = r; await pausa(5000);
+  }
+  return ultimo;
+}
 
 console.log(`== cost101 medido en ${base} ==`);
 
