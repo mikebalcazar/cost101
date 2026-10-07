@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cost101 · costos de obra</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="cost101-version" content="dev">
+<link rel="icon" href="assets/logo-taller101.png">
+<script>
+/* React y Babel servidos desde aquí mismo (mismos archivos que unpkg, misma huella): la app no depende de otro sitio para abrir. */
+window.__resources={
+"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"vendor/react.js",
+"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"vendor/react-dom.js",
+"https://unpkg.com/@babel/standalone@7.29.0/babel.min.js":"vendor/babel.js"};
+</script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/industry-d54496d2-f6ce-49fa-82ce-a48645e2d4ea/styles.css">
+<script src="_ds/industry-d54496d2-f6ce-49fa-82ce-a48645e2d4ea/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--color-bg:#0f1b24;--color-surface:#16242e;--color-text:#e8eef2;--color-accent:#3AA3DC;--color-divider:#2a3a46;
+--color-neutral-100:#1b2a35;--color-neutral-200:#22323e;--color-neutral-300:#2a3a46;--color-neutral-400:#3d505e;--color-neutral-500:#5f7482;--color-neutral-600:#8094a2;--color-neutral-700:#a9c0ce;--color-neutral-800:#c9d7e0;--color-neutral-900:#e8eef2;
+--color-accent-100:#0f3149;--color-accent-200:#124263;--color-accent-300:#155a86;--color-accent-400:#0080C1;--color-accent-500:#1c90cc;--color-accent-600:#5fb6e4;--color-accent-700:#86c9ec;--color-accent-800:#addcf3;--color-accent-900:#d9eff9;
+--font-heading:"Raleway",system-ui,sans-serif;--font-heading-weight:800;--font-body:"Raleway",system-ui,sans-serif}
+body{margin:0;background:#060d13 radial-gradient(130% 70% at 50% -12%,#2a9be0 0%,#0a6aa6 22%,#0b3655 48%,#07141e 72%,#05090d 100%) fixed;min-height:100vh}
+:root{--color-divider:rgba(255,255,255,.1);--color-neutral-200:rgba(255,255,255,.08);--color-accent-100:rgba(58,163,220,.16);--font-heading-weight:600}
+header{background:rgba(5,12,18,.38)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom-color:rgba(255,255,255,.08)!important}
+.blueprint>.corner{display:none}
+.blueprint:not(.btn){background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.13);border-radius:20px;overflow:hidden;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.input{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);border-radius:12px}
+.input:hover{border-color:rgba(255,255,255,.3)}
+select.input option{background:#0b2233;color:#e8eef2}
+.btn{border-radius:999px;font-weight:600}
+.btn-primary{background:#fff;color:#0b1b26;border-color:#fff}
+.btn-primary:hover{background:#e3f2fb}.btn-primary:active{background:#c9e6f6}
+.btn-secondary{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16)}
+.btn-secondary:hover{background:rgba(255,255,255,.14)}
+.btn-ghost{border-radius:999px}
+.seg{border-radius:14px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}
+.seg-opt+.seg-opt{border-left-color:rgba(255,255,255,.1)}
+.seg-opt:has(input:checked){background:#fff;color:#0b1b26}
+.tag{border-radius:999px}
+.dialog-backdrop{background:rgba(3,8,12,.6);backdrop-filter:blur(6px)}
+.dialog.blueprint{background:rgba(10,32,48,.88)!important;border-radius:24px}
+.nav a{padding:6px 12px;border-radius:999px}
+.nav a[aria-current='page']{background:rgba(255,255,255,.14);color:#fff}
+a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;font-family:var(--font-body);color:var(--color-text)">
+  <header style="border-bottom:1px solid var(--color-divider);background:var(--color-surface);position:sticky;top:0;z-index:20">
+    <nav class="nav" style="max-width:1360px;margin:0 auto;flex-wrap:wrap;row-gap:10px;padding:12px 20px">
+      <div class="nav-brand" style="display:flex;align-items:center;gap:12px;margin-right:20px">
+        <img src="assets/logo-taller101.png" alt="Taller 101" style="width:40px;height:40px;object-fit:cover;display:block">
+        <span style="font-size:20px;font-weight:800;letter-spacing:-.01em">cost<span style="color:var(--color-accent)">101</span></span>
+        <span style="font-family:var(--font-body);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">Generador de partidas</span>
+      </div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-right:auto">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+          <a href="#" aria-current="{{ n.current }}" onClick="{{ n.onClick }}" style="font-family:var(--font-heading);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase">{{ n.label }}</a>
+        </sc-for>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Rol</span>
+        <div class="seg">
+          <label class="seg-opt"><input type="radio" name="rol" checked="{{ rolAdmin }}" onChange="{{ setAdmin }}">Admin</label>
+          <label class="seg-opt"><input type="radio" name="rol" checked="{{ rolEquipo }}" onChange="{{ setEquipo }}">Equipo</label>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main style="flex:1;width:100%;max-width:1360px;margin:0 auto;padding:32px 20px 80px;box-sizing:border-box">
+
+    <!-- RESUMEN -->
+    <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Resumen" style="display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
+          <div style="max-width:640px">
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">Resumen · 6 oct 2026</div>
+            <h1 style="margin:0 0 6px;font-size:44px">Panel de <span style="color:var(--color-accent)">costos</span></h1>
+            <p style="margin:0;color:var(--color-neutral-700);text-wrap:pretty">Precios base con IVA incluido. Cada partida se recalcula sola cuando cambia un insumo o una cuadrilla.</p>
+          </div>
+          <button class="btn btn-primary blueprint" onClick="{{ onNueva }}" style="padding:10px 18px;font-size:15px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Nueva partida</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div class="blueprint" style="padding:18px 20px;display:flex;flex-direction:column;gap:10px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ s.label }}</div>
+              <div style="font-family:var(--font-heading);font-weight:600;font-size:52px;line-height:1">{{ s.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:24px;align-items:start">
+          <div class="blueprint" style="padding:0"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="padding:16px 18px;border-bottom:1px solid var(--color-divider);display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+              <h3 style="margin:0;font-size:24px">Por aprobar</h3>
+              <span style="font-size:12px;color:var(--color-neutral-700)">{{ aprobNote }}</span>
+            </div>
+            <sc-for list="{{ pendientes }}" as="p" hint-placeholder-count="2">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 18px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                <div style="flex:1 1 220px;min-width:0">
+                  <div style="font-family:var(--font-heading);font-size:12px;letter-spacing:.06em;color:var(--color-neutral-700)">{{ p.sku }} · {{ p.fecha }}</div>
+                  <div style="font-size:15px;font-weight:500">{{ p.nombre }}</div>
+                </div>
+                <div style="font-family:var(--font-heading);font-size:20px;font-weight:600">{{ p.puF }}<span style="font-family:var(--font-body);font-weight:400;font-size:12px;color:var(--color-neutral-700)"> / {{ p.unidad }}</span></div>
+                <div style="display:flex;gap:6px">
+                  <button class="btn btn-secondary" onClick="{{ p.onOpen }}">Revisar</button>
+                  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}"><button class="btn btn-primary" onClick="{{ p.onApprove }}">Aprobar</button></sc-if>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ noPendientes }}" hint-placeholder-val="{{ false }}"><div style="padding:22px 18px;color:var(--color-neutral-700);font-size:14px">No hay borradores pendientes.</div></sc-if>
+          </div>
+          <div class="blueprint" style="padding:0"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="padding:16px 18px;border-bottom:1px solid var(--color-divider);display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+              <h3 style="margin:0;font-size:24px">Cambios recientes en precios base</h3>
+              <a href="#" onClick="{{ goBase }}" style="font-size:13px">Ver precios</a>
+            </div>
+            <sc-for list="{{ cambios }}" as="c" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px 16px;padding:12px 18px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                <div style="min-width:0">
+                  <div style="font-size:14px;font-weight:500">{{ c.nombre }}</div>
+                  <div style="font-size:12px;color:var(--color-neutral-700)">{{ c.fecha }} · {{ c.fromF }} → {{ c.toF }} / {{ c.unidad }} · {{ c.usos }}</div>
+                </div>
+                <span class="tag tag-accent">{{ c.pctF }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- GENERADOR -->
+    <sc-if value="{{ isGen }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Generador" style="display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
+          <div style="min-width:0;max-width:760px">
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">{{ genKicker }}</div>
+            <h1 style="margin:0;font-size:40px;text-wrap:balance">{{ genTitle }}</h1>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Enfoque del generador</span>
+            <div class="seg">
+              <sc-for list="{{ modos }}" as="m" hint-placeholder-count="3">
+                <label class="seg-opt"><input type="radio" name="modo" checked="{{ m.checked }}" onChange="{{ m.onChange }}">{{ m.label }}</label>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+          <div style="flex:1 1 620px;min-width:0;display:flex;flex-direction:column;gap:22px">
+
+            <sc-if value="{{ isPasos }}" hint-placeholder-val="{{ false }}">
+              <div style="overflow-x:auto">
+                <div style="display:flex;min-width:max-content;border:1px solid var(--color-divider)">
+                  <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
+                    <label class="seg-opt" style="padding:10px 16px;gap:10px;border-right:1px solid var(--color-divider)">
+                      <input type="radio" name="paso" checked="{{ st.checked }}" onChange="{{ st.onChange }}">
+                      <span style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ st.n }}</span>
+                      <span style="display:flex;flex-direction:column;line-height:1.2"><span style="font-size:13px;font-weight:500">{{ st.label }}</span><span style="font-size:11px;opacity:.75">{{ st.meta }}</span></span>
+                    </label>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ showDatos }}" hint-placeholder-val="{{ true }}">
+              <div class="blueprint" style="padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:14px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div class="field" style="grid-column:1/-1"><label>Descripción de la partida</label><input class="input" value="{{ d.nombre }}" onChange="{{ dh.nombre }}" placeholder="Ej. Muro de tablaroca 2 caras con aislante acústico y pintura"></div>
+                <div class="field"><label>Clave</label><input class="input" value="{{ d.sku }}" onChange="{{ dh.sku }}"></div>
+                <div class="field"><label>Unidad de cotización</label>{{ selUnidad }}</div>
+                <div class="field"><label>Categoría</label>{{ selCat }}</div>
+              </div>
+            </sc-if>
+
+            <sc-for list="{{ sheetSections }}" as="s" hint-placeholder-count="0">
+              <div class="blueprint" style="padding:0"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px 16px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--color-divider)">
+                  <div style="min-width:0">
+                    <h3 style="margin:0;font-size:22px">{{ s.title }}</h3>
+                    <div style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ s.hint }}</div>
+                  </div>
+                  <div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ s.totalF }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ s.share }} del CD</span></div>
+                </div>
+                <div style="overflow-x:auto">
+                  <div style="min-width:840px">
+                    <div style="display:grid;grid-template-columns:84px minmax(200px,1fr) 52px 108px 170px 80px 112px 40px;gap:0 10px;padding:8px 16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700);border-bottom:1px solid var(--color-divider)">
+                      <span>Clave</span><span>Descripción</span><span>Unidad</span><span style="text-align:right">Precio</span><span>{{ s.cantHdr }}</span><span>Desp.</span><span style="text-align:right">Importe</span><span></span>
+                    </div>
+                    <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="2">
+                      <div style="display:grid;grid-template-columns:84px minmax(200px,1fr) 52px 108px 170px 80px 112px 40px;gap:0 10px;align-items:center;padding:6px 16px;font-size:14px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                        <span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.04em;color:var(--color-neutral-700)">{{ r.sku }}</span>
+                        <span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="min-width:0">{{ r.nombre }}</span><sc-if value="{{ r.hasTipo }}" hint-placeholder-val="{{ false }}"><span class="tag tag-outline" style="padding:1px 6px;font-size:10px">{{ r.tipoLbl }}</span></sc-if></span>
+                        <span style="color:var(--color-neutral-700)">{{ r.unidad }}</span>
+                        <span style="text-align:right;font-variant-numeric:tabular-nums">{{ r.precioF }}</span>
+                        <span style="display:flex;align-items:center;gap:6px"><input class="input" type="number" step="any" min="0" value="{{ r.cant }}" onChange="{{ r.onCant }}" style="width:78px;min-height:30px;padding:4px 8px;text-align:right;font-variant-numeric:tabular-nums"><span style="font-size:11px;color:var(--color-neutral-700);line-height:1.2">{{ r.cantUnit }}</span></span>
+                        <span style="display:flex;align-items:center;gap:4px">
+                          <sc-if value="{{ r.showDesp }}" hint-placeholder-val="{{ true }}"><input class="input" type="number" step="any" min="0" value="{{ r.desp }}" onChange="{{ r.onDesp }}" style="width:52px;min-height:30px;padding:4px 6px;text-align:right"><span style="font-size:12px;color:var(--color-neutral-700)">%</span></sc-if>
+                          <sc-if value="{{ r.noDesp }}" hint-placeholder-val="{{ false }}"><span style="color:var(--color-neutral-500)">—</span></sc-if>
+                        </span>
+                        <span style="text-align:right;font-weight:500;font-variant-numeric:tabular-nums">{{ r.importeF }}</span>
+                        <button class="btn btn-ghost btn-icon" onClick="{{ r.onRemove }}" aria-label="Quitar" style="width:30px;height:30px;color:var(--color-neutral-700)"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+                      </div>
+                    </sc-for>
+                    <sc-if value="{{ s.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:16px;font-size:13px;color:var(--color-neutral-700)">Sin componentes todavía.</div></sc-if>
+                    <sc-if value="{{ s.hasExtra }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid;grid-template-columns:minmax(0,1fr) 112px 40px;gap:0 10px;padding:8px 16px;font-size:13px;color:var(--color-neutral-700);border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)"><span>{{ s.extraLabel }}</span><span style="text-align:right;font-variant-numeric:tabular-nums">{{ s.extraF }}</span><span></span></div>
+                    </sc-if>
+                  </div>
+                </div>
+                <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:var(--color-accent);stroke-width:1.5;stroke-linecap:round;flex:none"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                  <div style="flex:1 1 280px;max-width:560px">{{ s.addSelect }}</div>
+                </div>
+              </div>
+            </sc-for>
+
+            <sc-if value="{{ isPasos }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                <button class="btn btn-secondary" disabled="{{ noPrev }}" onClick="{{ prevStep }}" style="padding:8px 14px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="m15 18-6-6 6-6"></path></svg>Anterior</button>
+                <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
+                  <button class="btn btn-secondary" onClick="{{ nextStep }}" style="padding:8px 14px">Siguiente: {{ nextLabel }}<svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="m9 18 6-6-6-6"></path></svg></button>
+                </sc-if>
+                <sc-if value="{{ isLastStep }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--color-neutral-700);align-self:center">Último paso — revisa el resumen y guarda.</span></sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isLienzo }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+                <div class="blueprint" style="flex:1 1 260px;max-width:100%;padding:16px;display:flex;flex-direction:column;gap:12px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                  <h4 style="margin:0;font-size:20px">Biblioteca</h4>
+                  <div style="position:relative">
+                    <svg width="16" height="16" viewBox="0 0 24 24" style="position:absolute;left:10px;top:10px;fill:none;stroke:var(--color-neutral-600);stroke-width:1.5;stroke-linecap:round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                    <input class="input" value="{{ libQ }}" onChange="{{ onLibQ }}" placeholder="Buscar insumo o partida" style="padding-left:34px">
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <sc-for list="{{ libTabs }}" as="t" hint-placeholder-count="5">
+                      <button class="{{ t.cls }}" onClick="{{ t.onClick }}" style="padding:4px 10px;font-size:13px">{{ t.label }}</button>
+                    </sc-for>
+                  </div>
+                  <div style="display:flex;flex-direction:column;max-height:560px;overflow-y:auto;border-top:1px solid var(--color-divider)">
+                    <sc-for list="{{ libItems }}" as="it" hint-placeholder-count="6">
+                      <button onClick="{{ it.onAdd }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)" style-hover="background:color-mix(in srgb,var(--color-accent) 10%,transparent)">
+                        <span style="flex:1;min-width:0"><span style="display:block;font-size:14px">{{ it.nombre }}</span><span style="display:block;font-size:11px;color:var(--color-neutral-700)">{{ it.meta }}</span></span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" style="flex:none;fill:none;stroke:var(--color-accent-700);stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                      </button>
+                    </sc-for>
+                    <sc-if value="{{ libEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:14px 4px;font-size:13px;color:var(--color-neutral-700)">Sin resultados.</div></sc-if>
+                  </div>
+                </div>
+                <div style="flex:2 1 380px;min-width:0;display:flex;flex-direction:column;gap:20px">
+                  <sc-for list="{{ canvasSections }}" as="s" hint-placeholder-count="0">
+                    <div class="blueprint" style="padding:14px 16px;display:flex;flex-direction:column;gap:8px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+                        <h4 style="margin:0;font-size:20px">{{ s.title }} <span style="font-family:var(--font-body);font-weight:400;font-size:12px;color:var(--color-neutral-700)">· {{ s.count }}</span></h4>
+                        <span style="font-family:var(--font-heading);font-weight:600;font-size:19px">{{ s.totalF }} <span style="font-family:var(--font-body);font-weight:400;font-size:12px;color:var(--color-neutral-700)">{{ s.share }}</span></span>
+                      </div>
+                      <div style="height:3px;background:var(--color-neutral-200)"><div style="height:100%;width:{{ s.share }};background:var(--color-accent)"></div></div>
+                      <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="1">
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:9px 0;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                          <div style="flex:1 1 200px;min-width:0">
+                            <div style="font-size:14px">{{ r.nombre }}</div>
+                            <div style="font-size:11px;color:var(--color-neutral-700)">{{ r.sku }} · {{ r.precioF }} / {{ r.unidad }}</div>
+                          </div>
+                          <div style="display:flex;align-items:center;gap:6px">
+                            <input class="input" type="number" step="any" min="0" value="{{ r.cant }}" onChange="{{ r.onCant }}" style="width:72px;min-height:30px;padding:4px 8px;text-align:right">
+                            <span style="font-size:11px;color:var(--color-neutral-700);width:72px;line-height:1.2">{{ r.cantUnit }}</span>
+                            <sc-if value="{{ r.showDesp }}" hint-placeholder-val="{{ false }}"><input class="input" type="number" step="any" min="0" value="{{ r.desp }}" onChange="{{ r.onDesp }}" title="Desperdicio %" style="width:50px;min-height:30px;padding:4px 6px;text-align:right"><span style="font-size:11px;color:var(--color-neutral-700)">% desp.</span></sc-if>
+                          </div>
+                          <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+                            <span style="font-weight:500;font-variant-numeric:tabular-nums;min-width:86px;text-align:right">{{ r.importeF }}</span>
+                            <button class="btn btn-ghost btn-icon" onClick="{{ r.onRemove }}" aria-label="Quitar" style="width:28px;height:28px;color:var(--color-neutral-700)"><svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+                          </div>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{ s.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:10px 0;font-size:13px;color:var(--color-neutral-700)">Agrega desde la biblioteca.</div></sc-if>
+                      <sc-if value="{{ s.hasExtra }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-neutral-700);padding-top:4px"><span>{{ s.extraLabel }}</span><span>{{ s.extraF }}</span></div></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <aside style="flex:1 1 300px;max-width:400px;min-width:0;position:sticky;top:84px">
+            <div class="blueprint" style="padding:20px;display:flex;flex-direction:column;gap:18px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div>
+                <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Precio unitario</div>
+                <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap"><span style="font-family:var(--font-heading);font-weight:600;font-size:48px;line-height:1.05;font-variant-numeric:tabular-nums">{{ g.puF }}</span><span style="font-size:14px;color:var(--color-neutral-700)">/ {{ d.unidad }}</span></div>
+                <div style="font-size:12px;color:var(--color-neutral-700)">IVA incluido · {{ g.ivaF }} de IVA</div>
+              </div>
+              <div style="display:flex;height:10px;background:var(--color-neutral-200)">
+                <div style="height:100%;width:{{ g.wMat }};background:var(--color-accent-800)"></div>
+                <div style="height:100%;width:{{ g.wMo }};background:var(--color-accent-600)"></div>
+                <div style="height:100%;width:{{ g.wHerr }};background:var(--color-accent-400)"></div>
+                <div style="height:100%;width:{{ g.wEq }};background:var(--color-accent-300)"></div>
+                <div style="height:100%;width:{{ g.wSub }};background:var(--color-neutral-500)"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;font-size:14px;font-variant-numeric:tabular-nums">
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="display:flex;align-items:center;gap:8px"><i style="width:10px;height:10px;background:var(--color-accent-800)"></i>Materiales</span><span>{{ g.matF }}</span></div>
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="display:flex;align-items:center;gap:8px"><i style="width:10px;height:10px;background:var(--color-accent-600)"></i>Mano de obra</span><span>{{ g.moF }}</span></div>
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="display:flex;align-items:center;gap:8px"><i style="width:10px;height:10px;background:var(--color-accent-400)"></i>Herramienta menor</span><span>{{ g.herrF }}</span></div>
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="display:flex;align-items:center;gap:8px"><i style="width:10px;height:10px;background:var(--color-accent-300)"></i>Equipo</span><span>{{ g.eqF }}</span></div>
+                <div style="display:flex;justify-content:space-between;gap:10px"><span style="display:flex;align-items:center;gap:8px"><i style="width:10px;height:10px;background:var(--color-neutral-500)"></i>Subpartidas</span><span>{{ g.subF }}</span></div>
+                <div style="display:flex;justify-content:space-between;gap:10px;padding-top:8px;border-top:1px solid var(--color-divider);font-weight:500"><span>Costo directo</span><span>{{ g.cdF }}</span></div>
+                <div style="display:flex;justify-content:space-between;gap:10px"><span>Indirectos</span><span>{{ g.indF }}</span></div>
+                <div style="display:flex;justify-content:space-between;gap:10px"><span>Utilidad</span><span>{{ g.utilF }}</span></div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+                <div class="field"><label>Herr. menor % MO</label><input class="input" type="number" step="any" min="0" value="{{ d.herr }}" onChange="{{ dh.herr }}" style="text-align:right"></div>
+                <div class="field"><label>Indirectos %</label><input class="input" type="number" step="any" min="0" value="{{ d.ind }}" onChange="{{ dh.ind }}" style="text-align:right"></div>
+                <div class="field"><label>Utilidad %</label><input class="input" type="number" step="any" min="0" value="{{ d.util }}" onChange="{{ dh.util }}" style="text-align:right"></div>
+              </div>
+              <sc-if value="{{ hasErr }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;color:var(--color-accent-900);background:var(--color-accent-100);padding:8px 10px">{{ err }}</div></sc-if>
+              <div style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ saveNote }}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+                  <button class="btn btn-primary blueprint" onClick="{{ saveApprove }}" style="flex:1 1 100%;padding:10px 14px;font-size:15px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"></path></svg>Guardar y aprobar</button>
+                  <button class="btn btn-secondary" onClick="{{ saveDraft }}" style="flex:1;padding:8px 12px">Guardar borrador</button>
+                </sc-if>
+                <sc-if value="{{ notAdmin }}" hint-placeholder-val="{{ false }}">
+                  <button class="btn btn-primary blueprint" onClick="{{ saveDraft }}" style="flex:1 1 100%;padding:10px 14px;font-size:15px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Guardar borrador</button>
+                </sc-if>
+                <button class="btn btn-ghost" onClick="{{ cancelGen }}" style="padding:8px 12px">Cancelar</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- CATÁLOGO -->
+    <sc-if value="{{ isCat }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Catálogo" style="display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
+          <div>
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">Catálogo</div>
+            <h1 style="margin:0 0 4px;font-size:44px">Catálogo de <span style="color:var(--color-accent)">partidas</span></h1>
+            <p style="margin:0;color:var(--color-neutral-700)">{{ catCount }}</p>
+          </div>
+          <button class="btn btn-primary blueprint" onClick="{{ onNueva }}" style="padding:10px 18px;font-size:15px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Nueva partida</button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+          <div style="position:relative;flex:1 1 260px;max-width:420px">
+            <svg width="16" height="16" viewBox="0 0 24 24" style="position:absolute;left:10px;top:10px;fill:none;stroke:var(--color-neutral-600);stroke-width:1.5;stroke-linecap:round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <input class="input" value="{{ q }}" onChange="{{ onQ }}" placeholder="Buscar por clave o descripción" style="padding-left:34px">
+          </div>
+          <div style="flex:0 1 200px">{{ selCatFilter }}</div>
+          <button class="btn btn-secondary" onClick="{{ openCatPart }}" style="min-height:36px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path><circle cx="7.5" cy="7.5" r=".5"></circle></svg>Categorías</button>
+          <div class="seg">
+            <sc-for list="{{ estTabs }}" as="t" hint-placeholder-count="3">
+              <label class="seg-opt"><input type="radio" name="est" checked="{{ t.checked }}" onChange="{{ t.onChange }}">{{ t.label }}</label>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+          <div class="blueprint" style="flex:1 1 580px;min-width:0;padding:0"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="overflow-x:auto">
+              <div style="min-width:640px">
+                <div style="display:grid;grid-template-columns:84px minmax(220px,1fr) 48px 116px 92px 96px;gap:0 12px;padding:10px 16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700);border-bottom:1px solid var(--color-divider)">
+                  <span>Clave</span><span>Descripción</span><span>Unidad</span><span style="text-align:right">P. unitario</span><span>Estado</span><span>Actualizado</span>
+                </div>
+                <sc-for list="{{ catRows }}" as="r" hint-placeholder-count="6">
+                  <div role="button" tabindex="0" onClick="{{ r.onClick }}" style="display:grid;grid-template-columns:84px minmax(220px,1fr) 48px 116px 92px 96px;gap:0 12px;align-items:center;padding:12px 16px;cursor:pointer;font-size:14px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent);background:{{ r.rowBg }}">
+                    <span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.04em;color:var(--color-neutral-700)">{{ r.sku }}</span>
+                    <span style="min-width:0"><span style="display:block;font-weight:500">{{ r.nombre }}</span><span style="display:block;font-size:12px;color:var(--color-neutral-700)">{{ r.cat }} · {{ r.nComp }}</span></span>
+                    <span style="color:var(--color-neutral-700)">{{ r.unidad }}</span>
+                    <span style="text-align:right;font-family:var(--font-heading);font-weight:600;font-size:17px;font-variant-numeric:tabular-nums">{{ r.puF }}</span>
+                    <span><span class="{{ r.tagClass }}">{{ r.estadoLbl }}</span></span>
+                    <span style="font-size:12px;color:var(--color-neutral-700)">{{ r.fecha }}</span>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ catEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:22px 16px;color:var(--color-neutral-700);font-size:14px">Ninguna partida coincide con los filtros.</div></sc-if>
+              </div>
+            </div>
+          </div>
+
+          <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+            <aside class="blueprint" style="flex:1 1 340px;max-width:480px;min-width:0;padding:20px;display:flex;flex-direction:column;gap:18px;position:sticky;top:84px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+                <div style="min-width:0">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.06em;color:var(--color-neutral-700)">{{ sel.sku }}</span><span class="{{ sel.tagClass }}">{{ sel.estadoLbl }}</span></div>
+                  <h3 style="margin:0;font-size:26px;text-wrap:balance">{{ sel.nombre }}</h3>
+                  <div style="font-size:13px;color:var(--color-neutral-700)">{{ sel.cat }} · por {{ sel.unidad }}</div>
+                </div>
+                <button class="btn btn-ghost btn-icon" onClick="{{ closeSel }}" aria-label="Cerrar" style="color:var(--color-neutral-700);flex:none"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+              </div>
+              <div>
+                <div style="display:flex;align-items:baseline;gap:6px"><span style="font-family:var(--font-heading);font-weight:600;font-size:44px;line-height:1">{{ sel.puF }}</span><span style="color:var(--color-neutral-700)">/ {{ sel.unidad }}</span></div>
+                <div style="font-size:12px;color:var(--color-neutral-700)">IVA incluido · CD {{ sel.cdF }} · Ind. {{ sel.ind }}% · Util. {{ sel.util }}%</div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-if value="{{ sel.canApprove }}" hint-placeholder-val="{{ false }}"><button class="btn btn-primary" onClick="{{ sel.onApprove }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"></path></svg>Aprobar</button></sc-if>
+                <button class="btn btn-secondary" onClick="{{ sel.onEdit }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>Editar</button>
+                <button class="btn btn-secondary" onClick="{{ sel.onDup }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><rect width="14" height="14" x="8" y="8"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Duplicar</button>
+              </div>
+              <sc-if value="{{ sel.pendNote }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--color-accent-800);background:var(--color-accent-100);padding:8px 10px">Borrador — pendiente de aprobación por un admin.</div></sc-if>
+              <div>
+                <h6 style="margin:0 0 8px;color:var(--color-neutral-700)">Composición</h6>
+                <sc-for list="{{ sel.comps }}" as="c" hint-placeholder-count="4">
+                  <div style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:13px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                    <span style="min-width:0">{{ c.nombre }}<span style="display:block;font-size:11px;color:var(--color-neutral-700)">{{ c.cantF }}</span></span>
+                    <span style="font-variant-numeric:tabular-nums;flex:none">{{ c.impF }}</span>
+                  </div>
+                </sc-for>
+                <div style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:13px;color:var(--color-neutral-700)"><span>Herramienta menor ({{ sel.herr }}% MO)</span><span>{{ sel.herrF }}</span></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><h6 style="margin:0;color:var(--color-neutral-700)">Historial de precio</h6><span style="font-size:12px;color:var(--color-neutral-700)">{{ sel.varF }}</span></div>
+                <svg width="100%" height="72" viewBox="0 0 320 72" preserveAspectRatio="none" style="display:block;border-bottom:1px solid var(--color-divider);overflow:visible">
+                  <path d="{{ sel.sparkD }}" style="fill:none;stroke:var(--color-accent);stroke-width:1.5;vector-effect:non-scaling-stroke"></path>
+                </svg>
+                <div style="margin-top:8px">
+                  <sc-for list="{{ sel.hist }}" as="hh" hint-placeholder-count="3">
+                    <div style="display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:10px;padding:5px 0;font-size:12px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 6%,transparent)">
+                      <span style="color:var(--color-neutral-700)">{{ hh.fecha }}</span><span style="min-width:0">{{ hh.m }}</span><span style="font-variant-numeric:tabular-nums;text-align:right">{{ hh.puF }} <span style="color:var(--color-neutral-700)">{{ hh.deltaF }}</span></span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </aside>
+          </sc-if>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- PRECIOS BASE -->
+    <sc-if value="{{ isBase }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Precios base" style="display:flex;flex-direction:column;gap:24px">
+        <div style="max-width:760px">
+          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">Base de datos</div>
+          <h1 style="margin:0 0 6px;font-size:44px">Precios <span style="color:var(--color-accent)">base</span></h1>
+          <p style="margin:0;color:var(--color-neutral-700);text-wrap:pretty">Materiales por unidad de venta, mano de obra y equipo por hora. Precios con IVA incluido. Al editar un precio, las partidas que lo usan se recalculan y registran el cambio en su historial.</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+          <div class="seg">
+            <sc-for list="{{ baseTabs }}" as="t" hint-placeholder-count="3">
+              <label class="seg-opt"><input type="radio" name="btipo" checked="{{ t.checked }}" onChange="{{ t.onChange }}">{{ t.label }} <span style="opacity:.7">{{ t.count }}</span></label>
+            </sc-for>
+          </div>
+          <div style="position:relative;flex:1 1 240px;max-width:380px">
+            <svg width="16" height="16" viewBox="0 0 24 24" style="position:absolute;left:10px;top:10px;fill:none;stroke:var(--color-neutral-600);stroke-width:1.5;stroke-linecap:round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <input class="input" value="{{ baseQ }}" onChange="{{ onBaseQ }}" placeholder="Buscar insumo" style="padding-left:34px">
+          </div>
+          <div style="flex:0 1 200px">{{ selBaseCat }}</div>
+          <button class="btn btn-secondary" onClick="{{ openCatBase }}" style="min-height:36px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path><circle cx="7.5" cy="7.5" r=".5"></circle></svg>Categorías</button>
+        </div>
+        <div class="blueprint" style="padding:0"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="padding:14px 16px;border-bottom:1px solid var(--color-divider);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));gap:12px;align-items:end">
+            <div class="field" style="grid-column:span 2"><label>Nuevo insumo · {{ baseTipoLbl }}</label><input class="input" value="{{ nuevo.nombre }}" onChange="{{ nh.nombre }}" placeholder="Descripción"></div>
+            <div class="field"><label>Unidad</label>{{ selNuevoUnidad }}</div>
+            <div class="field"><label>{{ precioLbl }}</label><input class="input" type="number" step="any" min="0" value="{{ nuevo.precio }}" onChange="{{ nh.precio }}" placeholder="0.00" style="text-align:right"></div>
+            <div class="field"><label>Categoría</label>{{ selNuevoCat }}</div>
+            <button class="btn btn-secondary" onClick="{{ addInsumo }}" style="min-height:36px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Agregar</button>
+          </div>
+          <div style="overflow-x:auto">
+            <div style="min-width:820px">
+              <div style="display:grid;grid-template-columns:84px minmax(220px,1fr) 170px 56px 140px 150px 84px;gap:0 12px;padding:10px 16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700);border-bottom:1px solid var(--color-divider)">
+                <span>Clave</span><span>Insumo</span><span>Categoría</span><span>Unidad</span><span style="text-align:right">{{ precioLbl }}</span><span>Último cambio</span><span style="text-align:right">Usado en</span>
+              </div>
+              <sc-for list="{{ baseRows }}" as="r" hint-placeholder-count="8">
+                <div style="display:grid;grid-template-columns:84px minmax(220px,1fr) 170px 56px 140px 150px 84px;gap:0 12px;align-items:center;padding:6px 16px;font-size:14px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                  <span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.04em;color:var(--color-neutral-700)">{{ r.sku }}</span>
+                  <span>{{ r.nombre }}</span>
+                  <span style="min-width:0">{{ r.catSelect }}</span>
+                  <span style="color:var(--color-neutral-700)">{{ r.unidad }}</span>
+                  <span style="display:flex;align-items:center;gap:6px;justify-content:flex-end"><span style="color:var(--color-neutral-700)">$</span><input class="input" type="number" step="any" min="0" value="{{ r.precio }}" onChange="{{ r.onChange }}" onBlur="{{ r.onBlur }}" onKeyDown="{{ r.onKey }}" style="width:104px;min-height:30px;padding:4px 8px;text-align:right;font-variant-numeric:tabular-nums"></span>
+                  <span style="font-size:12px;color:var(--color-neutral-700)">{{ r.lastF }} <span style="color:var(--color-accent-800)">{{ r.deltaF }}</span></span>
+                  <span style="text-align:right;font-size:13px">{{ r.usos }}</span>
+                </div>
+              </sc-for>
+              <sc-if value="{{ baseEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:22px 16px;color:var(--color-neutral-700);font-size:14px">Sin insumos con ese criterio.</div></sc-if>
+            </div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- CUADRILLAS -->
+    <sc-if value="{{ isCuad }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Cuadrillas" style="display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
+          <div style="max-width:720px">
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">Base de datos</div>
+            <h1 style="margin:0 0 6px;font-size:44px">Cuadrillas de <span style="color:var(--color-accent)">trabajo</span></h1>
+            <p style="margin:0;color:var(--color-neutral-700);text-wrap:pretty">Grupos de oficios reutilizables. En una partida se usan con su rendimiento por jornada: costo de jornada ÷ rendimiento.</p>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><div style="width:200px;max-width:100%">{{ selCuadCat }}</div><button class="btn btn-secondary" onClick="{{ openCatCuad }}" style="min-height:36px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"></path><circle cx="7.5" cy="7.5" r=".5"></circle></svg>Categorías</button><button class="btn btn-secondary" onClick="{{ addCuadrilla }}" style="min-height:36px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Nueva cuadrilla</button></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:28px">
+          <sc-for list="{{ cuadCards }}" as="c" hint-placeholder-count="3">
+            <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-neutral-700)"><span style="font-family:var(--font-heading);letter-spacing:.06em">{{ c.sku }}</span><span>{{ c.usos }}</span></div>
+              <input class="input" value="{{ c.nombre }}" onChange="{{ c.onNombre }}" style="font-family:var(--font-heading);font-weight:600;font-size:22px;background:transparent;border-color:transparent;padding:2px 4px;margin-left:-4px">
+              <div style="max-width:240px">{{ c.catSelect }}</div>
+              <div>
+                <sc-for list="{{ c.miembros }}" as="m" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                    <span style="flex:1;min-width:0"><span style="display:block;font-size:14px">{{ m.nombre }}</span><span style="display:block;font-size:11px;color:var(--color-neutral-700)">{{ m.precioF }}</span></span>
+                    <span style="display:flex;align-items:center;border:1px solid var(--color-divider)">
+                      <button class="btn btn-ghost" onClick="{{ m.onMinus }}" aria-label="Menos" style="width:28px;height:28px;padding:0;color:var(--color-text)"><svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path></svg></button>
+                      <span style="min-width:34px;text-align:center;font-size:14px;font-variant-numeric:tabular-nums">{{ m.cantF }}</span>
+                      <button class="btn btn-ghost" onClick="{{ m.onPlus }}" aria-label="Más" style="width:28px;height:28px;padding:0;color:var(--color-text)"><svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+                    </span>
+                    <button class="btn btn-ghost btn-icon" onClick="{{ m.onRemove }}" aria-label="Quitar" style="width:28px;height:28px;color:var(--color-neutral-700)"><svg width="14" height="14" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+                  </div>
+                </sc-for>
+                <div style="padding-top:10px">{{ c.addSelect }}</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-top:6px;border-top:1px solid var(--color-divider)">
+                <div style="font-size:12px;color:var(--color-neutral-700)">Jornada {{ c.horas }} h<br>{{ c.horaF }}</div>
+                <div style="text-align:right"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Costo por jornada</div><div style="font-family:var(--font-heading);font-weight:600;font-size:30px;line-height:1.1">{{ c.jornadaF }}</div></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ cuadEmpty }}" hint-placeholder-val="{{ false }}"><div style="color:var(--color-neutral-700);font-size:14px">No hay cuadrillas en esta categoría.</div></sc-if>
+      </section>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{ hasDlg }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop" onClick="{{ dlg.onBackdrop }}" style="z-index:60">
+      <div class="dialog blueprint" style="width:min(520px,100%);background:var(--color-bg);gap:14px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div>
+            <div class="dialog-title">{{ dlg.title }}</div>
+            <div style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">Edita el nombre en su campo; el cambio se aplica a todo lo asignado. Al eliminar una categoría, sus elementos quedan sin categoría.</div>
+          </div>
+          <button class="btn btn-ghost btn-icon" onClick="{{ dlg.close }}" aria-label="Cerrar" style="flex:none;color:var(--color-neutral-700)"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+        </div>
+        <div style="max-height:46vh;overflow-y:auto;border-top:1px solid var(--color-divider)">
+          <sc-for list="{{ dlg.rows }}" as="c" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+              <input class="input" value="{{ c.value }}" onChange="{{ c.onChange }}" onBlur="{{ c.onBlur }}" onKeyDown="{{ c.onKey }}" style="flex:1;min-width:0;min-height:32px;padding:4px 8px">
+              <span style="font-size:12px;color:var(--color-neutral-700);min-width:78px;text-align:right">{{ c.count }}</span>
+              <button class="btn btn-ghost btn-icon" onClick="{{ c.onDelete }}" aria-label="Eliminar categoría" style="width:30px;height:30px;color:var(--color-neutral-700)"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg></button>
+            </div>
+          </sc-for>
+          <div style="display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:12px;color:var(--color-neutral-700)"><span>Sin categoría</span><span style="padding-right:40px">{{ dlg.sinCat }}</span></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <input class="input" value="{{ dlg.newCat }}" onChange="{{ dlg.onNewCat }}" onKeyDown="{{ dlg.onNewKey }}" placeholder="Nueva categoría" style="flex:1;min-width:0">
+          <button class="btn btn-secondary" onClick="{{ dlg.add }}" style="min-height:36px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Agregar</button>
+        </div>
+        <div class="dialog-actions" style="margin-top:0">
+          <button class="btn btn-primary blueprint" onClick="{{ dlg.close }}" style="padding:8px 18px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Listo</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;max-width:calc(100% - 32px);background:var(--color-accent-900);color:var(--color-bg);padding:12px 18px;font-size:14px;box-shadow:var(--shadow-lg)">{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;modo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hoja&quot;,&quot;pasos&quot;,&quot;lienzo&quot;],&quot;default&quot;:&quot;hoja&quot;,&quot;tsType&quot;:&quot;'hoja'|'pasos'|'lienzo'&quot;,&quot;section&quot;:&quot;Generador&quot;},&quot;rol&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;admin&quot;,&quot;equipo&quot;],&quot;default&quot;:&quot;admin&quot;,&quot;tsType&quot;:&quot;'admin'|'equipo'&quot;,&quot;section&quot;:&quot;Usuario&quot;}}">
+const KEY='costeo-apu-v1', HOY=(d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date());
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const uid=()=>Math.random().toString(36).slice(2,9);
+const num=v=>{const n=parseFloat(v);return isFinite(n)?n:0;};
+const money=n=>'$'+(isFinite(n)?n:0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+const qty=n=>(isFinite(n)?n:0).toLocaleString('es-MX',{maximumFractionDigits:4});
+const fdate=f=>{const p=(f||HOY).split('-');return +p[2]+' '+MES[+p[1]-1]+' '+p[0];};
+const pct=n=>(n>0?'+':'')+n.toFixed(1)+'%';
+const UNIDADES=['m²','m³','ml','pza','kg','l','pt','h','lote','jgo'];
+const CATS_DEF={material:['Tableros','Maderas','Cancelería','Eléctrico','Hidráulico','Obra civil','Mármoles','Pintura','Aislantes','Acero','Herrajes'],mo:['Albañilería','Electricidad','Carpintería','Cancelería','Tablaroca','Pintura','Plomería','General'],equipo:['Equipo menor','Andamios','Maquinaria'],cuadrilla:['Albañilería','Tablaroca','Pintura','Electricidad','Carpintería','Plomería'],partida:['Concretos','Morteros','Muros','Plafones','Pisos','Acabados','Eléctrico','Carpintería','Hidráulico','Instalaciones']};
+const CAT_NOUN={material:['insumo','insumos'],mo:['insumo','insumos'],equipo:['insumo','insumos'],cuadrilla:['cuadrilla','cuadrillas'],partida:['partida','partidas']};
+const DLG_T={material:'Categorías de materiales',mo:'Categorías de mano de obra',equipo:'Categorías de equipo',cuadrilla:'Categorías de cuadrillas',partida:'Categorías del catálogo'};
+const TIPOS={material:'Materiales',mo:'Mano de obra',equipo:'Equipo'};
+
+function seed(){
+  const I=(id,sku,nombre,tipo,unidad,precio,cat,h)=>({id,sku,nombre,tipo,unidad,precio,cat,hist:(h||[['2026-01-12',precio]]).map(([f,p])=>({f,precio:p}))});
+  const insumos=[
+    I('m1','MAT-001','Panel de yeso 1/2" 1.22×2.44 m','material','pza',245,'Tableros',[['2026-03-02',228],['2026-07-15',239],['2026-09-28',245]]),
+    I('m2','MAT-002','Canal galvanizado 6.35 cm cal. 26','material','ml',28,'Tableros'),
+    I('m3','MAT-003','Poste galvanizado 6.35 cm cal. 26','material','ml',36,'Tableros',[['2026-01-12',33],['2026-05-10',36]]),
+    I('m4','MAT-004','Tornillo para tablaroca 1"','material','pza',0.35,'Tableros'),
+    I('m5','MAT-005','Colchoneta fibra de vidrio 2.5" acústica','material','m²',68,'Aislantes',[['2026-01-12',61],['2026-08-20',68]]),
+    I('m6','MAT-006','Compuesto para juntas (redimix)','material','kg',14,'Tableros'),
+    I('m7','MAT-007','Cinta de papel para juntas','material','ml',1.2,'Tableros'),
+    I('m8','MAT-008','Sellador vinílico','material','l',78,'Pintura'),
+    I('m9','MAT-009','Pintura vinílica lavable','material','l',115,'Pintura',[['2026-01-12',108],['2026-06-01',115]]),
+    I('m10','MAT-010','Lija para pared #120','material','pza',9,'Pintura'),
+    I('m11','MAT-011','Block hueco 15×20×40 cm','material','pza',18,'Obra civil',[['2026-01-12',16.5],['2026-04-01',18]]),
+    I('m12','MAT-012','Cemento gris CPC 30R','material','kg',5.2,'Obra civil',[['2026-02-01',4.9],['2026-06-01',5.05],['2026-09-01',5.2]]),
+    I('m13','MAT-013','Arena','material','m³',650,'Obra civil'),
+    I('m14','MAT-014','Grava 3/4"','material','m³',720,'Obra civil',[['2026-01-12',690],['2026-09-15',720]]),
+    I('m15','MAT-015','Agua','material','m³',45,'Obra civil'),
+    I('m16','MAT-016','Malla electrosoldada 6×6-10/10','material','m²',38,'Acero'),
+    I('m17','MAT-017','Cable THW-LS cal. 12 AWG','material','ml',14.5,'Eléctrico',[['2026-01-12',12.9],['2026-08-05',14.5]]),
+    I('m18','MAT-018','Cable THW-LS cal. 14 AWG','material','ml',10.2,'Eléctrico',[['2026-01-12',9.4],['2026-08-05',10.2]]),
+    I('m19','MAT-019','Poliducto naranja 1/2"','material','ml',6.8,'Eléctrico'),
+    I('m20','MAT-020','Caja chalupa galvanizada','material','pza',14,'Eléctrico'),
+    I('m21','MAT-021','Contacto dúplex polarizado con placa','material','pza',85,'Eléctrico',[['2026-01-12',79],['2026-06-20',85]]),
+    I('m22','MAT-022','Apagador sencillo con placa','material','pza',72,'Eléctrico'),
+    I('m23','MAT-023','Luminaria LED de empotrar 12 W','material','pza',245,'Eléctrico',[['2026-01-12',268],['2026-09-22',245]]),
+    I('m24','MAT-024','Cinta de aislar','material','pza',18,'Eléctrico'),
+    I('m25','MAT-025','Interruptor termomagnético 1P 20 A','material','pza',165,'Eléctrico'),
+    I('m26','MAT-026','Centro de carga 8 circuitos','material','pza',890,'Eléctrico'),
+    I('m27','MAT-027','Triplay de pino 16 mm 1.22×2.44 m','material','pza',720,'Maderas',[['2026-02-10',665],['2026-09-10',720]]),
+    I('m28','MAT-028','MDF 15 mm 1.22×2.44 m','material','pza',610,'Tableros',[['2026-01-12',585],['2026-09-10',610]]),
+    I('m29','MAT-029','Melamina blanca 16 mm 1.22×2.44 m','material','pza',890,'Tableros',[['2026-01-12',845],['2026-10-02',890]]),
+    I('m30','MAT-030','Madera de pino de 1ª (pie tabla)','material','pt',32,'Maderas'),
+    I('m31','MAT-031','Cubrecanto PVC blanco 19 mm','material','ml',6.5,'Maderas'),
+    I('m32','MAT-032','Bisagra bidimensional cierre suave','material','pza',48,'Herrajes'),
+    I('m33','MAT-033','Corredera telescópica 45 cm (par)','material','jgo',210,'Herrajes'),
+    I('m34','MAT-034','Jaladera de aluminio 128 mm','material','pza',65,'Herrajes'),
+    I('m35','MAT-035','Pegamento blanco para madera','material','l',95,'Maderas'),
+    I('m36','MAT-036','Barniz de poliuretano','material','l',260,'Pintura'),
+    I('m37','MAT-037','Tornillo para madera 1 1/2"','material','pza',0.6,'Herrajes'),
+    I('m38','MAT-038','Bisagra de libro 3.5" latonada','material','pza',38,'Herrajes'),
+    I('m39','MAT-039','Chapa de perilla para interior','material','pza',320,'Herrajes'),
+    I('m40','MAT-040','Tubo PPR 1/2"','material','ml',32,'Hidráulico'),
+    I('m41','MAT-041','Codo PPR 1/2" 90°','material','pza',9,'Hidráulico'),
+    I('m42','MAT-042','Mármol travertino 40×40 cm','material','m²',680,'Mármoles',[['2026-01-12',640],['2026-05-18',680]]),
+    I('m43','MAT-043','Adhesivo para piedra natural','material','kg',9.5,'Obra civil'),
+    I('o1','MO-001','Oficial albañil','mo','h',95,'Albañilería'),
+    I('o2','MO-002','Ayudante general','mo','h',65,'General',[['2026-01-12',60],['2026-07-01',65]]),
+    I('o3','MO-003','Oficial tablaroquero','mo','h',105,'Tablaroca'),
+    I('o4','MO-004','Oficial pintor','mo','h',88,'Pintura'),
+    I('o5','MO-005','Oficial electricista','mo','h',110,'Electricidad'),
+    I('o6','MO-006','Ayudante electricista','mo','h',70,'Electricidad'),
+    I('o7','MO-007','Oficial carpintero','mo','h',115,'Carpintería',[['2026-01-12',105],['2026-07-01',115]]),
+    I('o8','MO-008','Ayudante carpintero','mo','h',70,'Carpintería'),
+    I('o9','MO-009','Oficial plomero','mo','h',105,'Plomería'),
+    I('o10','MO-010','Instalador de mármol','mo','h',120,'Albañilería'),
+    I('e1','EQ-001','Andamio tubular (cuerpo)','equipo','h',18,'Andamios'),
+    I('e2','EQ-002','Revolvedora 1 saco','equipo','h',65,'Maquinaria'),
+    I('e3','EQ-003','Atornillador eléctrico','equipo','h',12,'Equipo menor'),
+    I('e4','EQ-004','Sierra circular de banco','equipo','h',35,'Maquinaria'),
+    I('e5','EQ-005','Rotomartillo','equipo','h',22,'Equipo menor'),
+    I('e6','EQ-006','Enchapadora de cantos portátil','equipo','h',40,'Maquinaria'),
+    I('e7','EQ-007','Termofusor PPR','equipo','h',15,'Equipo menor')
+  ];
+  const cuadrillas=[
+    {id:'c1',sku:'CUA-01',nombre:'Albañilería (1 of. + 1 ay.)',cat:'Albañilería',horas:8,miembros:[{ref:'o1',cant:1},{ref:'o2',cant:1}]},
+    {id:'c2',sku:'CUA-02',nombre:'Tablaroca (1 of. + 1 ay.)',cat:'Tablaroca',horas:8,miembros:[{ref:'o3',cant:1},{ref:'o2',cant:1}]},
+    {id:'c3',sku:'CUA-03',nombre:'Pintura (1 pintor + ½ ay.)',cat:'Pintura',horas:8,miembros:[{ref:'o4',cant:1},{ref:'o2',cant:0.5}]},
+    {id:'c4',sku:'CUA-04',nombre:'Electricidad (1 of. + 1 ay.)',cat:'Electricidad',horas:8,miembros:[{ref:'o5',cant:1},{ref:'o6',cant:1}]},
+    {id:'c5',sku:'CUA-05',nombre:'Carpintería (1 of. + 1 ay.)',cat:'Carpintería',horas:8,miembros:[{ref:'o7',cant:1},{ref:'o8',cant:1}]},
+    {id:'c6',sku:'CUA-06',nombre:'Plomería (1 of. + ½ ay.)',cat:'Plomería',horas:8,miembros:[{ref:'o9',cant:1},{ref:'o2',cant:0.5}]}
+  ];
+  const P=(id,sku,nombre,unidad,cat,estado,comps)=>({id,sku,nombre,unidad,cat,estado,ind:12,util:10,herr:3,hist:[],
+    comps:comps.map(([t,ref,cant,desp])=>({k:uid(),tipo:t==='c'?'cuadrilla':t==='p'?'partida':'insumo',ref,cant,desp:desp||0}))});
+  const partidas=[
+    P('p1','PAR-101',"Concreto hecho en obra f'c=150 kg/cm²",'m³','Concretos','aprobado',[['i','m12',330,3],['i','m13',0.55,5],['i','m14',0.7,5],['i','m15',0.22],['i','e2',1.5],['c','c1',3]]),
+    P('p2','PAR-102','Mortero cemento-arena 1:4','m³','Morteros','aprobado',[['i','m12',350,3],['i','m13',1.1,5],['i','m15',0.25],['c','c1',4]]),
+    P('p3','PAR-201','Pintura vinílica 2 manos sobre muro','m²','Acabados','aprobado',[['i','m8',0.1,5],['i','m9',0.22,5],['i','m10',0.05],['c','c3',45],['i','e1',0.05]]),
+    P('p4','PAR-301','Muro de block 15 cm asentado con mortero','m²','Muros','aprobado',[['i','m11',12.5,3],['p','p2',0.017],['c','c1',10],['i','e1',0.1]]),
+    P('p5','PAR-302','Muro de tablaroca 2 caras con aislante acústico y pintura','m²','Muros','borrador',[['i','m1',0.672,8],['i','m2',0.7,5],['i','m3',2.2,5],['i','m4',30,10],['i','m5',1,5],['i','m6',0.9,10],['i','m7',2.4,10],['c','c2',12],['i','e3',0.15],['i','e1',0.1],['p','p3',2]]),
+    P('p6','PAR-401','Firme de concreto 10 cm con malla','m²','Pisos','aprobado',[['p','p1',0.105],['i','m16',1.05,5],['c','c1',25]]),
+    P('p7','PAR-402','Plafón de tablaroca liso','m²','Plafones','borrador',[['i','m1',0.36,8],['i','m2',0.5,5],['i','m3',2.5,5],['i','m4',15,10],['i','m6',0.6,10],['i','m7',1.4,10],['c','c2',14],['i','e1',0.2]]),
+    P('p8','PAR-501','Salida de contacto dúplex (ranurado, poliducto y cableado)','pza','Eléctrico','aprobado',[['i','m19',6,5],['i','m17',18,8],['i','m20',1],['i','m21',1],['i','m24',0.1],['c','c4',6],['i','e5',0.3]]),
+    P('p9','PAR-502','Salida de alumbrado con apagador y luminaria LED','pza','Eléctrico','aprobado',[['i','m19',7,5],['i','m18',21,8],['i','m20',2],['i','m22',1],['i','m23',1],['i','m24',0.1],['c','c4',5],['i','e5',0.3]]),
+    P('p10','PAR-503','Circuito derivado 20 A desde centro de carga','pza','Eléctrico','borrador',[['i','m25',1],['i','m17',30,8],['i','m19',15,5],['c','c4',4]]),
+    P('p11','PAR-504','Centro de carga 8 circuitos instalado','pza','Eléctrico','aprobado',[['i','m26',1],['i','m24',0.5],['c','c4',2],['i','e5',0.5]]),
+    P('p12','PAR-601','Puerta de tambor MDF 0.90×2.10 m con marco y chapa','pza','Carpintería','aprobado',[['i','m28',1.3,10],['i','m30',12,10],['i','m35',0.25],['i','m38',3],['i','m39',1],['i','m37',24],['i','m36',0.6,10],['c','c5',1.5],['i','e4',1.5]]),
+    P('p13','PAR-602','Mueble bajo de cocina en melamina 16 mm','ml','Carpintería','aprobado',[['i','m29',1.6,12],['i','m31',6,10],['i','m32',4],['i','m33',1],['i','m34',2],['i','m37',40],['c','c5',1.2],['i','e4',1.5],['i','e6',0.8]]),
+    P('p14','PAR-603','Closet de melamina con puertas abatibles','m²','Carpintería','borrador',[['i','m29',2.1,12],['i','m28',0.4,10],['i','m31',8,10],['i','m32',3],['i','m34',1],['i','m37',50],['c','c5',1.5],['i','e4',1],['i','e6',0.8]]),
+    P('p15','PAR-701','Salida hidráulica de agua fría PPR 1/2"','pza','Hidráulico','aprobado',[['i','m40',6,5],['i','m41',4],['c','c6',6],['i','e7',0.4]]),
+    P('p16','PAR-404','Piso de mármol travertino 40×40 asentado con adhesivo','m²','Pisos','aprobado',[['i','m42',1,8],['i','m43',6,5],['i','o10',0.9],['i','o2',0.6]])
+  ];
+  return {insumos,cuadrillas,partidas,cats:JSON.parse(JSON.stringify(CATS_DEF)),seedV:2};
+}
+
+class Component extends DCLogic {
+  state = this.init();
+
+  init(){
+    let d=null;
+    try{ d=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
+    const fresh=!d||!d.partidas;
+    if(fresh) d=seed();
+    if(!d.cats){
+      const c=JSON.parse(JSON.stringify(CATS_DEF)), sc={c1:'Albañilería',c2:'Tablaroca',c3:'Pintura'};
+      d.cuadrillas=d.cuadrillas.map(q=>q.cat!=null?q:{...q,cat:sc[q.id]||''});
+      d.insumos.forEach(i=>{if(i.cat&&!c[i.tipo].includes(i.cat))c[i.tipo].push(i.cat);});
+      d.partidas.forEach(p=>{if(p.cat&&!c.partida.includes(p.cat))c.partida.push(p.cat);});
+      d.cuadrillas.forEach(q=>{if(q.cat&&!c.cuadrilla.includes(q.cat))c.cuadrilla.push(q.cat);});
+      d.cats=c;
+    }
+    if(!fresh&&(d.seedV||1)<2){
+      const sd=seed();
+      ['insumos','cuadrillas','partidas'].forEach(k=>{const ids=new Set(d[k].map(x=>x.id)); sd[k].forEach(x=>{if(!ids.has(x.id)) d[k].push(x);});});
+      Object.keys(sd.cats).forEach(k=>{d.cats[k]=d.cats[k]||[]; sd.cats[k].forEach(c=>{if(!d.cats[k].includes(c)) d.cats[k].push(c);});});
+      d.seedV=2;
+    }
+    const RR=[0.9,0.93,0.88,0.91,0.95,0.89,0.92];
+    d.partidas=d.partidas.map((p,i)=>{
+      if(p.hist&&p.hist.length) return p;
+      const pu=this.calc(p,d).pu, r=RR[i%7];
+      return {...p,hist:p.estado==='borrador'
+        ?[{f:'2026-09-30',pu,m:'Alta (borrador)'}]
+        :[{f:'2026-03-12',pu:pu*r,m:'Alta en catálogo'},{f:'2026-07-15',pu:pu*(1+r)/2,m:'Actualización de precios base'},{f:'2026-09-28',pu,m:'Actualización de precios base'}]};
+    });
+    return {...d,catDlg:null,newCat:'',catEdits:{},baseCat:'',cuadCat:'',view:'dash',rol:this.props.rol||'admin',modo:this.props.modo||'hoja',draft:null,step:0,err:null,
+      q:'',cat:'',est:'todas',selId:null,baseTipo:'material',baseQ:'',libTipo:'material',libQ:'',toast:null,edits:{},
+      nuevo:{nombre:'',unidad:'pza',precio:'',cat:''}};
+  }
+
+  componentDidUpdate(pp,ps){
+    const S=this.state;
+    if(S.insumos!==this._pi||S.cuadrillas!==this._pc||S.partidas!==this._pp||S.cats!==this._pk){
+      this._pi=S.insumos; this._pc=S.cuadrillas; this._pp=S.partidas; this._pk=S.cats;
+      try{ localStorage.setItem(KEY,JSON.stringify({insumos:S.insumos,cuadrillas:S.cuadrillas,partidas:S.partidas,cats:S.cats,seedV:2})); }catch(e){}
+    }
+    const P=this.props||{};
+    if(P.modo&&P.modo!==this._lm){ const first=this._lm===undefined; this._lm=P.modo; if(!first&&P.modo!==S.modo) this.setState({modo:P.modo}); }
+    if(P.rol&&P.rol!==this._lr){ const first=this._lr===undefined; this._lr=P.rol; if(!first&&P.rol!==S.rol) this.setState({rol:P.rol}); }
+  }
+  componentWillUnmount(){ clearTimeout(this._t); }
+
+  jornada(q,S){ return (q.miembros||[]).reduce((a,m)=>{const o=S.insumos.find(x=>x.id===m.ref);return a+(o?o.precio*num(m.cant):0);},0)*num(q.horas||8); }
+
+  calc(p,S,depth=0){
+    let mat=0,mo=0,eq=0,sub=0; const rows=[];
+    for(const c of p.comps||[]){
+      let imp=0,cls,obj,precio=0;
+      if(c.tipo==='insumo'){
+        obj=S.insumos.find(x=>x.id===c.ref); if(!obj) continue; precio=obj.precio;
+        if(obj.tipo==='material'){cls='mat';imp=num(c.cant)*(1+num(c.desp)/100)*precio;}
+        else {cls=obj.tipo==='mo'?'mo':'eq';imp=num(c.cant)*precio;}
+      } else if(c.tipo==='cuadrilla'){
+        obj=S.cuadrillas.find(x=>x.id===c.ref); if(!obj) continue;
+        precio=this.jornada(obj,S); cls='mo'; const r=num(c.cant); imp=r>0?precio/r:0;
+      } else {
+        obj=S.partidas.find(x=>x.id===c.ref); if(!obj||depth>4) continue;
+        precio=this.calc(obj,S,depth+1).cd; cls='sub'; imp=num(c.cant)*precio;
+      }
+      if(cls==='mat')mat+=imp; else if(cls==='mo')mo+=imp; else if(cls==='eq')eq+=imp; else sub+=imp;
+      rows.push({c,cls,obj,precio,imp});
+    }
+    const herr=mo*num(p.herr)/100, cd=mat+mo+eq+herr+sub, ind=cd*num(p.ind)/100, util=(cd+ind)*num(p.util)/100, pu=cd+ind+util;
+    return {mat,mo,eq,herr,sub,cd,ind,util,pu,iva:pu-pu/1.16,rows};
+  }
+
+  uses(p,id,S,depth=0){
+    if(!id||depth>5) return false;
+    return p.comps.some(c=>c.tipo==='partida'&&(c.ref===id||this.uses(S.partidas.find(x=>x.id===c.ref)||{comps:[]},id,S,depth+1)));
+  }
+
+  applyChange(mut,motivo,skipId){
+    const S=this.state, before={};
+    S.partidas.forEach(p=>{before[p.id]=this.calc(p,S).pu;});
+    const N=mut(S), S2={...S,...N}; let n=0;
+    const partidas=S2.partidas.map(p=>{
+      if(p.id===skipId||before[p.id]==null) return p;
+      const pu=this.calc(p,S2).pu; if(Math.abs(pu-before[p.id])<0.005) return p;
+      n++; const h=p.hist.slice(), l=h[h.length-1];
+      if(l&&l.f===HOY&&l.m===motivo) h[h.length-1]={f:HOY,pu,m:motivo}; else h.push({f:HOY,pu,m:motivo});
+      return {...p,hist:h};
+    });
+    this.setState({...N,partidas});
+    return n;
+  }
+
+  toast(msg){ this.setState({toast:msg}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:null}),3400); }
+
+  nextSku(pre,list){ const ns=list.map(x=>parseInt((x.sku.match(/(\d+)$/)||[])[1]||0,10)); return ns.length?Math.max(...ns)+1:1; }
+
+  newPartida(){
+    const S=this.state;
+    this.setState({view:'gen',step:0,err:null,draft:{id:null,sku:'PAR-'+Math.max(501,this.nextSku('PAR',S.partidas)),nombre:'',unidad:'m²',cat:'Muros',ind:12,util:10,herr:3,comps:[],estado:'borrador',hist:[]}});
+  }
+  editPartida(id){ const p=this.state.partidas.find(x=>x.id===id); if(p) this.setState({view:'gen',step:0,err:null,draft:JSON.parse(JSON.stringify(p))}); }
+  dupPartida(id){
+    const S=this.state, p=S.partidas.find(x=>x.id===id); if(!p) return;
+    this.setState({view:'gen',step:0,err:null,draft:{...JSON.parse(JSON.stringify(p)),id:null,sku:'PAR-'+Math.max(501,this.nextSku('PAR',S.partidas)),nombre:p.nombre+' (copia)',estado:'borrador',hist:[],comps:p.comps.map(c=>({...c,k:uid()}))}});
+  }
+  setD(patch){ this.setState(s=>({draft:{...s.draft,...patch},err:null})); }
+  setC(k,patch){ this.setState(s=>({draft:{...s.draft,comps:s.draft.comps.map(c=>c.k===k?{...c,...patch}:c)}})); }
+  rmC(k){ this.setState(s=>({draft:{...s.draft,comps:s.draft.comps.filter(c=>c.k!==k)}})); }
+  addC(val){
+    if(!val) return; const [t,ref]=val.split(':'); let cant=1,desp=0;
+    if(t==='insumo'){const i=this.state.insumos.find(x=>x.id===ref); if(i&&i.tipo==='material')desp=5; if(i&&i.tipo==='equipo')cant=0.1;}
+    if(t==='cuadrilla') cant=10;
+    this.setState(s=>({err:null,draft:{...s.draft,comps:[...s.draft.comps,{k:uid(),tipo:t,ref,cant,desp}]}}));
+  }
+
+  save(aprobar){
+    const S=this.state, d=S.draft;
+    if(!d.nombre.trim()) return this.setState({err:'Escribe la descripción de la partida.',step:0});
+    if(!d.comps.length) return this.setState({err:'Agrega al menos un componente.'});
+    const estado=aprobar?'aprobado':'borrador'; let id=d.id;
+    const S2={...S,partidas:id?S.partidas.map(p=>p.id===id?{...d}:p):S.partidas};
+    const pu=this.calc(d,S2).pu;
+    this.applyChange(()=>{
+      let partidas;
+      if(id){
+        partidas=S.partidas.map(p=>{
+          if(p.id!==id) return p;
+          const h=p.hist.slice(), l=h[h.length-1];
+          if(!l||Math.abs(l.pu-pu)>0.005) h.push({f:HOY,pu,m:'Edición de partida'});
+          if(aprobar&&p.estado!=='aprobado') h.push({f:HOY,pu,m:'Aprobada por admin'});
+          return {...d,estado,hist:h};
+        });
+      } else {
+        id=uid(); const h=[{f:HOY,pu,m:'Alta (borrador)'}]; if(aprobar) h.push({f:HOY,pu,m:'Aprobada por admin'});
+        partidas=[{...d,id,estado,hist:h},...S.partidas];
+      }
+      return {partidas};
+    },'Subpartida: '+d.nombre,id||'__new');
+    this.setState({view:'cat',selId:id,draft:null,err:null,q:'',cat:'',est:'todas'});
+    this.toast(aprobar?'Partida aprobada y publicada en el catálogo':'Guardada como borrador · pendiente de aprobación');
+  }
+
+  approve(id){
+    const p=this.state.partidas.find(x=>x.id===id); if(!p) return;
+    const pu=this.calc(p,this.state).pu;
+    this.setState(s=>({partidas:s.partidas.map(x=>x.id===id?{...x,estado:'aprobado',hist:[...x.hist,{f:HOY,pu,m:'Aprobada por admin'}]}:x)}));
+    this.toast(p.sku+' aprobada');
+  }
+
+  commitPrecio(id){
+    const S=this.state, raw=S.edits[id], edits={...S.edits}; delete edits[id];
+    this.setState({edits});
+    if(raw==null) return;
+    const i=S.insumos.find(x=>x.id===id), v=num(raw);
+    if(!i||v<=0||Math.abs(v-i.precio)<0.0001) return;
+    const n=this.applyChange(S=>({insumos:S.insumos.map(x=>{
+      if(x.id!==id) return x;
+      const h=x.hist.slice(), l=h[h.length-1];
+      if(l&&l.f===HOY&&h.length>1) h[h.length-1]={f:HOY,precio:v}; else h.push({f:HOY,precio:v});
+      return {...x,precio:v,hist:h};
+    })}),'Precio base: '+i.nombre);
+    this.toast(i.nombre+' → '+money(v)+' · '+n+(n===1?' partida recalculada':' partidas recalculadas'));
+  }
+
+  addInsumo(){
+    const S=this.state, nv=S.nuevo, t=S.baseTipo;
+    if(!nv.nombre.trim()||num(nv.precio)<=0) return this.toast('Escribe descripción y precio');
+    const pre=t==='material'?'MAT':t==='mo'?'MO':'EQ', list=S.insumos.filter(x=>x.tipo===t);
+    const n=this.nextSku(pre,list), sku=pre+'-'+String(n).padStart(3,'0');
+    const catSel=nv.cat||S.baseCat||'';
+    const ins={id:uid(),sku,nombre:nv.nombre.trim(),tipo:t,unidad:t==='material'?nv.unidad:'h',precio:num(nv.precio),cat:catSel,hist:[{f:HOY,precio:num(nv.precio)}]};
+    this.setState({insumos:[...S.insumos,ins],nuevo:{nombre:'',unidad:nv.unidad,precio:'',cat:nv.cat}});
+    this.toast(sku+' agregado');
+  }
+
+  setCuad(id,fn,motivo){
+    const q=this.state.cuadrillas.find(x=>x.id===id);
+    this.applyChange(S=>({cuadrillas:S.cuadrillas.map(x=>x.id===id?fn(x):x)}),'Cuadrilla: '+(q?q.nombre:''));
+  }
+  addCuadrilla(){
+    const S=this.state, n=this.nextSku('CUA',S.cuadrillas);
+    this.setState({cuadrillas:[...S.cuadrillas,{id:uid(),sku:'CUA-'+String(n).padStart(2,'0'),nombre:'Nueva cuadrilla',cat:S.cuadCat||'',horas:8,miembros:[]}]});
+  }
+
+  sel(value,opts,onChange,ph,compact){
+    const h=React.createElement, o=opts.map(x=>h('option',{key:x.v,value:x.v},x.l));
+    if(ph!=null) o.unshift(h('option',{key:'__',value:''},ph));
+    return h('select',{className:'input',value:value==null?'':value,onChange,style:compact?{width:'100%',minHeight:30,padding:'4px 8px',fontSize:13}:{width:'100%'}},o);
+  }
+  itemsOf(t,S){ return t==='cuadrilla'?S.cuadrillas:t==='partida'?S.partidas:S.insumos.filter(i=>i.tipo===t); }
+  catPatch(t,fn,S){
+    const p={};
+    if(t==='cuadrilla') p.cuadrillas=S.cuadrillas.map(fn);
+    else if(t==='partida') p.partidas=S.partidas.map(fn);
+    else p.insumos=S.insumos.map(x=>x.tipo===t?fn(x):x);
+    return p;
+  }
+  catAdd(){
+    const S=this.state,t=S.catDlg,n=S.newCat.trim(); if(!t||!n) return;
+    if(S.cats[t].some(x=>x.toLowerCase()===n.toLowerCase())) return this.toast('Esa categoría ya existe');
+    this.setState({cats:{...S.cats,[t]:[...S.cats[t],n]},newCat:''});
+  }
+  catRename(t,old){
+    const S=this.state,key=t+'|'+old,raw=S.catEdits[key],ce={...S.catEdits}; delete ce[key];
+    const n=raw==null?'':raw.trim();
+    if(!n||n===old){ return this.setState({catEdits:ce}); }
+    if(S.cats[t].some(x=>x!==old&&x.toLowerCase()===n.toLowerCase())){ this.toast('Esa categoría ya existe'); return this.setState({catEdits:ce}); }
+    const patch={...this.catPatch(t,x=>x.cat===old?{...x,cat:n}:x,S),cats:{...S.cats,[t]:S.cats[t].map(x=>x===old?n:x)},catEdits:ce};
+    if(t==='partida'){ if(S.draft&&S.draft.cat===old) patch.draft={...S.draft,cat:n}; if(S.cat===old) patch.cat=n; }
+    else if(t==='cuadrilla'){ if(S.cuadCat===old) patch.cuadCat=n; }
+    else { if(S.baseCat===old) patch.baseCat=n; if(S.nuevo.cat===old) patch.nuevo={...S.nuevo,cat:n}; }
+    this.setState(patch); this.toast('Categoría renombrada: '+n);
+  }
+  catDelete(t,name){
+    const S=this.state, cnt=this.itemsOf(t,S).filter(x=>x.cat===name).length;
+    const patch={...this.catPatch(t,x=>x.cat===name?{...x,cat:''}:x,S),cats:{...S.cats,[t]:S.cats[t].filter(x=>x!==name)}};
+    if(t==='partida'){ if(S.draft&&S.draft.cat===name) patch.draft={...S.draft,cat:''}; if(S.cat===name) patch.cat=''; }
+    else if(t==='cuadrilla'){ if(S.cuadCat===name) patch.cuadCat=''; }
+    else { if(S.baseCat===name) patch.baseCat=''; if(S.nuevo.cat===name) patch.nuevo={...S.nuevo,cat:''}; }
+    this.setState(patch); this.toast('“'+name+'” eliminada'+(cnt?' · '+cnt+' sin categoría':''));
+  }
+
+  renderVals(){
+    const S=this.state, admin=S.rol==='admin', v={};
+    const calcs={}; S.partidas.forEach(p=>{calcs[p.id]=this.calc(p,S);});
+    const lastH=p=>p.hist[p.hist.length-1]||{f:HOY};
+    const tagOf=e=>e==='aprobado'?'tag tag-accent':'tag tag-outline';
+    const cuadOf=id=>S.cuadrillas.find(q=>q.id===id);
+    const usosIns=i=>S.partidas.filter(p=>p.comps.some(c=>(c.tipo==='insumo'&&c.ref===i.id)||(c.tipo==='cuadrilla'&&(cuadOf(c.ref)||{miembros:[]}).miembros.some(m=>m.ref===i.id)))).length;
+    const plural=(n,a,b)=>n+' '+(n===1?a:b);
+
+    v.nav=[['dash','Resumen'],['gen','Generador'],['cat','Catálogo'],['base','Precios base'],['cuad','Cuadrillas']].map(([k,l])=>({label:l,current:S.view===k?'page':'false',
+      onClick:e=>{e.preventDefault(); if(k==='gen'&&!S.draft) this.newPartida(); else this.setState({view:k});}}));
+    v.isDash=S.view==='dash'; v.isGen=S.view==='gen'&&!!S.draft; v.isCat=S.view==='cat'; v.isBase=S.view==='base'; v.isCuad=S.view==='cuad';
+    v.rolAdmin=admin; v.rolEquipo=!admin; v.isAdmin=admin; v.notAdmin=!admin;
+    v.setAdmin=()=>this.setState({rol:'admin'}); v.setEquipo=()=>this.setState({rol:'equipo'});
+    v.onNueva=()=>this.newPartida();
+    v.goBase=e=>{e.preventDefault();this.setState({view:'base'});};
+    v.hasToast=!!S.toast; v.toast=S.toast;
+    const catOpts=t=>S.cats[t].map(x=>({v:x,l:x}));
+    const catLbl=c=>c||'Sin categoría';
+    v.openCatBase=()=>this.setState({catDlg:S.baseTipo,newCat:'',catEdits:{}});
+    v.openCatCuad=()=>this.setState({catDlg:'cuadrilla',newCat:'',catEdits:{}});
+    v.openCatPart=()=>this.setState({catDlg:'partida',newCat:'',catEdits:{}});
+    v.hasDlg=!!S.catDlg; v.dlg={rows:[]};
+    if(S.catDlg){
+      const t=S.catDlg, items=this.itemsOf(t,S), nn=CAT_NOUN[t], close=()=>this.setState({catDlg:null,newCat:'',catEdits:{}});
+      v.dlg={title:DLG_T[t],
+        rows:S.cats[t].map(c=>{const key=t+'|'+c, k=items.filter(x=>x.cat===c).length;
+          return {key,value:S.catEdits[key]!=null?S.catEdits[key]:c,count:plural(k,nn[0],nn[1]),
+            onChange:e=>this.setState({catEdits:{...this.state.catEdits,[key]:e.target.value}}),onBlur:()=>this.catRename(t,c),
+            onKey:e=>{if(e.key==='Enter')e.target.blur();},onDelete:()=>this.catDelete(t,c)};}),
+        sinCat:plural(items.filter(x=>!x.cat).length,nn[0],nn[1]),empty:!S.cats[t].length,
+        newCat:S.newCat,onNewCat:e=>this.setState({newCat:e.target.value}),onNewKey:e=>{if(e.key==='Enter')this.catAdd();},
+        add:()=>this.catAdd(),close,onBackdrop:e=>{if(e.target===e.currentTarget)close();}};
+    }
+
+    // Resumen
+    const borr=S.partidas.filter(p=>p.estado==='borrador');
+    v.stats=[{label:'Partidas aprobadas',value:S.partidas.length-borr.length},{label:'Borradores por aprobar',value:borr.length},{label:'Insumos base',value:S.insumos.length},{label:'Cuadrillas',value:S.cuadrillas.length}];
+    v.pendientes=borr.map(p=>({sku:p.sku,nombre:p.nombre,unidad:p.unidad,puF:money(calcs[p.id].pu),fecha:fdate(lastH(p).f),
+      onOpen:()=>this.setState({view:'cat',selId:p.id,q:'',cat:'',est:'todas'}),onApprove:()=>this.approve(p.id)}));
+    v.noPendientes=!borr.length;
+    v.aprobNote=admin?'Solo admin aprueba':'Esperando revisión de admin';
+    v.cambios=S.insumos.filter(i=>i.hist.length>1).map(i=>{const a=i.hist[i.hist.length-2],b=i.hist[i.hist.length-1],u=usosIns(i);
+      return {f:b.f,nombre:i.nombre,unidad:i.unidad,fecha:fdate(b.f),fromF:money(a.precio),toF:money(b.precio),pctF:pct((b.precio/a.precio-1)*100),usos:plural(u,'partida','partidas')};})
+      .sort((a,b)=>a.f<b.f?1:-1).slice(0,6);
+
+    // Generador
+    const d=S.draft;
+    v.d=d||{}; v.g={}; v.dh={}; v.modos=[]; v.steps=[]; v.sheetSections=[]; v.canvasSections=[]; v.libItems=[]; v.libTabs=[];
+    v.hasErr=!!S.err; v.err=S.err;
+    if(d){
+      const r=this.calc(d,S), u=d.unidad||'u';
+      const dh={}; ['nombre','sku','herr','ind','util'].forEach(k=>{dh[k]=e=>this.setD({[k]:e.target.value});}); v.dh=dh;
+      v.selUnidad=this.sel(d.unidad,UNIDADES.map(x=>({v:x,l:x})),e=>this.setD({unidad:e.target.value}));
+      v.selCat=this.sel(d.cat,catOpts('partida'),e=>this.setD({cat:e.target.value}),'Sin categoría');
+      v.genKicker='Generador · '+(d.id?'Editando '+d.sku:'Nueva partida '+d.sku);
+      v.genTitle=d.nombre.trim()||'Partida sin nombre';
+      const w=x=>(r.cd>0?Math.max(0,x/r.cd*100):0).toFixed(2)+'%';
+      v.g={puF:money(r.pu),ivaF:money(r.iva),matF:money(r.mat),moF:money(r.mo),herrF:money(r.herr),eqF:money(r.eq),subF:money(r.sub),cdF:money(r.cd),
+        indF:money(r.ind),utilF:money(r.util),wMat:w(r.mat),wMo:w(r.mo),wHerr:w(r.herr),wEq:w(r.eq),wSub:w(r.sub)};
+      v.saveNote=admin?'Como admin puedes publicar directo al catálogo o dejarla en borrador.':'Se guardará como borrador. Un admin debe aprobarla antes de usarla en cotizaciones.';
+      v.saveDraft=()=>this.save(false); v.saveApprove=()=>this.save(true);
+      v.cancelGen=()=>this.setState({draft:null,view:d.id?'cat':'dash',err:null});
+
+      const mkRow=row=>{const c=row.c,o=row.obj; let cantUnit,showDesp=false,tipoLbl='';
+        if(c.tipo==='insumo'){ if(o.tipo==='material'){cantUnit=o.unidad+' / '+u;showDesp=true;} else cantUnit='h / '+u; }
+        else if(c.tipo==='cuadrilla'){cantUnit=u+' / jornada';tipoLbl='Cuadrilla';}
+        else {cantUnit=o.unidad+' / '+u;tipoLbl='Subpartida';}
+        return {key:c.k,sku:o.sku,nombre:o.nombre,unidad:c.tipo==='cuadrilla'?'jor':o.unidad,precioF:money(row.precio),cant:c.cant,desp:c.desp,showDesp,noDesp:!showDesp,
+          cantUnit,importeF:money(row.imp),tipoLbl,hasTipo:!!tipoLbl&&c.tipo!=='partida',
+          onCant:e=>this.setC(c.k,{cant:e.target.value}),onDesp:e=>this.setC(c.k,{desp:e.target.value}),onRemove:()=>this.rmC(c.k)};};
+      const ins=t=>S.insumos.filter(i=>i.tipo===t);
+      const subs=S.partidas.filter(p=>p.id!==d.id&&!this.uses(p,d.id,S));
+      const defs=[
+        {key:'mat',title:'Materiales',cantHdr:'Cantidad',hint:'Cantidad por unidad de obra; el desperdicio se suma al importe.',
+          opts:ins('material').map(i=>({v:'insumo:'+i.id,l:i.sku+' · '+i.nombre+' — '+money(i.precio)+'/'+i.unidad})),ph:'Agregar material…'},
+        {key:'mo',title:'Mano de obra',cantHdr:'Horas / Rendim.',hint:'Horas de un oficio por unidad, o una cuadrilla con su rendimiento por jornada.',
+          opts:[...S.cuadrillas.map(q=>({v:'cuadrilla:'+q.id,l:'Cuadrilla · '+q.nombre+' — '+money(this.jornada(q,S))+'/jornada'})),...ins('mo').map(i=>({v:'insumo:'+i.id,l:i.sku+' · '+i.nombre+' — '+money(i.precio)+'/h'}))],ph:'Agregar oficio o cuadrilla…'},
+        {key:'eq',title:'Equipo',cantHdr:'Horas',hint:'Horas de uso de equipo por unidad de obra.',
+          opts:ins('equipo').map(i=>({v:'insumo:'+i.id,l:i.sku+' · '+i.nombre+' — '+money(i.precio)+'/h'})),ph:'Agregar equipo…'},
+        {key:'sub',title:'Subpartidas',cantHdr:'Cantidad',hint:'Partidas del catálogo usadas como componente, a costo directo.',
+          opts:subs.map(p=>({v:'partida:'+p.id,l:p.sku+' · '+p.nombre+' — CD '+money(calcs[p.id].cd)+'/'+p.unidad})),ph:'Agregar subpartida…'}
+      ];
+      const sections=defs.map(s=>{const rows=r.rows.filter(x=>x.cls===s.key).map(mkRow), tot=r[s.key]+(s.key==='mo'?r.herr:0);
+        return {...s,rows,count:plural(rows.length,'componente','componentes'),empty:!rows.length,totalF:money(tot),share:(r.cd>0?Math.round(tot/r.cd*100):0)+'%',
+          hasExtra:s.key==='mo',extraLabel:'Herramienta menor ('+num(d.herr)+'% de MO)',extraF:money(r.herr),
+          addSelect:this.sel('',s.opts,e=>this.addC(e.target.value),s.ph)};});
+
+      const modo=S.modo;
+      v.modos=[['hoja','Hoja APU'],['pasos','Por pasos'],['lienzo','Lienzo']].map(([k,l])=>({label:l,checked:modo===k,onChange:()=>this.setState({modo:k})}));
+      v.isPasos=modo==='pasos'; v.isLienzo=modo==='lienzo';
+      const step=S.step;
+      v.showDatos=modo!=='pasos'||step===0;
+      v.sheetSections=modo==='hoja'?sections:(modo==='pasos'&&step>0?[sections[step-1]]:[]);
+      v.canvasSections=modo==='lienzo'?sections:[];
+      const stepDefs=[{label:'Datos',meta:d.unidad+' · '+catLbl(d.cat)}].concat(sections.map(s=>({label:s.title,meta:s.totalF})));
+      v.steps=stepDefs.map((s,i)=>({n:i+1,label:s.label,meta:s.meta,checked:step===i,onChange:()=>this.setState({step:i})}));
+      v.noPrev=step===0; v.hasNext=step<4; v.isLastStep=step===4; v.nextLabel=(stepDefs[step+1]||{}).label||'';
+      v.prevStep=()=>this.setState({step:Math.max(0,step-1)}); v.nextStep=()=>this.setState({step:Math.min(4,step+1)});
+
+      const lt=S.libTipo, lq=S.libQ.toLowerCase();
+      v.libQ=S.libQ; v.onLibQ=e=>this.setState({libQ:e.target.value});
+      v.libTabs=[['material','Materiales'],['mo','Oficios'],['cuadrilla','Cuadrillas'],['equipo','Equipo'],['partida','Partidas']].map(([k,l])=>({label:l,cls:lt===k?'btn btn-primary':'btn btn-secondary',onClick:()=>this.setState({libTipo:k})}));
+      let lib;
+      if(lt==='cuadrilla') lib=S.cuadrillas.map(q=>({id:'cuadrilla:'+q.id,sku:q.sku,nombre:q.nombre,meta:q.sku+' · '+money(this.jornada(q,S))+' / jornada'}));
+      else if(lt==='partida') lib=subs.map(p=>({id:'partida:'+p.id,sku:p.sku,nombre:p.nombre,meta:p.sku+' · CD '+money(calcs[p.id].cd)+' / '+p.unidad}));
+      else lib=ins(lt).map(i=>({id:'insumo:'+i.id,sku:i.sku,nombre:i.nombre,meta:i.sku+' · '+money(i.precio)+' / '+i.unidad}));
+      v.libItems=lib.filter(x=>!lq||(x.nombre+' '+x.sku).toLowerCase().includes(lq)).map(x=>({...x,onAdd:()=>this.addC(x.id)}));
+      v.libEmpty=!v.libItems.length;
+    }
+
+    // Catálogo
+    const q=S.q.toLowerCase();
+    const list=S.partidas.filter(p=>(!S.cat||p.cat===S.cat)&&(S.est==='todas'||p.estado===S.est)&&(!q||(p.nombre+' '+p.sku).toLowerCase().includes(q)));
+    v.q=S.q; v.onQ=e=>this.setState({q:e.target.value});
+    v.selCatFilter=this.sel(S.cat,catOpts('partida'),e=>this.setState({cat:e.target.value}),'Todas las categorías');
+    v.estTabs=[['todas','Todas'],['aprobado','Aprobadas'],['borrador','Borradores']].map(([k,l])=>({label:l,checked:S.est===k,onChange:()=>this.setState({est:k})}));
+    v.catCount=plural(S.partidas.length,'partida','partidas')+' · precios unitarios con IVA incluido';
+    v.catRows=list.map(p=>({key:p.id,sku:p.sku,nombre:p.nombre,cat:catLbl(p.cat),nComp:plural(p.comps.length,'componente','componentes'),unidad:p.unidad,puF:money(calcs[p.id].pu),
+      estadoLbl:p.estado==='aprobado'?'Aprobada':'Borrador',tagClass:tagOf(p.estado),fecha:fdate(lastH(p).f),
+      rowBg:S.selId===p.id?'var(--color-accent-100)':'transparent',onClick:()=>this.setState({selId:p.id})}));
+    v.catEmpty=!list.length;
+    const sp=S.partidas.find(p=>p.id===S.selId);
+    v.hasSel=!!sp; v.sel={}; v.closeSel=()=>this.setState({selId:null});
+    if(sp){
+      const r=calcs[sp.id], vals=sp.hist.map(x=>x.pu), mn=Math.min(...vals), mx=Math.max(...vals), n=vals.length;
+      const pts=vals.map((y,i)=>[(n>1?i/(n-1):0)*312+4,66-(mx>mn?(y-mn)/(mx-mn):0.5)*60]);
+      if(n===1) pts.push([316,pts[0][1]]);
+      const u=sp.unidad;
+      v.sel={sku:sp.sku,nombre:sp.nombre,cat:catLbl(sp.cat),unidad:u,estadoLbl:sp.estado==='aprobado'?'Aprobada':'Borrador',tagClass:tagOf(sp.estado),
+        puF:money(r.pu),cdF:money(r.cd),ind:sp.ind,util:sp.util,herr:sp.herr,herrF:money(r.herr),
+        canApprove:admin&&sp.estado==='borrador',pendNote:!admin&&sp.estado==='borrador',
+        onApprove:()=>this.approve(sp.id),onEdit:()=>this.editPartida(sp.id),onDup:()=>this.dupPartida(sp.id),
+        comps:r.rows.map(x=>{const c=x.c,o=x.obj; let cf;
+          if(c.tipo==='cuadrilla') cf='Cuadrilla · rinde '+qty(num(c.cant))+' '+u+'/jornada';
+          else if(c.tipo==='partida') cf='Subpartida · '+qty(num(c.cant))+' '+o.unidad+' × '+money(x.precio);
+          else if(o.tipo==='material') cf=qty(num(c.cant))+' '+o.unidad+' × '+money(x.precio)+(num(c.desp)?' + '+qty(num(c.desp))+'% desp.':'');
+          else cf=qty(num(c.cant))+' h × '+money(x.precio);
+          return {nombre:o.nombre,cantF:cf,impF:money(x.imp)};}),
+        sparkD:'M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L'),
+        varF:n>1?pct((vals[n-1]/vals[0]-1)*100)+' desde el alta':'Sin cambios aún',
+        hist:sp.hist.map((x,i)=>({fecha:fdate(x.f),m:x.m,puF:money(x.pu),deltaF:i>0&&Math.abs(x.pu-sp.hist[i-1].pu)>0.005?pct((x.pu/sp.hist[i-1].pu-1)*100):''})).reverse().slice(0,8)};
+    }
+
+    // Precios base
+    const bt=S.baseTipo, bq=S.baseQ.toLowerCase();
+    v.baseTabs=Object.keys(TIPOS).map(k=>({label:TIPOS[k],count:S.insumos.filter(i=>i.tipo===k).length,checked:bt===k,onChange:()=>this.setState({baseTipo:k,baseCat:'',nuevo:{...S.nuevo,cat:''}})}));
+    v.selBaseCat=this.sel(S.baseCat,catOpts(bt),e=>this.setState({baseCat:e.target.value}),'Todas las categorías');
+    v.selNuevoCat=this.sel(S.nuevo.cat||S.baseCat,catOpts(bt),e=>this.setState({nuevo:{...S.nuevo,cat:e.target.value}}),'Sin categoría');
+    v.baseTipoLbl=TIPOS[bt]; v.precioLbl=bt==='material'?'Precio / unidad':'Precio / hora';
+    v.baseQ=S.baseQ; v.onBaseQ=e=>this.setState({baseQ:e.target.value});
+    v.nuevo=S.nuevo;
+    v.nh={nombre:e=>this.setState({nuevo:{...S.nuevo,nombre:e.target.value}}),precio:e=>this.setState({nuevo:{...S.nuevo,precio:e.target.value}}),cat:e=>this.setState({nuevo:{...S.nuevo,cat:e.target.value}})};
+    v.selNuevoUnidad=bt==='material'?this.sel(S.nuevo.unidad,UNIDADES.filter(x=>x!=='h').map(x=>({v:x,l:x})),e=>this.setState({nuevo:{...S.nuevo,unidad:e.target.value}})):this.sel('h',[{v:'h',l:'h'}],()=>{});
+    v.addInsumo=()=>this.addInsumo();
+    const bl=S.insumos.filter(i=>i.tipo===bt&&(!S.baseCat||i.cat===S.baseCat)&&(!bq||(i.nombre+' '+i.sku+' '+i.cat).toLowerCase().includes(bq)));
+    v.baseRows=bl.map(i=>{const h=i.hist, l=h[h.length-1], a=h[h.length-2], us=usosIns(i);
+      return {key:i.id,sku:i.sku,nombre:i.nombre,cat:i.cat,unidad:i.unidad,
+        catSelect:this.sel(i.cat,catOpts(i.tipo),e=>{const val=e.target.value;this.setState(s=>({insumos:s.insumos.map(x=>x.id===i.id?{...x,cat:val}:x)}));},'Sin categoría',true),precio:S.edits[i.id]!=null?S.edits[i.id]:i.precio,
+        lastF:fdate(l.f),deltaF:a?pct((l.precio/a.precio-1)*100):'',usos:plural(us,'partida','partidas'),
+        onChange:e=>this.setState({edits:{...this.state.edits,[i.id]:e.target.value}}),onBlur:()=>this.commitPrecio(i.id),
+        onKey:e=>{if(e.key==='Enter')e.target.blur();}};});
+    v.baseEmpty=!bl.length;
+
+    // Cuadrillas
+    const oficios=S.insumos.filter(i=>i.tipo==='mo');
+    v.addCuadrilla=()=>this.addCuadrilla();
+    v.selCuadCat=this.sel(S.cuadCat,catOpts('cuadrilla'),e=>this.setState({cuadCat:e.target.value}),'Todas las categorías');
+    v.cuadEmpty=!S.cuadrillas.some(c=>!S.cuadCat||c.cat===S.cuadCat);
+    v.cuadCards=S.cuadrillas.filter(c=>!S.cuadCat||c.cat===S.cuadCat).map(c=>{const j=this.jornada(c,S), hrs=num(c.horas||8), us=S.partidas.filter(p=>p.comps.some(x=>x.tipo==='cuadrilla'&&x.ref===c.id)).length;
+      return {key:c.id,sku:c.sku,nombre:c.nombre,horas:hrs,
+        catSelect:this.sel(c.cat,catOpts('cuadrilla'),e=>{const val=e.target.value;this.setState(s=>({cuadrillas:s.cuadrillas.map(x=>x.id===c.id?{...x,cat:val}:x)}));},'Sin categoría',true),jornadaF:money(j),horaF:money(hrs?j/hrs:0)+' por hora',usos:'Usada en '+plural(us,'partida','partidas'),
+        onNombre:e=>{const val=e.target.value; this.setState(s=>({cuadrillas:s.cuadrillas.map(x=>x.id===c.id?{...x,nombre:val}:x)}));},
+        miembros:c.miembros.map((m,idx)=>{const o=S.insumos.find(x=>x.id===m.ref)||{nombre:'—',precio:0};
+          const setCant=nc=>this.setCuad(c.id,x=>({...x,miembros:x.miembros.map((mm,ii)=>ii===idx?{...mm,cant:nc}:mm)}));
+          return {nombre:o.nombre,precioF:money(o.precio)+' / h',cantF:qty(num(m.cant)),
+            onMinus:()=>setCant(Math.max(0.5,num(m.cant)-0.5)),onPlus:()=>setCant(num(m.cant)+0.5),
+            onRemove:()=>this.setCuad(c.id,x=>({...x,miembros:x.miembros.filter((_,ii)=>ii!==idx)}))};}),
+        addSelect:this.sel('',oficios.filter(o=>!c.miembros.some(m=>m.ref===o.id)).map(o=>({v:o.id,l:o.nombre+' — '+money(o.precio)+'/h'})),
+          e=>{const ref=e.target.value; if(ref) this.setCuad(c.id,x=>({...x,miembros:[...x.miembros,{ref,cant:1}]}));},'+ Agregar oficio…')};});
+    return v;
+  }
+}
+</script>
+</body>
+</html>
