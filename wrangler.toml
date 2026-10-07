@@ -20,7 +20,10 @@ DOMINIO_PROPIO = "cost101.taller101.com"
 directory = "./public"
 binding = "ASSETS"
 not_found_handling = "404-page"
-# Todo pasa por el Worker, para que la redirección de workers.dev corra.
+# Las rutas se sirven tal cual: sin esto la plataforma manda /entrar.html a
+# /entrar y el candado lo regresa (le pasó a quote101).
+html_handling = "none"
+# Todo pasa por el Worker: es quien pide la sesión antes de entregar la app.
 run_worker_first = true
 
 [[services]]
@@ -39,7 +42,8 @@ routes = []
 directory = "./public"
 binding = "ASSETS"
 not_found_handling = "404-page"
-run_worker_first = ["/s101/*"]
+html_handling = "none"
+run_worker_first = true
 
 [[env.staging.services]]
 binding = "API"

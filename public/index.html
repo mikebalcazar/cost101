@@ -21,9 +21,21 @@ window.__resources={
 <helmet>
 <link rel="stylesheet" href="_ds/industry-d54496d2-f6ce-49fa-82ce-a48645e2d4ea/styles.css">
 <script src="_ds/industry-d54496d2-f6ce-49fa-82ce-a48645e2d4ea/_ds_bundle.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:"Raleway";src:url("fonts/raleway-400.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Raleway";src:url("fonts/raleway-500.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Raleway";src:url("fonts/raleway-600.woff2") format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Raleway";src:url("fonts/raleway-700.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Raleway";src:url("fonts/raleway-800.woff2") format("woff2");font-weight:800;font-display:swap}
+.cuenta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-left:auto;font-size:13px;color:var(--color-neutral-700)}
+.cuenta a,.cuenta button.liga{color:var(--color-accent-700);background:none;border:0;font:inherit;cursor:pointer;padding:4px 6px;text-decoration:none}
+.cuenta a:hover,.cuenta button.liga:hover{color:#fff}
+.cuenta .empresa{color:var(--color-text);font-weight:600}
+.cuenta .sync{font-size:11px;letter-spacing:.08em;text-transform:uppercase;min-width:74px;text-align:right}
+.quitar{width:28px;height:28px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;border:1px solid transparent;background:transparent;color:var(--color-neutral-600);cursor:pointer;font:inherit;font-size:12px}
+.quitar:hover{color:#fff;border-color:rgba(255,255,255,.2)}
+.quitar.seguro{width:auto;padding:0 10px;color:#fff;background:#b3261e;border-color:#b3261e;font-weight:600}
+.aviso101{padding:28px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
 :root{color-scheme:dark;--color-bg:#0f1b24;--color-surface:#16242e;--color-text:#e8eef2;--color-accent:#3AA3DC;--color-divider:#2a3a46;
 --color-neutral-100:#1b2a35;--color-neutral-200:#22323e;--color-neutral-300:#2a3a46;--color-neutral-400:#3d505e;--color-neutral-500:#5f7482;--color-neutral-600:#8094a2;--color-neutral-700:#a9c0ce;--color-neutral-800:#c9d7e0;--color-neutral-900:#e8eef2;
 --color-accent-100:#0f3149;--color-accent-200:#124263;--color-accent-300:#155a86;--color-accent-400:#0080C1;--color-accent-500:#1c90cc;--color-accent-600:#5fb6e4;--color-accent-700:#86c9ec;--color-accent-800:#addcf3;--color-accent-900:#d9eff9;
@@ -65,29 +77,27 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
           <a href="#" aria-current="{{ n.current }}" onClick="{{ n.onClick }}" style="font-family:var(--font-heading);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase">{{ n.label }}</a>
         </sc-for>
       </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Rol</span>
-        <div class="seg">
-          <label class="seg-opt"><input type="radio" name="rol" checked="{{ rolAdmin }}" onChange="{{ setAdmin }}">Admin</label>
-          <label class="seg-opt"><input type="radio" name="rol" checked="{{ rolEquipo }}" onChange="{{ setEquipo }}">Equipo</label>
-        </div>
-      </div>
+      {{ cuenta }}
     </nav>
   </header>
 
   <main style="flex:1;width:100%;max-width:1360px;margin:0 auto;padding:32px 20px 80px;box-sizing:border-box">
+
+    <!-- Cargando, sin licencia o falla: lo arma la lógica (ver `aviso`). -->
+    {{ aviso }}
 
     <!-- RESUMEN -->
     <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
       <section data-screen-label="Resumen" style="display:flex;flex-direction:column;gap:32px">
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px">
           <div style="max-width:640px">
-            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">Resumen · 6 oct 2026</div>
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">Resumen · {{ hoyF }}</div>
             <h1 style="margin:0 0 6px;font-size:44px">Panel de <span style="color:var(--color-accent)">costos</span></h1>
             <p style="margin:0;color:var(--color-neutral-700);text-wrap:pretty">Precios base con IVA incluido. Cada partida se recalcula sola cuando cambia un insumo o una cuadrilla.</p>
           </div>
           <button class="btn btn-primary blueprint" onClick="{{ onNueva }}" style="padding:10px 18px;font-size:15px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Nueva partida</button>
         </div>
+        {{ vacioCard }}
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
           <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
             <div class="blueprint" style="padding:18px 20px;display:flex;flex-direction:column;gap:10px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
@@ -401,6 +411,7 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
                 <button class="btn btn-secondary" onClick="{{ sel.onEdit }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>Editar</button>
                 <button class="btn btn-secondary" onClick="{{ sel.onDup }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><rect width="14" height="14" x="8" y="8"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Duplicar</button>
               </div>
+              {{ sel.quitar }}
               <sc-if value="{{ sel.pendNote }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--color-accent-800);background:var(--color-accent-100);padding:8px 10px">Borrador — pendiente de aprobación por un admin.</div></sc-if>
               <div>
                 <h6 style="margin:0 0 8px;color:var(--color-neutral-700)">Composición</h6>
@@ -461,19 +472,20 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
             <button class="btn btn-secondary" onClick="{{ addInsumo }}" style="min-height:36px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Agregar</button>
           </div>
           <div style="overflow-x:auto">
-            <div style="min-width:820px">
-              <div style="display:grid;grid-template-columns:84px minmax(220px,1fr) 170px 56px 140px 150px 84px;gap:0 12px;padding:10px 16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700);border-bottom:1px solid var(--color-divider)">
-                <span>Clave</span><span>Insumo</span><span>Categoría</span><span>Unidad</span><span style="text-align:right">{{ precioLbl }}</span><span>Último cambio</span><span style="text-align:right">Usado en</span>
+            <div style="min-width:900px">
+              <div style="display:grid;grid-template-columns:84px minmax(220px,1fr) 170px 76px 140px 150px 84px 64px;gap:0 12px;padding:10px 16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700);border-bottom:1px solid var(--color-divider)">
+                <span>Clave</span><span>Insumo</span><span>Categoría</span><span>Unidad</span><span style="text-align:right">{{ precioLbl }}</span><span>Último cambio</span><span style="text-align:right">Usado en</span><span></span>
               </div>
               <sc-for list="{{ baseRows }}" as="r" hint-placeholder-count="8">
-                <div style="display:grid;grid-template-columns:84px minmax(220px,1fr) 170px 56px 140px 150px 84px;gap:0 12px;align-items:center;padding:6px 16px;font-size:14px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                <div style="display:grid;grid-template-columns:84px minmax(220px,1fr) 170px 76px 140px 150px 84px 64px;gap:0 12px;align-items:center;padding:6px 16px;font-size:14px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
                   <span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.04em;color:var(--color-neutral-700)">{{ r.sku }}</span>
-                  <span>{{ r.nombre }}</span>
+                  <span style="min-width:0">{{ r.nombreInput }}</span>
                   <span style="min-width:0">{{ r.catSelect }}</span>
-                  <span style="color:var(--color-neutral-700)">{{ r.unidad }}</span>
+                  <span style="min-width:0;color:var(--color-neutral-700)">{{ r.unidadSel }}</span>
                   <span style="display:flex;align-items:center;gap:6px;justify-content:flex-end"><span style="color:var(--color-neutral-700)">$</span><input class="input" type="number" step="any" min="0" value="{{ r.precio }}" onChange="{{ r.onChange }}" onBlur="{{ r.onBlur }}" onKeyDown="{{ r.onKey }}" style="width:104px;min-height:30px;padding:4px 8px;text-align:right;font-variant-numeric:tabular-nums"></span>
                   <span style="font-size:12px;color:var(--color-neutral-700)">{{ r.lastF }} <span style="color:var(--color-accent-800)">{{ r.deltaF }}</span></span>
                   <span style="text-align:right;font-size:13px">{{ r.usos }}</span>
+                  <span style="text-align:right">{{ r.quitar }}</span>
                 </div>
               </sc-for>
               <sc-if value="{{ baseEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:22px 16px;color:var(--color-neutral-700);font-size:14px">Sin insumos con ese criterio.</div></sc-if>
@@ -497,7 +509,7 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:28px">
           <sc-for list="{{ cuadCards }}" as="c" hint-placeholder-count="3">
             <div class="blueprint" style="padding:18px;display:flex;flex-direction:column;gap:12px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-neutral-700)"><span style="font-family:var(--font-heading);letter-spacing:.06em">{{ c.sku }}</span><span>{{ c.usos }}</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-neutral-700)"><span style="font-family:var(--font-heading);letter-spacing:.06em">{{ c.sku }}</span><span style="display:flex;align-items:center;gap:8px">{{ c.usos }} {{ c.quitar }}</span></div>
               <input class="input" value="{{ c.nombre }}" onChange="{{ c.onNombre }}" style="font-family:var(--font-heading);font-weight:600;font-size:22px;background:transparent;border-color:transparent;padding:2px 4px;margin-left:-4px">
               <div style="max-width:240px">{{ c.catSelect }}</div>
               <div>
@@ -576,147 +588,297 @@ const CAT_NOUN={material:['insumo','insumos'],mo:['insumo','insumos'],equipo:['i
 const DLG_T={material:'Categorías de materiales',mo:'Categorías de mano de obra',equipo:'Categorías de equipo',cuadrilla:'Categorías de cuadrillas',partida:'Categorías del catálogo'};
 const TIPOS={material:'Materiales',mo:'Mano de obra',equipo:'Equipo'};
 
-function seed(){
-  const I=(id,sku,nombre,tipo,unidad,precio,cat,h)=>({id,sku,nombre,tipo,unidad,precio,cat,hist:(h||[['2026-01-12',precio]]).map(([f,p])=>({f,precio:p}))});
-  const insumos=[
-    I('m1','MAT-001','Panel de yeso 1/2" 1.22×2.44 m','material','pza',245,'Tableros',[['2026-03-02',228],['2026-07-15',239],['2026-09-28',245]]),
-    I('m2','MAT-002','Canal galvanizado 6.35 cm cal. 26','material','ml',28,'Tableros'),
-    I('m3','MAT-003','Poste galvanizado 6.35 cm cal. 26','material','ml',36,'Tableros',[['2026-01-12',33],['2026-05-10',36]]),
-    I('m4','MAT-004','Tornillo para tablaroca 1"','material','pza',0.35,'Tableros'),
-    I('m5','MAT-005','Colchoneta fibra de vidrio 2.5" acústica','material','m²',68,'Aislantes',[['2026-01-12',61],['2026-08-20',68]]),
-    I('m6','MAT-006','Compuesto para juntas (redimix)','material','kg',14,'Tableros'),
-    I('m7','MAT-007','Cinta de papel para juntas','material','ml',1.2,'Tableros'),
-    I('m8','MAT-008','Sellador vinílico','material','l',78,'Pintura'),
-    I('m9','MAT-009','Pintura vinílica lavable','material','l',115,'Pintura',[['2026-01-12',108],['2026-06-01',115]]),
-    I('m10','MAT-010','Lija para pared #120','material','pza',9,'Pintura'),
-    I('m11','MAT-011','Block hueco 15×20×40 cm','material','pza',18,'Obra civil',[['2026-01-12',16.5],['2026-04-01',18]]),
-    I('m12','MAT-012','Cemento gris CPC 30R','material','kg',5.2,'Obra civil',[['2026-02-01',4.9],['2026-06-01',5.05],['2026-09-01',5.2]]),
-    I('m13','MAT-013','Arena','material','m³',650,'Obra civil'),
-    I('m14','MAT-014','Grava 3/4"','material','m³',720,'Obra civil',[['2026-01-12',690],['2026-09-15',720]]),
-    I('m15','MAT-015','Agua','material','m³',45,'Obra civil'),
-    I('m16','MAT-016','Malla electrosoldada 6×6-10/10','material','m²',38,'Acero'),
-    I('m17','MAT-017','Cable THW-LS cal. 12 AWG','material','ml',14.5,'Eléctrico',[['2026-01-12',12.9],['2026-08-05',14.5]]),
-    I('m18','MAT-018','Cable THW-LS cal. 14 AWG','material','ml',10.2,'Eléctrico',[['2026-01-12',9.4],['2026-08-05',10.2]]),
-    I('m19','MAT-019','Poliducto naranja 1/2"','material','ml',6.8,'Eléctrico'),
-    I('m20','MAT-020','Caja chalupa galvanizada','material','pza',14,'Eléctrico'),
-    I('m21','MAT-021','Contacto dúplex polarizado con placa','material','pza',85,'Eléctrico',[['2026-01-12',79],['2026-06-20',85]]),
-    I('m22','MAT-022','Apagador sencillo con placa','material','pza',72,'Eléctrico'),
-    I('m23','MAT-023','Luminaria LED de empotrar 12 W','material','pza',245,'Eléctrico',[['2026-01-12',268],['2026-09-22',245]]),
-    I('m24','MAT-024','Cinta de aislar','material','pza',18,'Eléctrico'),
-    I('m25','MAT-025','Interruptor termomagnético 1P 20 A','material','pza',165,'Eléctrico'),
-    I('m26','MAT-026','Centro de carga 8 circuitos','material','pza',890,'Eléctrico'),
-    I('m27','MAT-027','Triplay de pino 16 mm 1.22×2.44 m','material','pza',720,'Maderas',[['2026-02-10',665],['2026-09-10',720]]),
-    I('m28','MAT-028','MDF 15 mm 1.22×2.44 m','material','pza',610,'Tableros',[['2026-01-12',585],['2026-09-10',610]]),
-    I('m29','MAT-029','Melamina blanca 16 mm 1.22×2.44 m','material','pza',890,'Tableros',[['2026-01-12',845],['2026-10-02',890]]),
-    I('m30','MAT-030','Madera de pino de 1ª (pie tabla)','material','pt',32,'Maderas'),
-    I('m31','MAT-031','Cubrecanto PVC blanco 19 mm','material','ml',6.5,'Maderas'),
-    I('m32','MAT-032','Bisagra bidimensional cierre suave','material','pza',48,'Herrajes'),
-    I('m33','MAT-033','Corredera telescópica 45 cm (par)','material','jgo',210,'Herrajes'),
-    I('m34','MAT-034','Jaladera de aluminio 128 mm','material','pza',65,'Herrajes'),
-    I('m35','MAT-035','Pegamento blanco para madera','material','l',95,'Maderas'),
-    I('m36','MAT-036','Barniz de poliuretano','material','l',260,'Pintura'),
-    I('m37','MAT-037','Tornillo para madera 1 1/2"','material','pza',0.6,'Herrajes'),
-    I('m38','MAT-038','Bisagra de libro 3.5" latonada','material','pza',38,'Herrajes'),
-    I('m39','MAT-039','Chapa de perilla para interior','material','pza',320,'Herrajes'),
-    I('m40','MAT-040','Tubo PPR 1/2"','material','ml',32,'Hidráulico'),
-    I('m41','MAT-041','Codo PPR 1/2" 90°','material','pza',9,'Hidráulico'),
-    I('m42','MAT-042','Mármol travertino 40×40 cm','material','m²',680,'Mármoles',[['2026-01-12',640],['2026-05-18',680]]),
-    I('m43','MAT-043','Adhesivo para piedra natural','material','kg',9.5,'Obra civil'),
-    I('o1','MO-001','Oficial albañil','mo','h',95,'Albañilería'),
-    I('o2','MO-002','Ayudante general','mo','h',65,'General',[['2026-01-12',60],['2026-07-01',65]]),
-    I('o3','MO-003','Oficial tablaroquero','mo','h',105,'Tablaroca'),
-    I('o4','MO-004','Oficial pintor','mo','h',88,'Pintura'),
-    I('o5','MO-005','Oficial electricista','mo','h',110,'Electricidad'),
-    I('o6','MO-006','Ayudante electricista','mo','h',70,'Electricidad'),
-    I('o7','MO-007','Oficial carpintero','mo','h',115,'Carpintería',[['2026-01-12',105],['2026-07-01',115]]),
-    I('o8','MO-008','Ayudante carpintero','mo','h',70,'Carpintería'),
-    I('o9','MO-009','Oficial plomero','mo','h',105,'Plomería'),
-    I('o10','MO-010','Instalador de mármol','mo','h',120,'Albañilería'),
-    I('e1','EQ-001','Andamio tubular (cuerpo)','equipo','h',18,'Andamios'),
-    I('e2','EQ-002','Revolvedora 1 saco','equipo','h',65,'Maquinaria'),
-    I('e3','EQ-003','Atornillador eléctrico','equipo','h',12,'Equipo menor'),
-    I('e4','EQ-004','Sierra circular de banco','equipo','h',35,'Maquinaria'),
-    I('e5','EQ-005','Rotomartillo','equipo','h',22,'Equipo menor'),
-    I('e6','EQ-006','Enchapadora de cantos portátil','equipo','h',40,'Maquinaria'),
-    I('e7','EQ-007','Termofusor PPR','equipo','h',15,'Equipo menor')
-  ];
-  const cuadrillas=[
-    {id:'c1',sku:'CUA-01',nombre:'Albañilería (1 of. + 1 ay.)',cat:'Albañilería',horas:8,miembros:[{ref:'o1',cant:1},{ref:'o2',cant:1}]},
-    {id:'c2',sku:'CUA-02',nombre:'Tablaroca (1 of. + 1 ay.)',cat:'Tablaroca',horas:8,miembros:[{ref:'o3',cant:1},{ref:'o2',cant:1}]},
-    {id:'c3',sku:'CUA-03',nombre:'Pintura (1 pintor + ½ ay.)',cat:'Pintura',horas:8,miembros:[{ref:'o4',cant:1},{ref:'o2',cant:0.5}]},
-    {id:'c4',sku:'CUA-04',nombre:'Electricidad (1 of. + 1 ay.)',cat:'Electricidad',horas:8,miembros:[{ref:'o5',cant:1},{ref:'o6',cant:1}]},
-    {id:'c5',sku:'CUA-05',nombre:'Carpintería (1 of. + 1 ay.)',cat:'Carpintería',horas:8,miembros:[{ref:'o7',cant:1},{ref:'o8',cant:1}]},
-    {id:'c6',sku:'CUA-06',nombre:'Plomería (1 of. + ½ ay.)',cat:'Plomería',horas:8,miembros:[{ref:'o9',cant:1},{ref:'o2',cant:0.5}]}
-  ];
-  const P=(id,sku,nombre,unidad,cat,estado,comps)=>({id,sku,nombre,unidad,cat,estado,ind:12,util:10,herr:3,hist:[],
-    comps:comps.map(([t,ref,cant,desp])=>({k:uid(),tipo:t==='c'?'cuadrilla':t==='p'?'partida':'insumo',ref,cant,desp:desp||0}))});
-  const partidas=[
-    P('p1','PAR-101',"Concreto hecho en obra f'c=150 kg/cm²",'m³','Concretos','aprobado',[['i','m12',330,3],['i','m13',0.55,5],['i','m14',0.7,5],['i','m15',0.22],['i','e2',1.5],['c','c1',3]]),
-    P('p2','PAR-102','Mortero cemento-arena 1:4','m³','Morteros','aprobado',[['i','m12',350,3],['i','m13',1.1,5],['i','m15',0.25],['c','c1',4]]),
-    P('p3','PAR-201','Pintura vinílica 2 manos sobre muro','m²','Acabados','aprobado',[['i','m8',0.1,5],['i','m9',0.22,5],['i','m10',0.05],['c','c3',45],['i','e1',0.05]]),
-    P('p4','PAR-301','Muro de block 15 cm asentado con mortero','m²','Muros','aprobado',[['i','m11',12.5,3],['p','p2',0.017],['c','c1',10],['i','e1',0.1]]),
-    P('p5','PAR-302','Muro de tablaroca 2 caras con aislante acústico y pintura','m²','Muros','borrador',[['i','m1',0.672,8],['i','m2',0.7,5],['i','m3',2.2,5],['i','m4',30,10],['i','m5',1,5],['i','m6',0.9,10],['i','m7',2.4,10],['c','c2',12],['i','e3',0.15],['i','e1',0.1],['p','p3',2]]),
-    P('p6','PAR-401','Firme de concreto 10 cm con malla','m²','Pisos','aprobado',[['p','p1',0.105],['i','m16',1.05,5],['c','c1',25]]),
-    P('p7','PAR-402','Plafón de tablaroca liso','m²','Plafones','borrador',[['i','m1',0.36,8],['i','m2',0.5,5],['i','m3',2.5,5],['i','m4',15,10],['i','m6',0.6,10],['i','m7',1.4,10],['c','c2',14],['i','e1',0.2]]),
-    P('p8','PAR-501','Salida de contacto dúplex (ranurado, poliducto y cableado)','pza','Eléctrico','aprobado',[['i','m19',6,5],['i','m17',18,8],['i','m20',1],['i','m21',1],['i','m24',0.1],['c','c4',6],['i','e5',0.3]]),
-    P('p9','PAR-502','Salida de alumbrado con apagador y luminaria LED','pza','Eléctrico','aprobado',[['i','m19',7,5],['i','m18',21,8],['i','m20',2],['i','m22',1],['i','m23',1],['i','m24',0.1],['c','c4',5],['i','e5',0.3]]),
-    P('p10','PAR-503','Circuito derivado 20 A desde centro de carga','pza','Eléctrico','borrador',[['i','m25',1],['i','m17',30,8],['i','m19',15,5],['c','c4',4]]),
-    P('p11','PAR-504','Centro de carga 8 circuitos instalado','pza','Eléctrico','aprobado',[['i','m26',1],['i','m24',0.5],['c','c4',2],['i','e5',0.5]]),
-    P('p12','PAR-601','Puerta de tambor MDF 0.90×2.10 m con marco y chapa','pza','Carpintería','aprobado',[['i','m28',1.3,10],['i','m30',12,10],['i','m35',0.25],['i','m38',3],['i','m39',1],['i','m37',24],['i','m36',0.6,10],['c','c5',1.5],['i','e4',1.5]]),
-    P('p13','PAR-602','Mueble bajo de cocina en melamina 16 mm','ml','Carpintería','aprobado',[['i','m29',1.6,12],['i','m31',6,10],['i','m32',4],['i','m33',1],['i','m34',2],['i','m37',40],['c','c5',1.2],['i','e4',1.5],['i','e6',0.8]]),
-    P('p14','PAR-603','Closet de melamina con puertas abatibles','m²','Carpintería','borrador',[['i','m29',2.1,12],['i','m28',0.4,10],['i','m31',8,10],['i','m32',3],['i','m34',1],['i','m37',50],['c','c5',1.5],['i','e4',1],['i','e6',0.8]]),
-    P('p15','PAR-701','Salida hidráulica de agua fría PPR 1/2"','pza','Hidráulico','aprobado',[['i','m40',6,5],['i','m41',4],['c','c6',6],['i','e7',0.4]]),
-    P('p16','PAR-404','Piso de mármol travertino 40×40 asentado con adhesivo','m²','Pisos','aprobado',[['i','m42',1,8],['i','m43',6,5],['i','o10',0.9],['i','o2',0.6]])
-  ];
-  return {insumos,cuadrillas,partidas,cats:JSON.parse(JSON.stringify(CATS_DEF)),seedV:2};
+/* ─────────────── cost101 sobre la suite (7-oct-2026) ───────────────
+ *
+ * Hasta el 6-oct esto era el prototipo de Claude Design y guardaba en el
+ * navegador (localStorage). Ahora los datos viven en la base de la empresa,
+ * en suite101-api: `costos_base`, `cuadrillas` y `productos` (con su receta).
+ *
+ * La pantalla sigue trabajando como antes —con su estado en memoria y su
+ * cuenta en vivo mientras se teclea—, y debajo hay una sola pieza nueva: el
+ * SINCRONIZADOR. Cada vez que el estado cambia, compara lo que hay en pantalla
+ * con lo último que confirmó el servidor y manda la diferencia. Al terminar
+ * vuelve a leer del servidor, que es quien manda: la clave, el historial, el
+ * precio y si quedó aprobado o en borrador los decide la API, no esta página.
+ */
+const API='/s101';
+const ERR={
+  sin_sesion:'Tu sesión terminó. Vuelve a entrar.',
+  sin_permiso:'No tienes permiso para eso.',
+  app_inactiva:'Tu empresa no tiene cost101 activo.',
+  app_no_permitida:'cost101 no está entre tus aplicaciones. Pídeselo a quien administra tu empresa.',
+  org_sin_pago:'La suscripción de la empresa venció. Avísale a quien la administra.',
+  clave_repetida:'Esa clave ya la tiene otro renglón.',
+  dinero_no_entero:'El precio no se pudo leer. Escríbelo con dos decimales.',
+  sin_respuesta:'No hubo forma de llegar al servidor. Revisa tu señal.',
+};
+function mensajeDe(e){
+  if(!e) return 'Algo no salió bien.';
+  if(e.cual==='en_uso'){
+    const u=(e.detalle&&e.detalle.usado_en)||[];
+    if(!u.length) return 'No se puede quitar: algo más lo usa.';
+    return 'No se puede quitar: lo usa «'+u[0].nombre+'»'+(u.length>1?' y '+(u.length-1)+' más':'')+'.';
+  }
+  if(e.cual==='datos_invalidos'){
+    const er=e.detalle&&e.detalle.errores; const k=er&&Object.keys(er)[0];
+    if(k) return er[k];
+    if(e.detalle&&e.detalle.motivo) return e.detalle.motivo;
+  }
+  if(e.cual==='sin_permiso'&&e.detalle&&e.detalle.motivo) return 'No se puede: '+e.detalle.motivo+'.';
+  return ERR[e.cual]||e.message||'Algo no salió bien.';
 }
+async function pedir(ruta,o){
+  o=o||{}; let r;
+  try{
+    r=await fetch(API+ruta,{method:o.method||'GET',headers:o.body!==undefined?{'Content-Type':'application/json'}:undefined,
+      body:o.body!==undefined?JSON.stringify(o.body):undefined,credentials:'same-origin'});
+  }catch(_){ throw Object.assign(new Error(ERR.sin_respuesta),{cual:'sin_respuesta'}); }
+  let d=null; try{ d=await r.json(); }catch(_){}
+  if(r.status===401){ location.replace('/entrar.html'); throw Object.assign(new Error(ERR.sin_sesion),{cual:'sin_sesion'}); }
+  if(!r.ok||!d||!d.ok){
+    const cual=(d&&d.error)||'sin_respuesta';
+    throw Object.assign(new Error(ERR[cual]||('Algo no salió bien ('+cual+').')),{cual,detalle:d&&d.detalle,estado:r.status});
+  }
+  return d.data;
+}
+const centavos=n=>Math.round(num(n)*100);
+const nuevoId=()=>'tmp-'+uid()+uid();
+// Del servidor (centavos, nombres de la suite) a la forma de la pantalla.
+const deCosto=c=>{const precio=num(c.precio)/100, h=(c.historial||[]).map(x=>({f:x.f,precio:num(x.precio)/100}));
+  return {id:c.id,sku:c.clave||'',nombre:c.nombre,tipo:c.tipo,unidad:c.unidad||'pza',precio,cat:c.categoria||'',hist:h.length?h:[{f:HOY,precio}]};};
+const deCuad=q=>({id:q.id,sku:q.clave||'',nombre:q.nombre,cat:q.categoria||'',horas:num(q.horas)||8,miembros:(q.miembros||[]).map(m=>({ref:m.ref,cant:num(m.cant)}))});
+const deProd=p=>{const a=p.apu||{}, pu=p.desglose?num(p.desglose.pu)/100:0, h=(p.historial||[]).map(x=>({f:x.f,pu:num(x.pu)/100,m:x.m}));
+  return {id:p.id,sku:p.codigo||'',nombre:p.nombre,unidad:p.unidad||'pza',cat:p.categoria||'',estado:p.estado==='aprobado'?'aprobado':'borrador',
+    herr:num(a.herr),ind:num(a.ind),util:num(a.util),comps:(a.comps||[]).map((c,i)=>({k:c.k||('c'+i),tipo:c.tipo,ref:c.ref,cant:num(c.cant),desp:num(c.desp)})),
+    hist:h.length?h:[{f:HOY,pu,m:'Alta'}]};};
+// Lo que se compara para saber si un renglón cambió (lo que el servidor guarda de él).
+const kIns=i=>JSON.stringify([i.sku,i.nombre,i.tipo,i.unidad,centavos(i.precio),i.cat||'']);
+const kCua=(q,R)=>JSON.stringify([q.sku,q.nombre,q.cat||'',num(q.horas||8),(q.miembros||[]).map(m=>[R(m.ref),num(m.cant)])]);
+const kPar=(p,R)=>JSON.stringify([p.sku,p.nombre,p.unidad,p.cat||'',p.estado,num(p.herr),num(p.ind),num(p.util),(p.comps||[]).map(c=>[c.tipo,R(c.ref),num(c.cant),num(c.desp)])]);
 
 class Component extends DCLogic {
   state = this.init();
 
   init(){
-    let d=null;
-    try{ d=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
-    const fresh=!d||!d.partidas;
-    if(fresh) d=seed();
-    if(!d.cats){
-      const c=JSON.parse(JSON.stringify(CATS_DEF)), sc={c1:'Albañilería',c2:'Tablaroca',c3:'Pintura'};
-      d.cuadrillas=d.cuadrillas.map(q=>q.cat!=null?q:{...q,cat:sc[q.id]||''});
-      d.insumos.forEach(i=>{if(i.cat&&!c[i.tipo].includes(i.cat))c[i.tipo].push(i.cat);});
-      d.partidas.forEach(p=>{if(p.cat&&!c.partida.includes(p.cat))c.partida.push(p.cat);});
-      d.cuadrillas.forEach(q=>{if(q.cat&&!c.cuadrilla.includes(q.cat))c.cuadrilla.push(q.cat);});
-      d.cats=c;
-    }
-    if(!fresh&&(d.seedV||1)<2){
-      const sd=seed();
-      ['insumos','cuadrillas','partidas'].forEach(k=>{const ids=new Set(d[k].map(x=>x.id)); sd[k].forEach(x=>{if(!ids.has(x.id)) d[k].push(x);});});
-      Object.keys(sd.cats).forEach(k=>{d.cats[k]=d.cats[k]||[]; sd.cats[k].forEach(c=>{if(!d.cats[k].includes(c)) d.cats[k].push(c);});});
-      d.seedV=2;
-    }
-    const RR=[0.9,0.93,0.88,0.91,0.95,0.89,0.92];
-    d.partidas=d.partidas.map((p,i)=>{
-      if(p.hist&&p.hist.length) return p;
-      const pu=this.calc(p,d).pu, r=RR[i%7];
-      return {...p,hist:p.estado==='borrador'
-        ?[{f:'2026-09-30',pu,m:'Alta (borrador)'}]
-        :[{f:'2026-03-12',pu:pu*r,m:'Alta en catálogo'},{f:'2026-07-15',pu:pu*(1+r)/2,m:'Actualización de precios base'},{f:'2026-09-28',pu,m:'Actualización de precios base'}]};
-    });
-    return {...d,catDlg:null,newCat:'',catEdits:{},baseCat:'',cuadCat:'',view:'dash',rol:this.props.rol||'admin',modo:this.props.modo||'hoja',draft:null,step:0,err:null,
+    return {insumos:[],cuadrillas:[],partidas:[],cats:JSON.parse(JSON.stringify(CATS_DEF)),
+      listo:false,falla:null,sinLicencia:false,guardando:false,org:null,orgs:[],correo:'',porBorrar:null,sembrando:false,
+      catDlg:null,newCat:'',catEdits:{},baseCat:'',cuadCat:'',view:'dash',rol:'equipo',modo:this.props.modo||(window.innerWidth<760?'pasos':'hoja'),draft:null,step:0,err:null,
       q:'',cat:'',est:'todas',selId:null,baseTipo:'material',baseQ:'',libTipo:'material',libQ:'',toast:null,edits:{},
       nuevo:{nombre:'',unidad:'pza',precio:'',cat:''}};
   }
+
+  componentDidMount(){ this._ids={}; this._srv={ins:new Map(),cua:new Map(),par:new Map(),cats:''}; this.arrancar(); }
+
+  /* ───── arranque: quién soy, en qué empresa, y sus datos ───── */
+  async arrancar(){
+    try{
+      const yo=await pedir('/yo');
+      const todas=yo.empresa?[{id:yo.empresa.id,nombre:yo.empresa.nombre}]:(yo.orgs||[]);
+      // Cuáles de mis empresas traen cost101 prendido (licencia): se le pregunta a la API.
+      const vistas=await Promise.all(todas.slice(0,60).map(o=>pedir('/orgs/'+encodeURIComponent(o.id)).then(d=>d&&d.apps&&d.apps.cost?{id:o.id,nombre:d.nombre||o.nombre,miembro:o.miembro!==false}:null).catch(()=>null)));
+      const orgs=vistas.filter(Boolean);
+      const correo=(yo.usuario&&yo.usuario.correo)||'';
+      if(!orgs.length){ this.setState({sinLicencia:true,correo}); return; }
+      let guardada=null; try{ guardada=localStorage.getItem('cost101-org'); }catch(_){}
+      const org=(orgs.find(o=>o.id===guardada)||orgs.find(o=>o.miembro)||orgs[0]).id;
+      this.setState({orgs,correo,org},()=>this.recargar(true));
+    }catch(e){ if(e.cual!=='sin_sesion') this.setState({falla:mensajeDe(e)}); }
+  }
+  ruta(r){ return '/orgs/'+encodeURIComponent(this.state.org)+r; }
+  real(id){ return (this._ids&&this._ids[id])||id; }
+
+  /* Lee todo del servidor y lo pone en pantalla. Si mientras llegaba la
+   * respuesta alguien cambió algo aquí, NO se pisa: se manda primero. */
+  async recargar(primera){
+    const a=this.state.insumos,b=this.state.cuadrillas,c=this.state.partidas,k=this.state.cats;
+    const d=await pedir(this.ruta('/costos'));
+    let cats=null;
+    if(primera){
+      // Por la lista y no por id: si todavía no hay categorías guardadas, la lista
+      // contesta vacía; por id contestaría 404, que es ruido en la consola.
+      try{ const aj=await pedir(this.ruta('/ajustes?clave=categorias')); cats=aj&&aj.filas&&aj.filas[0]&&aj.filas[0].valor; }catch(_){ cats=null; }
+    }
+    const S=this.state;
+    if(!primera&&(S.insumos!==a||S.cuadrillas!==b||S.partidas!==c||S.cats!==k)){ this.programarSync(); return; }
+    const insumos=d.costos_base.map(deCosto), cuadrillas=d.cuadrillas.map(deCuad), partidas=d.productos.map(deProd);
+    partidas.sort((x,y)=>x.sku<y.sku?-1:x.sku>y.sku?1:0);
+    const R=x=>x;
+    this._srv.ins=new Map(insumos.map(i=>[i.id,kIns(i)]));
+    this._srv.cua=new Map(cuadrillas.map(q=>[q.id,kCua(q,R)]));
+    this._srv.par=new Map(partidas.map(p=>[p.id,kPar(p,R)]));
+    const patch={insumos,cuadrillas,partidas,listo:true,falla:null,rol:d.puede_aprobar?'admin':'equipo'};
+    if(primera){
+      const guardadas=cats&&typeof cats==='object';
+      const base=guardadas?cats:(insumos.length||partidas.length?{material:[],mo:[],equipo:[],cuadrilla:[],partida:[]}:JSON.parse(JSON.stringify(CATS_DEF)));
+      const cc={material:[],mo:[],equipo:[],cuadrilla:[],partida:[]};
+      Object.keys(cc).forEach(t=>{cc[t]=Array.isArray(base[t])?base[t].slice():[];});
+      this._srv.cats=guardadas?JSON.stringify(cc):'';
+      patch.cats=cc;
+    }
+    // Una categoría que algún renglón trae y no está en la lista, se agrega.
+    const cc2=patch.cats||JSON.parse(JSON.stringify(S.cats)); let toco=false;
+    const mete=(t,n)=>{ if(n&&!cc2[t].includes(n)){cc2[t].push(n);toco=true;} };
+    insumos.forEach(i=>mete(i.tipo,i.cat)); cuadrillas.forEach(q=>mete('cuadrilla',q.cat)); partidas.forEach(p=>mete('partida',p.cat));
+    if(patch.cats||toco){ patch.cats=cc2; if(this._srv.cats) this._srv.cats=JSON.stringify(cc2); }
+    if(S.selId&&!partidas.some(p=>p.id===S.selId)) patch.selId=null;
+    this.setState(patch);
+  }
+
+  /* ───── el sincronizador ───── */
+  programarSync(){ if(!this.state.listo) return; clearTimeout(this._ts); this._ts=setTimeout(()=>this.sincronizar(),450); }
+
+  diferencias(S){
+    const R=id=>this.real(id), V=this._srv, ops=[];
+    const vivos={ins:new Set(),cua:new Set(),par:new Set()};
+    S.insumos.forEach(i=>{const id=R(i.id); vivos.ins.add(id); if(!V.ins.has(id)) ops.push({t:'ins',acc:'crear',id:i.id}); else if(V.ins.get(id)!==kIns(i)) ops.push({t:'ins',acc:'cambiar',id:i.id});});
+    S.cuadrillas.forEach(q=>{const id=R(q.id); vivos.cua.add(id); if(!V.cua.has(id)) ops.push({t:'cua',acc:'crear',id:q.id}); else if(V.cua.get(id)!==kCua(q,R)) ops.push({t:'cua',acc:'cambiar',id:q.id});});
+    // Las partidas nuevas que no llevan dentro otra partida nueva van primero.
+    const nuevas=S.partidas.filter(p=>!V.par.has(R(p.id)));
+    const esNueva=id=>nuevas.some(n=>n.id===id);
+    nuevas.slice().sort((x,y)=>Number(x.comps.some(c=>c.tipo==='partida'&&esNueva(c.ref)))-Number(y.comps.some(c=>c.tipo==='partida'&&esNueva(c.ref))))
+      .forEach(p=>ops.push({t:'par',acc:'crear',id:p.id}));
+    S.partidas.forEach(p=>{const id=R(p.id); vivos.par.add(id); if(V.par.has(id)&&V.par.get(id)!==kPar(p,R)) ops.push({t:'par',acc:'cambiar',id:p.id});});
+    // Se borra en orden contrario: primero quien usa, luego lo usado.
+    V.par.forEach((_,id)=>{ if(!vivos.par.has(id)) ops.push({t:'par',acc:'borrar',id}); });
+    V.cua.forEach((_,id)=>{ if(!vivos.cua.has(id)) ops.push({t:'cua',acc:'borrar',id}); });
+    V.ins.forEach((_,id)=>{ if(!vivos.ins.has(id)) ops.push({t:'ins',acc:'borrar',id}); });
+    if(JSON.stringify(S.cats)!==V.cats&&(V.cats||this._catsTocadas)) ops.push({t:'cats',acc:'cambiar'});
+    return ops;
+  }
+
+  async ejecutar(op){
+    const R=id=>this.real(id), V=this._srv, S=this.state;
+    const TABLA={ins:'costos_base',cua:'cuadrillas',par:'productos'}[op.t];
+    if(op.t==='cats'){
+      const valor=S.cats; await pedir(this.ruta('/ajustes'),{method:'POST',body:{clave:'categorias',valor}}); V.cats=JSON.stringify(valor); return;
+    }
+    if(op.acc==='borrar'){ await pedir(this.ruta('/'+TABLA+'/'+encodeURIComponent(op.id)),{method:'DELETE'}); V[op.t].delete(op.id); return; }
+    const lista=op.t==='ins'?S.insumos:op.t==='cua'?S.cuadrillas:S.partidas;
+    const x=lista.find(y=>y.id===op.id||y.id===R(op.id)); if(!x) return;
+    let cuerpo, llave;
+    if(op.t==='ins'){ cuerpo={clave:x.sku,nombre:x.nombre,tipo:x.tipo,unidad:x.unidad,precio:centavos(x.precio),categoria:x.cat||''}; llave=kIns(x); }
+    else if(op.t==='cua'){ cuerpo={clave:x.sku,nombre:x.nombre,categoria:x.cat||'',horas:num(x.horas||8),miembros:x.miembros.map(m=>({ref:R(m.ref),cant:num(m.cant)}))}; llave=kCua(x,R); }
+    else { cuerpo={codigo:x.sku,nombre:x.nombre,unidad:x.unidad,categoria:x.cat||'',estado:x.estado,
+        apu:{herr:num(x.herr),ind:num(x.ind),util:num(x.util),comps:x.comps.map(c=>({k:c.k,tipo:c.tipo,ref:R(c.ref),cant:num(c.cant),desp:num(c.desp)}))}}; llave=kPar(x,R); }
+    if(op.acc==='crear'){
+      if(op.t==='ins'&&x.tipo!=='material') cuerpo.unidad='h';
+      const r=await pedir(this.ruta('/'+TABLA),{method:'POST',body:cuerpo});
+      if(x.id!==r.id){ this._ids[x.id]=r.id; this.cambiarId(x.id,r.id); }
+      V[op.t].set(r.id,llave);
+    } else {
+      if(op.t==='ins') delete cuerpo.tipo; // el tipo no se cambia desde la pantalla
+      await pedir(this.ruta('/'+TABLA+'/'+encodeURIComponent(R(x.id))),{method:'PATCH',body:cuerpo});
+      V[op.t].set(R(x.id),llave);
+    }
+  }
+
+  /** El renglón que nació aquí con un id provisional ya tiene el de verdad. */
+  cambiarId(viejo,nuevo){
+    const c=id=>id===viejo?nuevo:id;
+    this.setState(s=>({
+      insumos:s.insumos.map(i=>i.id===viejo?{...i,id:nuevo}:i),
+      cuadrillas:s.cuadrillas.map(q=>({...q,id:c(q.id),miembros:q.miembros.map(m=>m.ref===viejo?{...m,ref:nuevo}:m)})),
+      partidas:s.partidas.map(p=>({...p,id:c(p.id),comps:p.comps.map(k=>k.ref===viejo?{...k,ref:nuevo}:k)})),
+      draft:s.draft?{...s.draft,id:c(s.draft.id),comps:s.draft.comps.map(k=>k.ref===viejo?{...k,ref:nuevo}:k)}:s.draft,
+      selId:c(s.selId),
+    }));
+  }
+
+  async sincronizar(){
+    if(this._ocupado){ this._otra=true; return; }
+    this._ocupado=true; let hubo=false;
+    try{
+      for(let vuelta=0;vuelta<8;vuelta++){
+        const ops=this.diferencias(this.state);
+        if(!ops.length) break;
+        if(!hubo){ hubo=true; this.setState({guardando:true}); }
+        for(const op of ops) await this.ejecutar(op);
+        await new Promise(r=>setTimeout(r,0)); // que React asiente los ids nuevos
+      }
+      if(hubo) await this.recargar(false);
+    }catch(e){
+      this.toast(mensajeDe(e));
+      // El servidor manda: se vuelve a lo que él tiene.
+      try{ const d=await pedir(this.ruta('/costos'));
+        const insumos=d.costos_base.map(deCosto), cuadrillas=d.cuadrillas.map(deCuad), partidas=d.productos.map(deProd), R=x=>x;
+        partidas.sort((x,y)=>x.sku<y.sku?-1:x.sku>y.sku?1:0);
+        this._srv.ins=new Map(insumos.map(i=>[i.id,kIns(i)])); this._srv.cua=new Map(cuadrillas.map(q=>[q.id,kCua(q,R)])); this._srv.par=new Map(partidas.map(p=>[p.id,kPar(p,R)]));
+        this.setState(s=>({insumos,cuadrillas,partidas,rol:d.puede_aprobar?'admin':'equipo',selId:partidas.some(p=>p.id===s.selId)?s.selId:null}));
+      }catch(_){}
+    }finally{
+      this._ocupado=false;
+      if(hubo) this.setState({guardando:false,guardado:Date.now()});
+      if(this._otra){ this._otra=false; this.programarSync(); }
+    }
+  }
+
+  /* ───── quitar (dos toques: el primero pregunta) ───── */
+  pedirBorrar(clave,hacer){
+    if(this.state.porBorrar===clave){ clearTimeout(this._tb); this.setState({porBorrar:null}); hacer(); return; }
+    this.setState({porBorrar:clave}); clearTimeout(this._tb); this._tb=setTimeout(()=>this.setState({porBorrar:null}),4000);
+  }
+  botonQuitar(clave,hacer,etiqueta){
+    const h=React.createElement, seguro=this.state.porBorrar===clave;
+    return h('button',{className:'quitar'+(seguro?' seguro':''),title:etiqueta,'aria-label':etiqueta,'data-quitar':clave,onClick:e=>{e.stopPropagation();this.pedirBorrar(clave,hacer);}},
+      seguro?'¿Quitar?':h('svg',{width:14,height:14,viewBox:'0 0 24 24',style:{fill:'none',stroke:'currentColor',strokeWidth:1.5,strokeLinecap:'round',strokeLinejoin:'round'}},
+        h('path',{d:'M3 6h18'}),h('path',{d:'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'}),h('path',{d:'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'})));
+  }
+  borrarInsumo(id){
+    const S=this.state, i=S.insumos.find(x=>x.id===id); if(!i) return;
+    const enCuad=S.cuadrillas.filter(q=>q.miembros.some(m=>m.ref===id)), enPart=S.partidas.filter(p=>p.comps.some(c=>c.tipo==='insumo'&&c.ref===id));
+    if(enCuad.length||enPart.length){ const u=[...enPart,...enCuad]; return this.toast('No se puede quitar: lo usa «'+u[0].nombre+'»'+(u.length>1?' y '+(u.length-1)+' más':'')+'.'); }
+    this.setState({insumos:S.insumos.filter(x=>x.id!==id)}); this.toast(i.sku+' quitado');
+  }
+  borrarCuadrilla(id){
+    const S=this.state, q=S.cuadrillas.find(x=>x.id===id); if(!q) return;
+    const u=S.partidas.filter(p=>p.comps.some(c=>c.tipo==='cuadrilla'&&c.ref===id));
+    if(u.length) return this.toast('No se puede quitar: la usa «'+u[0].nombre+'»'+(u.length>1?' y '+(u.length-1)+' más':'')+'.');
+    this.setState({cuadrillas:S.cuadrillas.filter(x=>x.id!==id)}); this.toast(q.sku+' quitada');
+  }
+  borrarPartida(id){
+    const S=this.state, p=S.partidas.find(x=>x.id===id); if(!p) return;
+    const u=S.partidas.filter(x=>x.id!==id&&x.comps.some(c=>c.tipo==='partida'&&c.ref===id));
+    if(u.length) return this.toast('No se puede quitar: va dentro de «'+u[0].nombre+'»'+(u.length>1?' y '+(u.length-1)+' más':'')+'.');
+    this.setState({partidas:S.partidas.filter(x=>x.id!==id),selId:null}); this.toast(p.sku+' quitada del catálogo');
+  }
+  commitNombre(id){
+    const S=this.state, k='n:'+id, raw=S.edits[k], edits={...S.edits}; delete edits[k];
+    const n=raw==null?'':String(raw).trim(), i=S.insumos.find(x=>x.id===id);
+    if(!i||!n||n===i.nombre) return this.setState({edits});
+    this.setState({edits,insumos:S.insumos.map(x=>x.id===id?{...x,nombre:n}:x)});
+  }
+
+  /* ───── el catálogo de ejemplo, la empresa y la salida ───── */
+  async sembrar(){
+    if(this.state.sembrando) return;
+    this.setState({sembrando:true});
+    try{
+      const r=await fetch('/semilla.json',{credentials:'same-origin'}); if(!r.ok) throw new Error('No se pudo leer el catálogo de ejemplo.');
+      const sem=await r.json();
+      const d=await pedir(this.ruta('/costos/importar'),{method:'POST',body:{costos:sem.costos,cuadrillas:sem.cuadrillas,productos:sem.productos}});
+      await pedir(this.ruta('/ajustes'),{method:'POST',body:{clave:'categorias',valor:sem.categorias}});
+      await this.recargar(true);
+      this.toast('Catálogo de ejemplo cargado: '+d.nuevos.costos+' insumos, '+d.nuevos.cuadrillas+' cuadrillas, '+d.nuevos.productos+' partidas');
+    }catch(e){ this.toast(mensajeDe(e)); }
+    finally{ this.setState({sembrando:false}); }
+  }
+  cambiarEmpresa(id){
+    try{ localStorage.setItem('cost101-org',id); }catch(_){}
+    this._ids={}; this._srv={ins:new Map(),cua:new Map(),par:new Map(),cats:''}; this._catsTocadas=false;
+    this.setState({org:id,listo:false,insumos:[],cuadrillas:[],partidas:[],draft:null,selId:null,view:'dash'},()=>this.recargar(true).catch(e=>this.setState({falla:mensajeDe(e)})));
+  }
+  async salir(){ try{ await pedir('/auth/salir',{method:'POST',body:{}}); }catch(_){} location.replace('/entrar.html'); }
 
   componentDidUpdate(pp,ps){
     const S=this.state;
     if(S.insumos!==this._pi||S.cuadrillas!==this._pc||S.partidas!==this._pp||S.cats!==this._pk){
       this._pi=S.insumos; this._pc=S.cuadrillas; this._pp=S.partidas; this._pk=S.cats;
-      try{ localStorage.setItem(KEY,JSON.stringify({insumos:S.insumos,cuadrillas:S.cuadrillas,partidas:S.partidas,cats:S.cats,seedV:2})); }catch(e){}
+      this.programarSync();
     }
     const P=this.props||{};
     if(P.modo&&P.modo!==this._lm){ const first=this._lm===undefined; this._lm=P.modo; if(!first&&P.modo!==S.modo) this.setState({modo:P.modo}); }
-    if(P.rol&&P.rol!==this._lr){ const first=this._lr===undefined; this._lr=P.rol; if(!first&&P.rol!==S.rol) this.setState({rol:P.rol}); }
   }
-  componentWillUnmount(){ clearTimeout(this._t); }
+  componentWillUnmount(){ clearTimeout(this._t); clearTimeout(this._ts); clearTimeout(this._tb); }
 
   jornada(q,S){ return (q.miembros||[]).reduce((a,m)=>{const o=S.insumos.find(x=>x.id===m.ref);return a+(o?o.precio*num(m.cant):0);},0)*num(q.horas||8); }
 
@@ -803,7 +965,7 @@ class Component extends DCLogic {
           return {...d,estado,hist:h};
         });
       } else {
-        id=uid(); const h=[{f:HOY,pu,m:'Alta (borrador)'}]; if(aprobar) h.push({f:HOY,pu,m:'Aprobada por admin'});
+        id=nuevoId(); const h=[{f:HOY,pu,m:'Alta (borrador)'}]; if(aprobar) h.push({f:HOY,pu,m:'Aprobada por admin'});
         partidas=[{...d,id,estado,hist:h},...S.partidas];
       }
       return {partidas};
@@ -840,7 +1002,7 @@ class Component extends DCLogic {
     const pre=t==='material'?'MAT':t==='mo'?'MO':'EQ', list=S.insumos.filter(x=>x.tipo===t);
     const n=this.nextSku(pre,list), sku=pre+'-'+String(n).padStart(3,'0');
     const catSel=nv.cat||S.baseCat||'';
-    const ins={id:uid(),sku,nombre:nv.nombre.trim(),tipo:t,unidad:t==='material'?nv.unidad:'h',precio:num(nv.precio),cat:catSel,hist:[{f:HOY,precio:num(nv.precio)}]};
+    const ins={id:nuevoId(),sku,nombre:nv.nombre.trim(),tipo:t,unidad:t==='material'?nv.unidad:'h',precio:num(nv.precio),cat:catSel,hist:[{f:HOY,precio:num(nv.precio)}]};
     this.setState({insumos:[...S.insumos,ins],nuevo:{nombre:'',unidad:nv.unidad,precio:'',cat:nv.cat}});
     this.toast(sku+' agregado');
   }
@@ -851,7 +1013,7 @@ class Component extends DCLogic {
   }
   addCuadrilla(){
     const S=this.state, n=this.nextSku('CUA',S.cuadrillas);
-    this.setState({cuadrillas:[...S.cuadrillas,{id:uid(),sku:'CUA-'+String(n).padStart(2,'0'),nombre:'Nueva cuadrilla',cat:S.cuadCat||'',horas:8,miembros:[]}]});
+    this.setState({cuadrillas:[...S.cuadrillas,{id:nuevoId(),sku:'CUA-'+String(n).padStart(2,'0'),nombre:'Nueva cuadrilla',cat:S.cuadCat||'',horas:8,miembros:[]}]});
   }
 
   sel(value,opts,onChange,ph,compact){
@@ -870,7 +1032,7 @@ class Component extends DCLogic {
   catAdd(){
     const S=this.state,t=S.catDlg,n=S.newCat.trim(); if(!t||!n) return;
     if(S.cats[t].some(x=>x.toLowerCase()===n.toLowerCase())) return this.toast('Esa categoría ya existe');
-    this.setState({cats:{...S.cats,[t]:[...S.cats[t],n]},newCat:''});
+    this._catsTocadas=true; this.setState({cats:{...S.cats,[t]:[...S.cats[t],n]},newCat:''});
   }
   catRename(t,old){
     const S=this.state,key=t+'|'+old,raw=S.catEdits[key],ce={...S.catEdits}; delete ce[key];
@@ -881,7 +1043,7 @@ class Component extends DCLogic {
     if(t==='partida'){ if(S.draft&&S.draft.cat===old) patch.draft={...S.draft,cat:n}; if(S.cat===old) patch.cat=n; }
     else if(t==='cuadrilla'){ if(S.cuadCat===old) patch.cuadCat=n; }
     else { if(S.baseCat===old) patch.baseCat=n; if(S.nuevo.cat===old) patch.nuevo={...S.nuevo,cat:n}; }
-    this.setState(patch); this.toast('Categoría renombrada: '+n);
+    this._catsTocadas=true; this.setState(patch); this.toast('Categoría renombrada: '+n);
   }
   catDelete(t,name){
     const S=this.state, cnt=this.itemsOf(t,S).filter(x=>x.cat===name).length;
@@ -889,7 +1051,7 @@ class Component extends DCLogic {
     if(t==='partida'){ if(S.draft&&S.draft.cat===name) patch.draft={...S.draft,cat:''}; if(S.cat===name) patch.cat=''; }
     else if(t==='cuadrilla'){ if(S.cuadCat===name) patch.cuadCat=''; }
     else { if(S.baseCat===name) patch.baseCat=''; if(S.nuevo.cat===name) patch.nuevo={...S.nuevo,cat:''}; }
-    this.setState(patch); this.toast('“'+name+'” eliminada'+(cnt?' · '+cnt+' sin categoría':''));
+    this._catsTocadas=true; this.setState(patch); this.toast('“'+name+'” eliminada'+(cnt?' · '+cnt+' sin categoría':''));
   }
 
   renderVals(){
@@ -903,9 +1065,30 @@ class Component extends DCLogic {
 
     v.nav=[['dash','Resumen'],['gen','Generador'],['cat','Catálogo'],['base','Precios base'],['cuad','Cuadrillas']].map(([k,l])=>({label:l,current:S.view===k?'page':'false',
       onClick:e=>{e.preventDefault(); if(k==='gen'&&!S.draft) this.newPartida(); else this.setState({view:k});}}));
-    v.isDash=S.view==='dash'; v.isGen=S.view==='gen'&&!!S.draft; v.isCat=S.view==='cat'; v.isBase=S.view==='base'; v.isCuad=S.view==='cuad';
+    const L=S.listo;
+    v.isDash=L&&S.view==='dash'; v.isGen=L&&S.view==='gen'&&!!S.draft; v.isCat=L&&S.view==='cat'; v.isBase=L&&S.view==='base'; v.isCuad=L&&S.view==='cuad';
+    const h=React.createElement;
+    v.hoyF=fdate(HOY);
+    const orgAct=S.orgs.find(o=>o.id===S.org);
+    v.cuenta=h('div',{className:'cuenta','data-cuenta':'1'},
+      h('span',{className:'sync','data-sync':S.guardando?'guardando':'quieto'},S.guardando?'Guardando…':(S.guardado?'Guardado':'')),
+      S.orgs.length>1
+        ?h('select',{className:'input','data-empresa':'1',value:S.org||'',onChange:e=>this.cambiarEmpresa(e.target.value),style:{minHeight:30,padding:'4px 8px',fontSize:13,maxWidth:190}},S.orgs.map(o=>h('option',{key:o.id,value:o.id},o.nombre)))
+        :h('span',{className:'empresa','data-empresa':'1'},orgAct?orgAct.nombre:''),
+      h('span',{'data-rol':admin?'admin':'equipo',title:admin?'Puedes aprobar partidas':'Guardas borradores; aprueba quien dirige la empresa'},admin?'Aprueba':'Equipo'),
+      h('a',{href:'https://suite101.taller101.com',title:'El menú de la suite'},'Suite 101'),
+      h('button',{className:'liga','data-salir':'1',onClick:()=>this.salir(),title:S.correo},'Salir'));
+    const tarjeta=(titulo,texto,extra)=>h('div',{className:'blueprint aviso101','data-aviso':titulo},h('h3',{style:{margin:0,fontSize:24}},titulo),h('p',{style:{margin:0,color:'var(--color-neutral-700)',maxWidth:640}},texto),extra||null);
+    v.aviso=S.falla?tarjeta('No se pudo abrir',S.falla,h('button',{className:'btn btn-secondary',onClick:()=>location.reload()},'Reintentar'))
+      :S.sinLicencia?tarjeta('cost101 no está activo','Entraste a la suite como '+S.correo+', pero ninguna de tus empresas tiene cost101 prendido. Se activa por empresa; pídeselo a quien administra la suite.',h('a',{className:'btn btn-secondary',href:'https://suite101.taller101.com'},'Ir al menú de la suite'))
+      :!L?tarjeta('Un momento','Leyendo los costos de tu empresa…'):null;
+    v.vacioCard=(L&&!S.insumos.length&&!S.partidas.length&&!S.cuadrillas.length)
+      ?tarjeta('Tu base de costos está vacía','Empieza capturando tus precios base (materiales, mano de obra y equipo) y arma con ellos tus partidas.'+(admin?' O carga un catálogo de ejemplo —60 insumos, 6 cuadrillas y 16 partidas con precios de referencia— y ajústalo a los tuyos.':''),
+        h('div',{style:{display:'flex',gap:8,flexWrap:'wrap'}},
+          h('button',{className:'btn btn-primary','data-ir-base':'1',onClick:()=>this.setState({view:'base'})},'Capturar precios base'),
+          admin?h('button',{className:'btn btn-secondary','data-sembrar':'1',disabled:S.sembrando,onClick:()=>this.sembrar()},S.sembrando?'Cargando…':'Cargar catálogo de ejemplo'):null))
+      :null;
     v.rolAdmin=admin; v.rolEquipo=!admin; v.isAdmin=admin; v.notAdmin=!admin;
-    v.setAdmin=()=>this.setState({rol:'admin'}); v.setEquipo=()=>this.setState({rol:'equipo'});
     v.onNueva=()=>this.newPartida();
     v.goBase=e=>{e.preventDefault();this.setState({view:'base'});};
     v.hasToast=!!S.toast; v.toast=S.toast;
@@ -1025,6 +1208,7 @@ class Component extends DCLogic {
         puF:money(r.pu),cdF:money(r.cd),ind:sp.ind,util:sp.util,herr:sp.herr,herrF:money(r.herr),
         canApprove:admin&&sp.estado==='borrador',pendNote:!admin&&sp.estado==='borrador',
         onApprove:()=>this.approve(sp.id),onEdit:()=>this.editPartida(sp.id),onDup:()=>this.dupPartida(sp.id),
+        quitar:(admin||sp.estado==='borrador')?React.createElement('div',{style:{display:'flex',alignItems:'center',gap:8,fontSize:12,color:'var(--color-neutral-700)'}},this.botonQuitar('par:'+sp.id,()=>this.borrarPartida(sp.id),'Quitar del catálogo'),'Quitar del catálogo'):null,
         comps:r.rows.map(x=>{const c=x.c,o=x.obj; let cf;
           if(c.tipo==='cuadrilla') cf='Cuadrilla · rinde '+qty(num(c.cant))+' '+u+'/jornada';
           else if(c.tipo==='partida') cf='Subpartida · '+qty(num(c.cant))+' '+o.unidad+' × '+money(x.precio);
@@ -1049,7 +1233,13 @@ class Component extends DCLogic {
     v.addInsumo=()=>this.addInsumo();
     const bl=S.insumos.filter(i=>i.tipo===bt&&(!S.baseCat||i.cat===S.baseCat)&&(!bq||(i.nombre+' '+i.sku+' '+i.cat).toLowerCase().includes(bq)));
     v.baseRows=bl.map(i=>{const h=i.hist, l=h[h.length-1], a=h[h.length-2], us=usosIns(i);
+      const kn='n:'+i.id;
       return {key:i.id,sku:i.sku,nombre:i.nombre,cat:i.cat,unidad:i.unidad,
+        nombreInput:React.createElement('input',{className:'input','data-nombre':i.sku,value:S.edits[kn]!=null?S.edits[kn]:i.nombre,
+          onChange:e=>this.setState({edits:{...this.state.edits,[kn]:e.target.value}}),onBlur:()=>this.commitNombre(i.id),onKeyDown:e=>{if(e.key==='Enter')e.target.blur();},
+          style:{width:'100%',minHeight:30,padding:'4px 8px',fontSize:14,background:'transparent',borderColor:'transparent'}}),
+        unidadSel:i.tipo==='material'?this.sel(i.unidad,UNIDADES.filter(x=>x!=='h').concat(UNIDADES.includes(i.unidad)?[]:[i.unidad]).map(x=>({v:x,l:x})),e=>{const val=e.target.value;this.setState(s=>({insumos:s.insumos.map(x=>x.id===i.id?{...x,unidad:val}:x)}));},null,true):'h',
+        quitar:this.botonQuitar('ins:'+i.id,()=>this.borrarInsumo(i.id),'Quitar '+i.sku),
         catSelect:this.sel(i.cat,catOpts(i.tipo),e=>{const val=e.target.value;this.setState(s=>({insumos:s.insumos.map(x=>x.id===i.id?{...x,cat:val}:x)}));},'Sin categoría',true),precio:S.edits[i.id]!=null?S.edits[i.id]:i.precio,
         lastF:fdate(l.f),deltaF:a?pct((l.precio/a.precio-1)*100):'',usos:plural(us,'partida','partidas'),
         onChange:e=>this.setState({edits:{...this.state.edits,[i.id]:e.target.value}}),onBlur:()=>this.commitPrecio(i.id),
@@ -1062,7 +1252,7 @@ class Component extends DCLogic {
     v.selCuadCat=this.sel(S.cuadCat,catOpts('cuadrilla'),e=>this.setState({cuadCat:e.target.value}),'Todas las categorías');
     v.cuadEmpty=!S.cuadrillas.some(c=>!S.cuadCat||c.cat===S.cuadCat);
     v.cuadCards=S.cuadrillas.filter(c=>!S.cuadCat||c.cat===S.cuadCat).map(c=>{const j=this.jornada(c,S), hrs=num(c.horas||8), us=S.partidas.filter(p=>p.comps.some(x=>x.tipo==='cuadrilla'&&x.ref===c.id)).length;
-      return {key:c.id,sku:c.sku,nombre:c.nombre,horas:hrs,
+      return {key:c.id,sku:c.sku,nombre:c.nombre,horas:hrs,quitar:this.botonQuitar('cua:'+c.id,()=>this.borrarCuadrilla(c.id),'Quitar '+c.sku),
         catSelect:this.sel(c.cat,catOpts('cuadrilla'),e=>{const val=e.target.value;this.setState(s=>({cuadrillas:s.cuadrillas.map(x=>x.id===c.id?{...x,cat:val}:x)}));},'Sin categoría',true),jornadaF:money(j),horaF:money(hrs?j/hrs:0)+' por hora',usos:'Usada en '+plural(us,'partida','partidas'),
         onNombre:e=>{const val=e.target.value; this.setState(s=>({cuadrillas:s.cuadrillas.map(x=>x.id===c.id?{...x,nombre:val}:x)}));},
         miembros:c.miembros.map((m,idx)=>{const o=S.insumos.find(x=>x.id===m.ref)||{nombre:'—',precio:0};

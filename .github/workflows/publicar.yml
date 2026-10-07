@@ -1,6 +1,11 @@
 # Publica cost101 en Cloudflare y luego mide lo que publicó.
-# Orden: pruebas sin red → staging → medir + navegador → producción → medir
-# + navegador. Lo medido vuelve como comentario del commit (OPERAR.md §6).
+#
+# Orden: la pantalla contra una suite101-api de verdad levantada aquí mismo →
+# staging → medir + la pantalla contra staging → producción → medir. Lo medido
+# vuelve como comentario del commit (OPERAR.md §6).
+#
+# En producción se mira, no se toca: ahí la prueba de pantalla NO corre,
+# porque da de alta una empresa de prueba y eso sólo existe fuera de producción.
 #
 # Secretos del repositorio (los mismos valores que master101 y peek101):
 #   CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
@@ -28,6 +33,7 @@ jobs:
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CORREO_SUPERADMIN: ${{ vars.CORREO_SUPERADMIN || 'mike@forespot.com' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -59,22 +65,36 @@ jobs:
       - name: Que el JavaScript compile
         run: |
           set -euo pipefail
-          for f in worker/index.js scripts/*.mjs pruebas/*.mjs public/support.js; do node --check "$f"; done
+          for f in worker/index.js scripts/*.mjs pruebas/*.mjs public/support.js public/entrar.js; do node --check "$f"; done
+          node scripts/logica.mjs
           echo "todo pasa node --check"
 
       - name: Traer el navegador
         run: npx playwright install --with-deps chromium
 
-      - name: La pantalla, sin red (servidor local)
+      # La pantalla se prueba contra la API DE VERDAD, no contra una de
+      # mentiras: se trae suite101-api (es pública), se levanta aquí con su
+      # base local, y cost101 le habla por el mismo puente que en Cloudflare.
+      - name: Traer y levantar suite101-api
         run: |
           set -euo pipefail
-          node pruebas/servidor.mjs 8795 &
-          BANCO=$!
-          sleep 2
-          BASE=http://127.0.0.1:8795 node pruebas/pantalla.spec.mjs | tee /tmp/medido-local.txt
-          kill $BANCO || true
+          git clone --depth 1 https://github.com/mikebalcazar/suite101-api /tmp/suite101-api
+          cd /tmp/suite101-api
+          echo "suite101-api en $(git rev-parse --short HEAD)"
+          npm ci --silent
+          npx wrangler d1 migrations apply suite101-master-staging --local --env staging > /tmp/api-migraciones.txt 2>&1 || { tail -20 /tmp/api-migraciones.txt; exit 1; }
+          CLOUDFLARE_API_TOKEN= CLOUDFLARE_ACCOUNT_ID= nohup npx wrangler dev --env staging --local --port 8787 > /tmp/api-dev.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8787/salud > /dev/null && break; sleep 2; done
+          curl -sf http://127.0.0.1:8787/salud || { tail -40 /tmp/api-dev.log; exit 1; }
 
-      - name: Sellar la portada con este commit
+      - name: La pantalla, contra la API levantada aquí
+        run: |
+          set -uo pipefail
+          node pruebas/servidor.mjs 8796 http://127.0.0.1:8787 &
+          sleep 2
+          BASE=http://127.0.0.1:8796 API=http://127.0.0.1:8787 node pruebas/pantalla.spec.mjs 2>&1 | tee /tmp/medido-local.txt
+
+      - name: Sellar con este commit
         run: node scripts/sellar.mjs "${{ github.sha }}"
 
       # ── staging ──────────────────────────────────────────────────────────
@@ -98,6 +118,7 @@ jobs:
       - name: La pantalla con un navegador, contra staging
         env:
           BASE: ${{ steps.staging.outputs.url }}
+          API: https://suite101-api-staging.mike-929.workers.dev
         run: |
           set -uo pipefail
           node pruebas/pantalla.spec.mjs 2>&1 | tee -a /tmp/medido-staging.txt
@@ -120,15 +141,6 @@ jobs:
           # El certificado del dominio nuevo puede tardar la primera vez.
           for i in $(seq 1 30); do curl -sf -o /dev/null "$PROD/huella.txt" && break; sleep 10; done
           node scripts/medir.mjs 2>&1 | tee /tmp/medido-prod.txt
-
-      # La prueba sólo escribe en el navegador del corredor (localStorage):
-      # no deja nada en producción.
-      - name: La pantalla con un navegador, contra producción
-        env:
-          BASE: ${{ steps.produccion.outputs.url }}
-        run: |
-          set -uo pipefail
-          node pruebas/pantalla.spec.mjs 2>&1 | tee -a /tmp/medido-prod.txt
 
       - name: Dejar lo medido en el commit
         if: always()
