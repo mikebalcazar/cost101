@@ -1,5 +1,20 @@
 # cost101 — por dónde va
 
+## 7-oct-2026 (tarde) · publicado, y lo demás de la suite ya lo conoce
+
+- **cost101 0.2.0 en producción**: https://cost101.taller101.com (c922d44).
+  Medido por el corredor: local 55/55, staging 55/55, producción en verde.
+- **quote101 G108** (cotizador-t101 #84, fusionado y publicado): «Buscar en
+  catálogo» con Productos y Precios base.
+- **Menú de la suite** (suite101-api #271), **master101** (#35),
+  **workshop101** (#15) y **el sitio** (descargas #31): fusionados.
+- Mike autorizó con botones (7-oct) que este chat fusione y publique.
+
+**Sigue pendiente:** dominio propio de cada empresa para cost101
+(`APPS_DOMINIO` y la puerta, en suite101-api); la base de forespot está
+vacía (se llena a mano o con «Cargar catálogo de ejemplo», precios de
+referencia sin validar); Babel compila en el navegador; logotipo en PNG.
+
 ## 7-oct-2026 · cost101 entra a la suite (0.2.0)
 
 Mike, 7-oct: «una base de datos de los costos base, la cual puedo editar
