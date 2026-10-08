@@ -109,7 +109,10 @@ try {
       dice(x.status === 401, `sin sesión, ${f} no se entrega`, String(x.status));
     }
     const e = await fetch(BASE + '/entrar.html');
-    dice(e.status === 200 && (await e.text()).includes('cost<span'), 'la pantalla de entrada sí es pública y dice cost101');
+    // 0.3.1: la marca es el logotipo oficial en SVG (ya no el texto cost<span>101</span>).
+    dice(e.status === 200 && (await e.text()).includes('src="assets/cost101-claro.svg" alt="cost101"'), 'la pantalla de entrada sí es pública y dice cost101');
+    const logo = await fetch(BASE + '/assets/cost101-claro.svg');
+    dice(logo.status === 200 && (await logo.text()).includes('aria-label="cost101"'), 'y su logotipo también se entrega sin sesión', String(logo.status));
     const s = await fetch(BASE + '/s101/orgs/' + ORG + '/costos');
     dice(s.status === 401, 'sin sesión, los costos no se abren por el puente', String(s.status));
   }

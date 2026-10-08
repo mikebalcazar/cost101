@@ -24,7 +24,7 @@ const APP = 'cost101';
 const LLAVE = 'cost';
 
 /** Lo que se entrega sin sesión: la pantalla de entrada y lo que ella pide. */
-const ABIERTO = new Set(['/entrar.html', '/entrar.js', '/404.html', '/huella.txt', '/assets/logo-taller101.png']);
+const ABIERTO = new Set(['/entrar.html', '/entrar.js', '/404.html', '/huella.txt', '/assets/logo-taller101.png', '/assets/cost101-claro.svg']);
 const esAbierto = (ruta) => ABIERTO.has(ruta) || ruta.startsWith('/fonts/');
 
 const archivo = (u) => {

@@ -1,5 +1,26 @@
 # cost101 — por dónde va
 
+## 8-oct-2026 (noche) · logotipo oficial, tipografía de la suite, barra en un renglón (0.3.1)
+
+- Mike, 8-oct: todas las apps con el look de cost101 y la tipografía y el
+  logotipo de dash/quell. cost101 ya era el look; aquí sólo cambió:
+- Logotipo: el oficial `assets/cost101-claro.svg` (palabra blanca, aro
+  #3AA3DC) en la barra (28 px, con «Generador de partidas» debajo) y en
+  entrar.html (36 px). El favicon sigue siendo `logo-taller101.png`. El SVG
+  está en `ABIERTO` del Worker porque entrar.html lo pide sin sesión.
+- entrar.html pasó al mismo degradado/vidrio de la app; títulos en Raleway
+  600 (Sansation ya no se pide ahí; el archivo sigue publicado porque
+  `scripts/medir.mjs` lo comprueba).
+- Tipografía: `@font-face` de «Cifras» (fira-cifras-400/600) y «Cifras»
+  primero en `--font-body` y `--font-heading`.
+- La barra cabe en un renglón desde 1280 px (a 1424 la empresa y «Salir» se
+  caían): medido con Playwright a 1440, 1424 y 1280 (todo a la misma
+  altura, 71 px) y a 390 (las secciones se deslizan de lado en un renglón,
+  sin desborde de página).
+- Pruebas: pantalla.spec, 74 de 74 (la de la entrada buscaba el texto
+  `cost<span`; ahora busca el SVG y que se entregue sin sesión). El servidor
+  de pruebas aprendió el tipo `image/svg+xml`.
+
 ## 8-oct-2026 (noche) · Configuración, mano de obra por hora o unidad, nombre visible (0.3.0)
 
 - Mike: «necesito poder editar el nombre del material en los precios base».
