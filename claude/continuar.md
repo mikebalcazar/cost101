@@ -1,5 +1,14 @@
 # cost101 — por dónde va
 
+## 8-oct-2026 · sólo el lienzo (0.2.2), y los costos base a revisión
+
+- Mike: «Deja en cost101 solo la modalidad de lienzo. Ya quita las otras 2».
+  Fuera «Hoja APU», «Por pasos» y su selector (#1). 57/57 local y staging;
+  producción en a20d660.
+- Costos base de carpintería, tablaroca y cancelería: 193 renglones en Excel
+  para que Mike marque cuáles se quedan y corrija precios. **No se cargó
+  nada**; al regresar, `POST /orgs/:o/costos/importar` con lo que quede.
+
 ## 7-oct-2026 (tarde) · publicado, y lo demás de la suite ya lo conoce
 
 - **cost101 0.2.0 en producción**: https://cost101.taller101.com (c922d44).
