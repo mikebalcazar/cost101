@@ -104,7 +104,7 @@ try {
   {
     const r = await fetch(BASE + '/', { redirect: 'manual' });
     dice(r.status === 302 && (r.headers.get('location') || '').endsWith('/entrar.html'), 'sin sesión, la app manda a entrar', `${r.status} → ${r.headers.get('location')}`);
-    for (const f of ['/support.js', '/semilla.json', '/costos-base.json', '/vendor/react.js']) {
+    for (const f of ['/support.js', '/semilla.json', '/vendor/react.js']) {
       const x = await fetch(BASE + f, { redirect: 'manual' });
       dice(x.status === 401, `sin sesión, ${f} no se entrega`, String(x.status));
     }
@@ -232,7 +232,9 @@ try {
     && (await gen.getByText('Hoja APU').count()) === 0 && (await gen.getByText('Por pasos').count()) === 0,
     'el generador ya no ofrece «Hoja APU» ni «Por pasos»: sólo el lienzo');
   dice((await gen.getByRole('heading', { name: 'Biblioteca' }).count()) === 1, 'y abre directo en el lienzo, con su biblioteca');
-  await p.getByPlaceholder('Ej. Muro de tablaroca').fill('Partida armada en la prueba');
+  await p.locator('[data-titulo]').fill('Partida armada en la prueba');
+  dice((await gen.getByText('Título de la partida').count()) === 1 && (await gen.getByText('Descripción para el catálogo').count()) === 1, 'el generador pide título y, aparte, la descripción para el catálogo');
+  await p.locator('[data-descripcion]').fill('Lambrín de chapa natural de roble europeo, montaje directo sobre muro liso.\nMódulos de 1.20×2.40 como máximo.');
   await gen.getByRole('button', { name: 'Materiales', exact: true }).click();
   await gen.locator('[data-lib-item]').first().click();
   await espera(150);
@@ -250,6 +252,10 @@ try {
   dice(!!armada && armada.precio === Math.round(armada.desglose.pu / 1.16) && armada.precio > 0, 'y el que leerá quote101 es ése sin IVA', armada ? `${armada.precio}` : '');
   await ir(p, 'Catálogo');
   dice((await p.getByText('Partida armada en la prueba').count()) >= 1, 'aparece en el catálogo');
+  dice(armada?.descripcion === 'Lambrín de chapa natural de roble europeo, montaje directo sobre muro liso.\nMódulos de 1.20×2.40 como máximo.', 'la descripción quedó en la base, aparte del título (API)', JSON.stringify(armada?.descripcion || '').slice(0, 60));
+  await p.getByText('Partida armada en la prueba').first().click();
+  const fichaDesc = await p.locator('[data-sel-desc]').innerText().catch(() => '');
+  dice(fichaDesc.includes('montaje directo sobre muro liso') && fichaDesc.includes('1.20×2.40'), 'el catálogo enseña el título y abajo la descripción', fichaDesc.slice(0, 50));
 
   /* ── nada vive en el navegador ── */
   await p.evaluate(() => { try { localStorage.clear(); } catch { /* */ } });
@@ -268,23 +274,10 @@ try {
   await guardado(p);
   dice((await costos()).productos.length === 16, 'la partida se quitó del catálogo (API)');
 
-  /* ── los costos base que revisó Mike (8-oct-2026) ── */
-  console.log('\n-- Costos base revisados: cargar los que falten --');
-  await ir(p, 'Resumen');
-  const tarjetaBase = p.locator('[data-aviso="Costos base listos para cargar"]');
-  await tarjetaBase.waitFor({ timeout: 20000 });
-  const boton = p.locator('[data-cargar-base]');
-  dice((await boton.innerText()).trim() === 'Cargar los 193', 'a quien dirige se le ofrecen los 193', await boton.innerText());
-  await boton.click();
-  await p.getByText('Costos base cargados: 193 insumos nuevos').waitFor({ timeout: 40000 });
-  d = await costos();
-  const tablaroca = d.costos_base.find((x) => x.clave === 'MAT-201');
-  dice(d.costos_base.length === 253 && tablaroca?.nombre.startsWith('Tablaroca normal') && tablaroca.precio === 39900 && tablaroca.tipo === 'material',
-    'quedaron en la base: 60 + 193, la Tablaroca normal a $399.00 (API)', `${d.costos_base.length} costos · MAT-201 ${tablaroca?.precio}`);
-  dice(d.costos_base.find((x) => x.clave === 'MO-101')?.tipo === 'mo' && d.costos_base.find((x) => x.clave === 'EQ-305')?.tipo === 'equipo', 'mano de obra y equipo con su tipo (API)');
-  dice(d.costos_base.find((x) => x.clave === 'MAT-001')?.precio === 26000, 'lo que ya estaba no se pisó (MAT-001 sigue en $260)');
-  await p.locator('[data-cuenta]').waitFor();
-  dice((await tarjetaBase.count()) === 0, 'ya cargados, el aviso se va');
+  /* Los costos base que revisó Mike (8-oct-2026) ya están cargados en
+   * forespot y eran SUYOS: a otra empresa no se le ofrecen ni se le entregan. */
+  dice((await p.locator('[data-cargar-base]').count()) === 0, 'no se ofrecen los costos base de otra empresa');
+  dice((await p.request.get(BASE + '/costos-base.json')).status() === 404, 'la lista de forespot ya no se sirve');
 
   /* ── la salida ── */
   await p.locator('[data-salir]').click();
@@ -306,7 +299,6 @@ try {
   await entrarPorPantalla(q, TIN);
   await q.locator('section[data-screen-label="Resumen"]').waitFor({ timeout: 30000 });
   dice((await q.locator('[data-rol]').getAttribute('data-rol')) === 'equipo', 'entra como equipo: la suite dice que no aprueba');
-  dice((await q.locator('[data-cargar-base]').count()) === 0, 'a quien no dirige no se le ofrece cargar los costos base');
   dice((await q.locator('section[data-screen-label="Resumen"]').getByRole('button', { name: 'Aprobar' }).count()) === 0, 'no se le ofrece aprobar');
   for (const s of ['Catálogo', 'Precios base', 'Cuadrillas', 'Generador', 'Resumen']) {
     await ir(q, s);
@@ -315,7 +307,7 @@ try {
     dice(actual.toLowerCase() === s.toLowerCase() && ancho <= 1, `abre ${s} sin desbordar a lo ancho`, ancho + ' px');
   }
   await ir(q, 'Generador');
-  await q.getByPlaceholder('Ej. Muro de tablaroca').fill('Borrador del equipo');
+  await q.locator('[data-titulo]').fill('Borrador del equipo');
   dice((await q.getByRole('button', { name: 'Guardar y aprobar' }).count()) === 0, 'en el generador sólo puede guardar borrador');
   // En celular también es el lienzo: la biblioteca va arriba de las secciones.
   await q.locator('section[data-screen-label="Generador"] [data-lib-item]').first().click();
@@ -329,7 +321,7 @@ try {
   await ir(q, 'Catálogo');
   await q.getByText('PAR-101').first().click();
   await q.getByRole('button', { name: 'Editar' }).first().click();
-  await q.getByPlaceholder('Ej. Muro de tablaroca').fill("Concreto hecho en obra f'c=150 kg/cm², revisado");
+  await q.locator('[data-titulo]').fill("Concreto hecho en obra f'c=150 kg/cm², revisado");
   await q.getByRole('button', { name: 'Guardar borrador' }).first().click();
   await guardado(q);
   d = await costos();

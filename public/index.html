@@ -98,7 +98,6 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
           <button class="btn btn-primary blueprint" onClick="{{ onNueva }}" style="padding:10px 18px;font-size:15px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Nueva partida</button>
         </div>
         {{ vacioCard }}
-        {{ cargaCard }}
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
           <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
             <div class="blueprint" style="padding:18px 20px;display:flex;flex-direction:column;gap:10px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
@@ -162,7 +161,8 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
 
             <sc-if value="{{ showDatos }}" hint-placeholder-val="{{ true }}">
               <div class="blueprint" style="padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:14px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                <div class="field" style="grid-column:1/-1"><label>Descripción de la partida</label><input class="input" value="{{ d.nombre }}" onChange="{{ dh.nombre }}" placeholder="Ej. Muro de tablaroca 2 caras con aislante acústico y pintura"></div>
+                <div class="field" style="grid-column:1/-1"><label>Título de la partida</label><input class="input" data-titulo="1" value="{{ d.nombre }}" onChange="{{ dh.nombre }}" placeholder="Ej. Lambrín de chapa de roble 12 mm"></div>
+                <div class="field" style="grid-column:1/-1"><label>Descripción para el catálogo</label><textarea class="input" data-descripcion="1" rows="3" value="{{ d.desc }}" onChange="{{ dh.desc }}" placeholder="Todos los detalles: material, acabado, cómo se instala, medidas máximas…"></textarea></div>
                 <div class="field"><label>Clave</label><input class="input" value="{{ d.sku }}" onChange="{{ dh.sku }}"></div>
                 <div class="field"><label>Unidad de cotización</label>{{ selUnidad }}</div>
                 <div class="field"><label>Categoría</label>{{ selCat }}</div>
@@ -325,6 +325,7 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
                 <div style="min-width:0">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.06em;color:var(--color-neutral-700)">{{ sel.sku }}</span><span class="{{ sel.tagClass }}">{{ sel.estadoLbl }}</span></div>
                   <h3 style="margin:0;font-size:26px;text-wrap:balance">{{ sel.nombre }}</h3>
+                  <sc-if value="{{ sel.hayDesc }}" hint-placeholder-val="{{ false }}"><p data-sel-desc="1" style="margin:6px 0 4px;font-size:14px;line-height:1.5;color:var(--color-neutral-800);white-space:pre-line">{{ sel.desc }}</p></sc-if>
                   <div style="font-size:13px;color:var(--color-neutral-700)">{{ sel.cat }} · por {{ sel.unidad }}</div>
                 </div>
                 <button class="btn btn-ghost btn-icon" onClick="{{ closeSel }}" aria-label="Cerrar" style="color:var(--color-neutral-700);flex:none"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
@@ -575,20 +576,20 @@ const deCosto=c=>{const precio=num(c.precio)/100, h=(c.historial||[]).map(x=>({f
   return {id:c.id,sku:c.clave||'',nombre:c.nombre,tipo:c.tipo,unidad:c.unidad||'pza',precio,cat:c.categoria||'',hist:h.length?h:[{f:HOY,precio}]};};
 const deCuad=q=>({id:q.id,sku:q.clave||'',nombre:q.nombre,cat:q.categoria||'',horas:num(q.horas)||8,miembros:(q.miembros||[]).map(m=>({ref:m.ref,cant:num(m.cant)}))});
 const deProd=p=>{const a=p.apu||{}, pu=p.desglose?num(p.desglose.pu)/100:0, h=(p.historial||[]).map(x=>({f:x.f,pu:num(x.pu)/100,m:x.m}));
-  return {id:p.id,sku:p.codigo||'',nombre:p.nombre,unidad:p.unidad||'pza',cat:p.categoria||'',estado:p.estado==='aprobado'?'aprobado':'borrador',
+  return {id:p.id,sku:p.codigo||'',nombre:p.nombre,desc:p.descripcion||'',unidad:p.unidad||'pza',cat:p.categoria||'',estado:p.estado==='aprobado'?'aprobado':'borrador',
     herr:num(a.herr),ind:num(a.ind),util:num(a.util),comps:(a.comps||[]).map((c,i)=>({k:c.k||('c'+i),tipo:c.tipo,ref:c.ref,cant:num(c.cant),desp:num(c.desp)})),
     hist:h.length?h:[{f:HOY,pu,m:'Alta'}]};};
 // Lo que se compara para saber si un renglón cambió (lo que el servidor guarda de él).
 const kIns=i=>JSON.stringify([i.sku,i.nombre,i.tipo,i.unidad,centavos(i.precio),i.cat||'']);
 const kCua=(q,R)=>JSON.stringify([q.sku,q.nombre,q.cat||'',num(q.horas||8),(q.miembros||[]).map(m=>[R(m.ref),num(m.cant)])]);
-const kPar=(p,R)=>JSON.stringify([p.sku,p.nombre,p.unidad,p.cat||'',p.estado,num(p.herr),num(p.ind),num(p.util),(p.comps||[]).map(c=>[c.tipo,R(c.ref),num(c.cant),num(c.desp)])]);
+const kPar=(p,R)=>JSON.stringify([p.sku,p.nombre,p.desc||'',p.unidad,p.cat||'',p.estado,num(p.herr),num(p.ind),num(p.util),(p.comps||[]).map(c=>[c.tipo,R(c.ref),num(c.cant),num(c.desp)])]);
 
 class Component extends DCLogic {
   state = this.init();
 
   init(){
     return {insumos:[],cuadrillas:[],partidas:[],cats:JSON.parse(JSON.stringify(CATS_DEF)),
-      listo:false,falla:null,sinLicencia:false,guardando:false,org:null,orgs:[],correo:'',porBorrar:null,sembrando:false,costosBase:null,cargandoBase:false,
+      listo:false,falla:null,sinLicencia:false,guardando:false,org:null,orgs:[],correo:'',porBorrar:null,sembrando:false,
       catDlg:null,newCat:'',catEdits:{},baseCat:'',cuadCat:'',view:'dash',rol:'equipo',draft:null,step:0,err:null,
       q:'',cat:'',est:'todas',selId:null,baseTipo:'material',baseQ:'',libTipo:'material',libQ:'',toast:null,edits:{},
       nuevo:{nombre:'',unidad:'pza',precio:'',cat:''}};
@@ -685,7 +686,7 @@ class Component extends DCLogic {
     let cuerpo, llave;
     if(op.t==='ins'){ cuerpo={clave:x.sku,nombre:x.nombre,tipo:x.tipo,unidad:x.unidad,precio:centavos(x.precio),categoria:x.cat||''}; llave=kIns(x); }
     else if(op.t==='cua'){ cuerpo={clave:x.sku,nombre:x.nombre,categoria:x.cat||'',horas:num(x.horas||8),miembros:x.miembros.map(m=>({ref:R(m.ref),cant:num(m.cant)}))}; llave=kCua(x,R); }
-    else { cuerpo={codigo:x.sku,nombre:x.nombre,unidad:x.unidad,categoria:x.cat||'',estado:x.estado,
+    else { cuerpo={codigo:x.sku,nombre:x.nombre,descripcion:x.desc||'',unidad:x.unidad,categoria:x.cat||'',estado:x.estado,
         apu:{herr:num(x.herr),ind:num(x.ind),util:num(x.util),comps:x.comps.map(c=>({k:c.k,tipo:c.tipo,ref:R(c.ref),cant:num(c.cant),desp:num(c.desp)}))}}; llave=kPar(x,R); }
     if(op.acc==='crear'){
       if(op.t==='ins'&&x.tipo!=='material') cuerpo.unidad='h';
@@ -789,23 +790,6 @@ class Component extends DCLogic {
     }catch(e){ this.toast(mensajeDe(e)); }
     finally{ this.setState({sembrando:false}); }
   }
-  /* Los costos base que Mike revisó el 8-oct-2026 (carpintería, tablaroca y
-   * cancelería). Se ofrecen a quien dirige mientras falte alguno por clave; la
-   * carga es la misma de la semilla, que no duplica ni pisa lo que ya está. */
-  async leerCostosBase(){
-    if(this._cbPedido) return; this._cbPedido=true;
-    try{ const r=await fetch('/costos-base.json',{credentials:'same-origin'}); if(r.ok){ const d=await r.json(); this.setState({costosBase:d.costos||[]}); } }catch(_){}
-  }
-  async cargarCostosBase(faltan){
-    if(this.state.cargandoBase) return;
-    this.setState({cargandoBase:true});
-    try{
-      const d=await pedir(this.ruta('/costos/importar'),{method:'POST',body:{costos:faltan}});
-      await this.recargar(true);
-      this.toast('Costos base cargados: '+d.nuevos.costos+' insumos nuevos'+(d.ya_estaban.costos?' ('+d.ya_estaban.costos+' ya estaban)':''));
-    }catch(e){ this.toast(mensajeDe(e)); }
-    finally{ this.setState({cargandoBase:false}); }
-  }
   cambiarEmpresa(id){
     try{ localStorage.setItem('cost101-org',id); }catch(_){}
     this._ids={}; this._srv={ins:new Map(),cua:new Map(),par:new Map(),cats:''}; this._catsTocadas=false;
@@ -873,7 +857,7 @@ class Component extends DCLogic {
 
   newPartida(){
     const S=this.state;
-    this.setState({view:'gen',step:0,err:null,draft:{id:null,sku:'PAR-'+Math.max(501,this.nextSku('PAR',S.partidas)),nombre:'',unidad:'m²',cat:'Muros',ind:12,util:10,herr:3,comps:[],estado:'borrador',hist:[]}});
+    this.setState({view:'gen',step:0,err:null,draft:{id:null,sku:'PAR-'+Math.max(501,this.nextSku('PAR',S.partidas)),nombre:'',desc:'',unidad:'m²',cat:'Muros',ind:12,util:10,herr:3,comps:[],estado:'borrador',hist:[]}});
   }
   editPartida(id){ const p=this.state.partidas.find(x=>x.id===id); if(p) this.setState({view:'gen',step:0,err:null,draft:JSON.parse(JSON.stringify(p))}); }
   dupPartida(id){
@@ -892,7 +876,7 @@ class Component extends DCLogic {
 
   save(aprobar){
     const S=this.state, d=S.draft;
-    if(!d.nombre.trim()) return this.setState({err:'Escribe la descripción de la partida.',step:0});
+    if(!d.nombre.trim()) return this.setState({err:'Escribe el título de la partida.',step:0});
     if(!d.comps.length) return this.setState({err:'Agrega al menos un componente.'});
     const estado=aprobar?'aprobado':'borrador'; let id=d.id;
     const S2={...S,partidas:id?S.partidas.map(p=>p.id===id?{...d}:p):S.partidas};
@@ -1031,13 +1015,6 @@ class Component extends DCLogic {
           h('button',{className:'btn btn-primary','data-ir-base':'1',onClick:()=>this.setState({view:'base'})},'Capturar precios base'),
           admin?h('button',{className:'btn btn-secondary','data-sembrar':'1',disabled:S.sembrando,onClick:()=>this.sembrar()},S.sembrando?'Cargando…':'Cargar catálogo de ejemplo'):null))
       :null;
-    if(admin&&L) this.leerCostosBase();
-    const tengo=new Set(S.insumos.map(i=>i.sku)), faltan=admin&&L&&S.costosBase?S.costosBase.filter(c=>!tengo.has(c.clave)):[];
-    v.cargaCard=faltan.length
-      ?tarjeta('Costos base listos para cargar',faltan.length+' insumos de carpintería, tablaroca y cancelería revisados el 8 de octubre: precio más alto de tienda en línea, o el estimado más 15 % donde no hubo tienda. Lo que ya tienes no se toca.',
-        h('div',{style:{display:'flex',gap:8,flexWrap:'wrap'}},
-          h('button',{className:'btn btn-primary','data-cargar-base':'1',disabled:S.cargandoBase,onClick:()=>this.cargarCostosBase(faltan)},S.cargandoBase?'Cargando…':'Cargar los '+faltan.length)))
-      :null;
     v.rolAdmin=admin; v.rolEquipo=!admin; v.isAdmin=admin; v.notAdmin=!admin;
     v.onNueva=()=>this.newPartida();
     v.goBase=e=>{e.preventDefault();this.setState({view:'base'});};
@@ -1077,7 +1054,7 @@ class Component extends DCLogic {
     v.hasErr=!!S.err; v.err=S.err;
     if(d){
       const r=this.calc(d,S), u=d.unidad||'u';
-      const dh={}; ['nombre','sku','herr','ind','util'].forEach(k=>{dh[k]=e=>this.setD({[k]:e.target.value});}); v.dh=dh;
+      const dh={}; ['nombre','desc','sku','herr','ind','util'].forEach(k=>{dh[k]=e=>this.setD({[k]:e.target.value});}); v.dh=dh;
       v.selUnidad=this.sel(d.unidad,UNIDADES.map(x=>({v:x,l:x})),e=>this.setD({unidad:e.target.value}));
       v.selCat=this.sel(d.cat,catOpts('partida'),e=>this.setD({cat:e.target.value}),'Sin categoría');
       v.genKicker='Generador · '+(d.id?'Editando '+d.sku:'Nueva partida '+d.sku);
@@ -1147,7 +1124,7 @@ class Component extends DCLogic {
       const pts=vals.map((y,i)=>[(n>1?i/(n-1):0)*312+4,66-(mx>mn?(y-mn)/(mx-mn):0.5)*60]);
       if(n===1) pts.push([316,pts[0][1]]);
       const u=sp.unidad;
-      v.sel={sku:sp.sku,nombre:sp.nombre,cat:catLbl(sp.cat),unidad:u,estadoLbl:sp.estado==='aprobado'?'Aprobada':'Borrador',tagClass:tagOf(sp.estado),
+      v.sel={sku:sp.sku,nombre:sp.nombre,desc:sp.desc||'',hayDesc:!!(sp.desc||'').trim(),cat:catLbl(sp.cat),unidad:u,estadoLbl:sp.estado==='aprobado'?'Aprobada':'Borrador',tagClass:tagOf(sp.estado),
         puF:money(r.pu),cdF:money(r.cd),ind:sp.ind,util:sp.util,herr:sp.herr,herrF:money(r.herr),
         canApprove:admin&&sp.estado==='borrador',pendNote:!admin&&sp.estado==='borrador',
         onApprove:()=>this.approve(sp.id),onEdit:()=>this.editPartida(sp.id),onDup:()=>this.dupPartida(sp.id),

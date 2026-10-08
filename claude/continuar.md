@@ -1,5 +1,20 @@
 # cost101 — por dónde va
 
+## 8-oct-2026 (noche) · título y descripción de la partida; cada empresa lo suyo (0.2.4)
+
+- Mike: «hay que agregar título de la partida, que es el nombre con que se
+  identifica fácil y la descripción es donde se escriben todos los detalles
+  de la partida para el catálogo». El generador pide **Título** (`nombre`)
+  y **Descripción para el catálogo** (`descripcion`, ya existía en la API);
+  el catálogo enseña la descripción bajo el título. Las partidas viejas
+  traen todo en el título: se parten a mano.
+- Mike: «sus bases de datos también se separan entre empresas». Ya lo
+  estaban (un Durable Object por empresa, la puerta pide ser miembro); la
+  API ahora lo prueba en los dos sentidos (suite101-api, costos.spec). Se
+  quitó «Cargar los 193» y `costos-base.json`: era la lista de forespot y
+  se le habría ofrecido a quien dirige cualquier otra empresa.
+- 62/62 en local.
+
 ## 8-oct-2026 (tarde) · los 193 costos base, listos para cargar (0.2.3)
 
 - Precios revisados en tiendas en línea (Home Depot, Sodimac, Mercado Libre,
