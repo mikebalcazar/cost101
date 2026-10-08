@@ -104,7 +104,7 @@ try {
   {
     const r = await fetch(BASE + '/', { redirect: 'manual' });
     dice(r.status === 302 && (r.headers.get('location') || '').endsWith('/entrar.html'), 'sin sesión, la app manda a entrar', `${r.status} → ${r.headers.get('location')}`);
-    for (const f of ['/support.js', '/semilla.json', '/vendor/react.js']) {
+    for (const f of ['/support.js', '/semilla.json', '/costos-base.json', '/vendor/react.js']) {
       const x = await fetch(BASE + f, { redirect: 'manual' });
       dice(x.status === 401, `sin sesión, ${f} no se entrega`, String(x.status));
     }
@@ -268,6 +268,24 @@ try {
   await guardado(p);
   dice((await costos()).productos.length === 16, 'la partida se quitó del catálogo (API)');
 
+  /* ── los costos base que revisó Mike (8-oct-2026) ── */
+  console.log('\n-- Costos base revisados: cargar los que falten --');
+  await ir(p, 'Resumen');
+  const tarjetaBase = p.locator('[data-aviso="Costos base listos para cargar"]');
+  await tarjetaBase.waitFor({ timeout: 20000 });
+  const boton = p.locator('[data-cargar-base]');
+  dice((await boton.innerText()).trim() === 'Cargar los 193', 'a quien dirige se le ofrecen los 193', await boton.innerText());
+  await boton.click();
+  await p.getByText('Costos base cargados: 193 insumos nuevos').waitFor({ timeout: 40000 });
+  d = await costos();
+  const tablaroca = d.costos_base.find((x) => x.clave === 'MAT-201');
+  dice(d.costos_base.length === 253 && tablaroca?.nombre.startsWith('Tablaroca normal') && tablaroca.precio === 39900 && tablaroca.tipo === 'material',
+    'quedaron en la base: 60 + 193, la Tablaroca normal a $399.00 (API)', `${d.costos_base.length} costos · MAT-201 ${tablaroca?.precio}`);
+  dice(d.costos_base.find((x) => x.clave === 'MO-101')?.tipo === 'mo' && d.costos_base.find((x) => x.clave === 'EQ-305')?.tipo === 'equipo', 'mano de obra y equipo con su tipo (API)');
+  dice(d.costos_base.find((x) => x.clave === 'MAT-001')?.precio === 26000, 'lo que ya estaba no se pisó (MAT-001 sigue en $260)');
+  await p.locator('[data-cuenta]').waitFor();
+  dice((await tarjetaBase.count()) === 0, 'ya cargados, el aviso se va');
+
   /* ── la salida ── */
   await p.locator('[data-salir]').click();
   await p.waitForURL(/entrar\.html/);
@@ -288,6 +306,7 @@ try {
   await entrarPorPantalla(q, TIN);
   await q.locator('section[data-screen-label="Resumen"]').waitFor({ timeout: 30000 });
   dice((await q.locator('[data-rol]').getAttribute('data-rol')) === 'equipo', 'entra como equipo: la suite dice que no aprueba');
+  dice((await q.locator('[data-cargar-base]').count()) === 0, 'a quien no dirige no se le ofrece cargar los costos base');
   dice((await q.locator('section[data-screen-label="Resumen"]').getByRole('button', { name: 'Aprobar' }).count()) === 0, 'no se le ofrece aprobar');
   for (const s of ['Catálogo', 'Precios base', 'Cuadrillas', 'Generador', 'Resumen']) {
     await ir(q, s);

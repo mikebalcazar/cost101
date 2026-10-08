@@ -98,6 +98,7 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
           <button class="btn btn-primary blueprint" onClick="{{ onNueva }}" style="padding:10px 18px;font-size:15px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Nueva partida</button>
         </div>
         {{ vacioCard }}
+        {{ cargaCard }}
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
           <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
             <div class="blueprint" style="padding:18px 20px;display:flex;flex-direction:column;gap:10px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
@@ -587,7 +588,7 @@ class Component extends DCLogic {
 
   init(){
     return {insumos:[],cuadrillas:[],partidas:[],cats:JSON.parse(JSON.stringify(CATS_DEF)),
-      listo:false,falla:null,sinLicencia:false,guardando:false,org:null,orgs:[],correo:'',porBorrar:null,sembrando:false,
+      listo:false,falla:null,sinLicencia:false,guardando:false,org:null,orgs:[],correo:'',porBorrar:null,sembrando:false,costosBase:null,cargandoBase:false,
       catDlg:null,newCat:'',catEdits:{},baseCat:'',cuadCat:'',view:'dash',rol:'equipo',draft:null,step:0,err:null,
       q:'',cat:'',est:'todas',selId:null,baseTipo:'material',baseQ:'',libTipo:'material',libQ:'',toast:null,edits:{},
       nuevo:{nombre:'',unidad:'pza',precio:'',cat:''}};
@@ -787,6 +788,23 @@ class Component extends DCLogic {
       this.toast('Catálogo de ejemplo cargado: '+d.nuevos.costos+' insumos, '+d.nuevos.cuadrillas+' cuadrillas, '+d.nuevos.productos+' partidas');
     }catch(e){ this.toast(mensajeDe(e)); }
     finally{ this.setState({sembrando:false}); }
+  }
+  /* Los costos base que Mike revisó el 8-oct-2026 (carpintería, tablaroca y
+   * cancelería). Se ofrecen a quien dirige mientras falte alguno por clave; la
+   * carga es la misma de la semilla, que no duplica ni pisa lo que ya está. */
+  async leerCostosBase(){
+    if(this._cbPedido) return; this._cbPedido=true;
+    try{ const r=await fetch('/costos-base.json',{credentials:'same-origin'}); if(r.ok){ const d=await r.json(); this.setState({costosBase:d.costos||[]}); } }catch(_){}
+  }
+  async cargarCostosBase(faltan){
+    if(this.state.cargandoBase) return;
+    this.setState({cargandoBase:true});
+    try{
+      const d=await pedir(this.ruta('/costos/importar'),{method:'POST',body:{costos:faltan}});
+      await this.recargar(true);
+      this.toast('Costos base cargados: '+d.nuevos.costos+' insumos nuevos'+(d.ya_estaban.costos?' ('+d.ya_estaban.costos+' ya estaban)':''));
+    }catch(e){ this.toast(mensajeDe(e)); }
+    finally{ this.setState({cargandoBase:false}); }
   }
   cambiarEmpresa(id){
     try{ localStorage.setItem('cost101-org',id); }catch(_){}
@@ -1012,6 +1030,13 @@ class Component extends DCLogic {
         h('div',{style:{display:'flex',gap:8,flexWrap:'wrap'}},
           h('button',{className:'btn btn-primary','data-ir-base':'1',onClick:()=>this.setState({view:'base'})},'Capturar precios base'),
           admin?h('button',{className:'btn btn-secondary','data-sembrar':'1',disabled:S.sembrando,onClick:()=>this.sembrar()},S.sembrando?'Cargando…':'Cargar catálogo de ejemplo'):null))
+      :null;
+    if(admin&&L) this.leerCostosBase();
+    const tengo=new Set(S.insumos.map(i=>i.sku)), faltan=admin&&L&&S.costosBase?S.costosBase.filter(c=>!tengo.has(c.clave)):[];
+    v.cargaCard=faltan.length
+      ?tarjeta('Costos base listos para cargar',faltan.length+' insumos de carpintería, tablaroca y cancelería revisados el 8 de octubre: precio más alto de tienda en línea, o el estimado más 15 % donde no hubo tienda. Lo que ya tienes no se toca.',
+        h('div',{style:{display:'flex',gap:8,flexWrap:'wrap'}},
+          h('button',{className:'btn btn-primary','data-cargar-base':'1',disabled:S.cargandoBase,onClick:()=>this.cargarCostosBase(faltan)},S.cargandoBase?'Cargando…':'Cargar los '+faltan.length)))
       :null;
     v.rolAdmin=admin; v.rolEquipo=!admin; v.isAdmin=admin; v.notAdmin=!admin;
     v.onNueva=()=>this.newPartida();
