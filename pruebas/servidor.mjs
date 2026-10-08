@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 import worker from '../worker/index.js';
 
 const RAIZ = join(fileURLToPath(new URL('..', import.meta.url)), 'public');
-const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.txt': 'text/plain; charset=utf-8', '.json': 'application/json; charset=utf-8', '.woff2': 'font/woff2' };
+const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.txt': 'text/plain; charset=utf-8', '.json': 'application/json; charset=utf-8', '.woff2': 'font/woff2', '.svg': 'image/svg+xml' };
 const puerto = Number(process.argv[2] || 8795);
 const API = (process.argv[3] || process.env.API_LOCAL || 'http://127.0.0.1:8787').replace(/\/$/, '');
 

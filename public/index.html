@@ -22,16 +22,46 @@ window.__resources={
 <link rel="stylesheet" href="_ds/industry-d54496d2-f6ce-49fa-82ce-a48645e2d4ea/styles.css">
 <script src="_ds/industry-d54496d2-f6ce-49fa-82ce-a48645e2d4ea/_ds_bundle.js"></script>
 <style>
+/* Tipografía de la suite (como dash101 y quell101): las cifras en Fira Sans
+   —«Cifras», sólo dígitos y signos de medida por unicode-range— y el texto en
+   Raleway. Todo del propio origen; nada se le pide a Google. */
+@font-face{font-family:"Cifras";src:url("fonts/fira-cifras-400.woff2") format("woff2");font-weight:400 500;font-display:swap;unicode-range:U+0030-0039,U+00B0,U+00B1,U+00D7,U+0025}
+@font-face{font-family:"Cifras";src:url("fonts/fira-cifras-600.woff2") format("woff2");font-weight:600 900;font-display:swap;unicode-range:U+0030-0039,U+00B0,U+00B1,U+00D7,U+0025}
 @font-face{font-family:"Raleway";src:url("fonts/raleway-400.woff2") format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Raleway";src:url("fonts/raleway-500.woff2") format("woff2");font-weight:500;font-display:swap}
 @font-face{font-family:"Raleway";src:url("fonts/raleway-600.woff2") format("woff2");font-weight:600;font-display:swap}
 @font-face{font-family:"Raleway";src:url("fonts/raleway-700.woff2") format("woff2");font-weight:700;font-display:swap}
 @font-face{font-family:"Raleway";src:url("fonts/raleway-800.woff2") format("woff2");font-weight:800;font-display:swap}
-.cuenta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-left:auto;font-size:13px;color:var(--color-neutral-700)}
+.cuenta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto;min-width:0;font-size:13px;color:var(--color-neutral-700)}
 .cuenta a,.cuenta button.liga{color:var(--color-accent-700);background:none;border:0;font:inherit;cursor:pointer;padding:4px 6px;text-decoration:none}
 .cuenta a:hover,.cuenta button.liga:hover{color:#fff}
-.cuenta .empresa{color:var(--color-text);font-weight:600}
+.cuenta .empresa{color:var(--color-text);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.cuenta select.input{min-width:0;flex:0 1 auto}
 .cuenta .sync{font-size:11px;letter-spacing:.08em;text-transform:uppercase;min-width:74px;text-align:right}
+.cuenta .sync:empty{min-width:0;display:none}
+/* La barra (0.3.1, 8-oct-2026): el logotipo oficial en SVG, y en una sola
+   línea desde 1280 px —a 1424 la empresa y «Salir» se caían a otro renglón—.
+   En el teléfono, las secciones se deslizan de lado en un solo renglón. */
+.marca101{display:flex;flex-direction:column;align-items:flex-start;gap:3px;flex-shrink:0}
+.marca101 img{height:28px;width:auto;display:block}
+.marca101 span{font-weight:500;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700);white-space:nowrap}
+.ligas101{display:flex;gap:4px;flex-wrap:wrap}
+.ligas101 a{font-family:var(--font-heading);font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+@media (min-width:1280px){
+  .nav101{flex-wrap:nowrap!important;column-gap:20px!important}
+  .ligas101{flex-wrap:nowrap;gap:2px;margin-right:auto}
+  .ligas101 a{font-size:13.5px;padding:6px 11px}
+  .cuenta{flex-wrap:nowrap;flex:0 1 auto}
+  .cuenta>*{flex-shrink:0}
+  .cuenta .empresa,.cuenta select.input{flex-shrink:1}
+}
+@media (max-width:700px){
+  .nav101{column-gap:12px!important;padding:10px 16px!important}
+  .ligas101{order:3;width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:2px;margin:0 -4px}
+  .ligas101::-webkit-scrollbar{display:none}
+  .ligas101 a{font-size:13px;padding:6px 10px}
+  .cuenta{order:2;font-size:12px;gap:4px 8px}
+}
 .quitar{width:28px;height:28px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;border:1px solid transparent;background:transparent;color:var(--color-neutral-600);cursor:pointer;font:inherit;font-size:12px}
 .quitar:hover{color:#fff;border-color:rgba(255,255,255,.2)}
 .quitar.seguro{width:auto;padding:0 10px;color:#fff;background:#b3261e;border-color:#b3261e;font-weight:600}
@@ -39,7 +69,8 @@ window.__resources={
 :root{color-scheme:dark;--color-bg:#0f1b24;--color-surface:#16242e;--color-text:#e8eef2;--color-accent:#3AA3DC;--color-divider:#2a3a46;
 --color-neutral-100:#1b2a35;--color-neutral-200:#22323e;--color-neutral-300:#2a3a46;--color-neutral-400:#3d505e;--color-neutral-500:#5f7482;--color-neutral-600:#8094a2;--color-neutral-700:#a9c0ce;--color-neutral-800:#c9d7e0;--color-neutral-900:#e8eef2;
 --color-accent-100:#0f3149;--color-accent-200:#124263;--color-accent-300:#155a86;--color-accent-400:#0080C1;--color-accent-500:#1c90cc;--color-accent-600:#5fb6e4;--color-accent-700:#86c9ec;--color-accent-800:#addcf3;--color-accent-900:#d9eff9;
---font-heading:"Raleway",system-ui,sans-serif;--font-heading-weight:800;--font-body:"Raleway",system-ui,sans-serif}
+--font-heading:"Cifras","Raleway",system-ui,sans-serif;--font-heading-weight:800;--font-body:"Cifras","Raleway",system-ui,sans-serif}
+body{font-variant-numeric:lining-nums}
 body{margin:0;background:#060d13 radial-gradient(130% 70% at 50% -12%,#2a9be0 0%,#0a6aa6 22%,#0b3655 48%,#07141e 72%,#05090d 100%) fixed;min-height:100vh}
 :root{--color-divider:rgba(255,255,255,.1);--color-neutral-200:rgba(255,255,255,.08);--color-accent-100:rgba(58,163,220,.16);--font-heading-weight:600}
 header{background:rgba(5,12,18,.38)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom-color:rgba(255,255,255,.08)!important}
@@ -66,15 +97,14 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
 </helmet>
 <div style="min-height:100vh;display:flex;flex-direction:column;font-family:var(--font-body);color:var(--color-text)">
   <header style="border-bottom:1px solid var(--color-divider);background:var(--color-surface);position:sticky;top:0;z-index:20">
-    <nav class="nav" style="max-width:1360px;margin:0 auto;flex-wrap:wrap;row-gap:10px;padding:12px 20px">
-      <div class="nav-brand" style="display:flex;align-items:center;gap:12px;margin-right:20px">
-        <img src="assets/logo-taller101.png" alt="Taller 101" style="width:40px;height:40px;object-fit:cover;display:block">
-        <span style="font-size:20px;font-weight:800;letter-spacing:-.01em">cost<span style="color:var(--color-accent)">101</span></span>
-        <span style="font-family:var(--font-body);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">Generador de partidas</span>
+    <nav class="nav nav101" style="max-width:1360px;margin:0 auto;flex-wrap:wrap;row-gap:10px;column-gap:20px;padding:12px 20px">
+      <div class="nav-brand marca101" style="margin-right:0">
+        <img src="assets/cost101-claro.svg" alt="cost101" width="54" height="28">
+        <span>Generador de partidas</span>
       </div>
-      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-right:auto">
+      <div class="ligas101">
         <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
-          <a href="#" aria-current="{{ n.current }}" onClick="{{ n.onClick }}" style="font-family:var(--font-heading);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase">{{ n.label }}</a>
+          <a href="#" aria-current="{{ n.current }}" onClick="{{ n.onClick }}">{{ n.label }}</a>
         </sc-for>
       </div>
       {{ cuenta }}
