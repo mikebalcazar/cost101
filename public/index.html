@@ -154,32 +154,10 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
             <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">{{ genKicker }}</div>
             <h1 style="margin:0;font-size:40px;text-wrap:balance">{{ genTitle }}</h1>
           </div>
-          <div style="display:flex;flex-direction:column;gap:6px">
-            <span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Enfoque del generador</span>
-            <div class="seg">
-              <sc-for list="{{ modos }}" as="m" hint-placeholder-count="3">
-                <label class="seg-opt"><input type="radio" name="modo" checked="{{ m.checked }}" onChange="{{ m.onChange }}">{{ m.label }}</label>
-              </sc-for>
-            </div>
-          </div>
         </div>
 
         <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
           <div style="flex:1 1 620px;min-width:0;display:flex;flex-direction:column;gap:22px">
-
-            <sc-if value="{{ isPasos }}" hint-placeholder-val="{{ false }}">
-              <div style="overflow-x:auto">
-                <div style="display:flex;min-width:max-content;border:1px solid var(--color-divider)">
-                  <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
-                    <label class="seg-opt" style="padding:10px 16px;gap:10px;border-right:1px solid var(--color-divider)">
-                      <input type="radio" name="paso" checked="{{ st.checked }}" onChange="{{ st.onChange }}">
-                      <span style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ st.n }}</span>
-                      <span style="display:flex;flex-direction:column;line-height:1.2"><span style="font-size:13px;font-weight:500">{{ st.label }}</span><span style="font-size:11px;opacity:.75">{{ st.meta }}</span></span>
-                    </label>
-                  </sc-for>
-                </div>
-              </div>
-            </sc-if>
 
             <sc-if value="{{ showDatos }}" hint-placeholder-val="{{ true }}">
               <div class="blueprint" style="padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:14px"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
@@ -187,58 +165,6 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
                 <div class="field"><label>Clave</label><input class="input" value="{{ d.sku }}" onChange="{{ dh.sku }}"></div>
                 <div class="field"><label>Unidad de cotización</label>{{ selUnidad }}</div>
                 <div class="field"><label>Categoría</label>{{ selCat }}</div>
-              </div>
-            </sc-if>
-
-            <sc-for list="{{ sheetSections }}" as="s" hint-placeholder-count="0">
-              <div class="blueprint" style="padding:0"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-                <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px 16px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--color-divider)">
-                  <div style="min-width:0">
-                    <h3 style="margin:0;font-size:22px">{{ s.title }}</h3>
-                    <div style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ s.hint }}</div>
-                  </div>
-                  <div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--font-heading);font-weight:600;font-size:22px">{{ s.totalF }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ s.share }} del CD</span></div>
-                </div>
-                <div style="overflow-x:auto">
-                  <div style="min-width:840px">
-                    <div style="display:grid;grid-template-columns:84px minmax(200px,1fr) 52px 108px 170px 80px 112px 40px;gap:0 10px;padding:8px 16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700);border-bottom:1px solid var(--color-divider)">
-                      <span>Clave</span><span>Descripción</span><span>Unidad</span><span style="text-align:right">Precio</span><span>{{ s.cantHdr }}</span><span>Desp.</span><span style="text-align:right">Importe</span><span></span>
-                    </div>
-                    <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="2">
-                      <div style="display:grid;grid-template-columns:84px minmax(200px,1fr) 52px 108px 170px 80px 112px 40px;gap:0 10px;align-items:center;padding:6px 16px;font-size:14px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
-                        <span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.04em;color:var(--color-neutral-700)">{{ r.sku }}</span>
-                        <span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="min-width:0">{{ r.nombre }}</span><sc-if value="{{ r.hasTipo }}" hint-placeholder-val="{{ false }}"><span class="tag tag-outline" style="padding:1px 6px;font-size:10px">{{ r.tipoLbl }}</span></sc-if></span>
-                        <span style="color:var(--color-neutral-700)">{{ r.unidad }}</span>
-                        <span style="text-align:right;font-variant-numeric:tabular-nums">{{ r.precioF }}</span>
-                        <span style="display:flex;align-items:center;gap:6px"><input class="input" type="number" step="any" min="0" value="{{ r.cant }}" onChange="{{ r.onCant }}" style="width:78px;min-height:30px;padding:4px 8px;text-align:right;font-variant-numeric:tabular-nums"><span style="font-size:11px;color:var(--color-neutral-700);line-height:1.2">{{ r.cantUnit }}</span></span>
-                        <span style="display:flex;align-items:center;gap:4px">
-                          <sc-if value="{{ r.showDesp }}" hint-placeholder-val="{{ true }}"><input class="input" type="number" step="any" min="0" value="{{ r.desp }}" onChange="{{ r.onDesp }}" style="width:52px;min-height:30px;padding:4px 6px;text-align:right"><span style="font-size:12px;color:var(--color-neutral-700)">%</span></sc-if>
-                          <sc-if value="{{ r.noDesp }}" hint-placeholder-val="{{ false }}"><span style="color:var(--color-neutral-500)">—</span></sc-if>
-                        </span>
-                        <span style="text-align:right;font-weight:500;font-variant-numeric:tabular-nums">{{ r.importeF }}</span>
-                        <button class="btn btn-ghost btn-icon" onClick="{{ r.onRemove }}" aria-label="Quitar" style="width:30px;height:30px;color:var(--color-neutral-700)"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
-                      </div>
-                    </sc-for>
-                    <sc-if value="{{ s.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:16px;font-size:13px;color:var(--color-neutral-700)">Sin componentes todavía.</div></sc-if>
-                    <sc-if value="{{ s.hasExtra }}" hint-placeholder-val="{{ false }}">
-                      <div style="display:grid;grid-template-columns:minmax(0,1fr) 112px 40px;gap:0 10px;padding:8px 16px;font-size:13px;color:var(--color-neutral-700);border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)"><span>{{ s.extraLabel }}</span><span style="text-align:right;font-variant-numeric:tabular-nums">{{ s.extraF }}</span><span></span></div>
-                    </sc-if>
-                  </div>
-                </div>
-                <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                  <svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:var(--color-accent);stroke-width:1.5;stroke-linecap:round;flex:none"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
-                  <div style="flex:1 1 280px;max-width:560px">{{ s.addSelect }}</div>
-                </div>
-              </div>
-            </sc-for>
-
-            <sc-if value="{{ isPasos }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-                <button class="btn btn-secondary" disabled="{{ noPrev }}" onClick="{{ prevStep }}" style="padding:8px 14px"><svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="m15 18-6-6 6-6"></path></svg>Anterior</button>
-                <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
-                  <button class="btn btn-secondary" onClick="{{ nextStep }}" style="padding:8px 14px">Siguiente: {{ nextLabel }}<svg width="16" height="16" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="m9 18 6-6-6-6"></path></svg></button>
-                </sc-if>
-                <sc-if value="{{ isLastStep }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--color-neutral-700);align-self:center">Último paso — revisa el resumen y guarda.</span></sc-if>
               </div>
             </sc-if>
 
@@ -257,7 +183,7 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
                   </div>
                   <div style="display:flex;flex-direction:column;max-height:560px;overflow-y:auto;border-top:1px solid var(--color-divider)">
                     <sc-for list="{{ libItems }}" as="it" hint-placeholder-count="6">
-                      <button onClick="{{ it.onAdd }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)" style-hover="background:color-mix(in srgb,var(--color-accent) 10%,transparent)">
+                      <button data-lib-item onClick="{{ it.onAdd }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)" style-hover="background:color-mix(in srgb,var(--color-accent) 10%,transparent)">
                         <span style="flex:1;min-width:0"><span style="display:block;font-size:14px">{{ it.nombre }}</span><span style="display:block;font-size:11px;color:var(--color-neutral-700)">{{ it.meta }}</span></span>
                         <svg width="16" height="16" viewBox="0 0 24 24" style="flex:none;fill:none;stroke:var(--color-accent-700);stroke-width:1.5;stroke-linecap:round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
                       </button>
@@ -573,7 +499,7 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;modo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hoja&quot;,&quot;pasos&quot;,&quot;lienzo&quot;],&quot;default&quot;:&quot;hoja&quot;,&quot;tsType&quot;:&quot;'hoja'|'pasos'|'lienzo'&quot;,&quot;section&quot;:&quot;Generador&quot;},&quot;rol&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;admin&quot;,&quot;equipo&quot;],&quot;default&quot;:&quot;admin&quot;,&quot;tsType&quot;:&quot;'admin'|'equipo'&quot;,&quot;section&quot;:&quot;Usuario&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;rol&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;admin&quot;,&quot;equipo&quot;],&quot;default&quot;:&quot;admin&quot;,&quot;tsType&quot;:&quot;'admin'|'equipo'&quot;,&quot;section&quot;:&quot;Usuario&quot;}}">
 const KEY='costeo-apu-v1', HOY=(d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date());
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const uid=()=>Math.random().toString(36).slice(2,9);
@@ -662,7 +588,7 @@ class Component extends DCLogic {
   init(){
     return {insumos:[],cuadrillas:[],partidas:[],cats:JSON.parse(JSON.stringify(CATS_DEF)),
       listo:false,falla:null,sinLicencia:false,guardando:false,org:null,orgs:[],correo:'',porBorrar:null,sembrando:false,
-      catDlg:null,newCat:'',catEdits:{},baseCat:'',cuadCat:'',view:'dash',rol:'equipo',modo:this.props.modo||(window.innerWidth<760?'pasos':'hoja'),draft:null,step:0,err:null,
+      catDlg:null,newCat:'',catEdits:{},baseCat:'',cuadCat:'',view:'dash',rol:'equipo',draft:null,step:0,err:null,
       q:'',cat:'',est:'todas',selId:null,baseTipo:'material',baseQ:'',libTipo:'material',libQ:'',toast:null,edits:{},
       nuevo:{nombre:'',unidad:'pza',precio:'',cat:''}};
   }
@@ -876,7 +802,6 @@ class Component extends DCLogic {
       this.programarSync();
     }
     const P=this.props||{};
-    if(P.modo&&P.modo!==this._lm){ const first=this._lm===undefined; this._lm=P.modo; if(!first&&P.modo!==S.modo) this.setState({modo:P.modo}); }
   }
   componentWillUnmount(){ clearTimeout(this._t); clearTimeout(this._ts); clearTimeout(this._tb); }
 
@@ -1123,7 +1048,7 @@ class Component extends DCLogic {
 
     // Generador
     const d=S.draft;
-    v.d=d||{}; v.g={}; v.dh={}; v.modos=[]; v.steps=[]; v.sheetSections=[]; v.canvasSections=[]; v.libItems=[]; v.libTabs=[];
+    v.d=d||{}; v.g={}; v.dh={}; v.canvasSections=[]; v.libItems=[]; v.libTabs=[];
     v.hasErr=!!S.err; v.err=S.err;
     if(d){
       const r=this.calc(d,S), u=d.unidad||'u';
@@ -1163,17 +1088,10 @@ class Component extends DCLogic {
           hasExtra:s.key==='mo',extraLabel:'Herramienta menor ('+num(d.herr)+'% de MO)',extraF:money(r.herr),
           addSelect:this.sel('',s.opts,e=>this.addC(e.target.value),s.ph)};});
 
-      const modo=S.modo;
-      v.modos=[['hoja','Hoja APU'],['pasos','Por pasos'],['lienzo','Lienzo']].map(([k,l])=>({label:l,checked:modo===k,onChange:()=>this.setState({modo:k})}));
-      v.isPasos=modo==='pasos'; v.isLienzo=modo==='lienzo';
-      const step=S.step;
-      v.showDatos=modo!=='pasos'||step===0;
-      v.sheetSections=modo==='hoja'?sections:(modo==='pasos'&&step>0?[sections[step-1]]:[]);
-      v.canvasSections=modo==='lienzo'?sections:[];
-      const stepDefs=[{label:'Datos',meta:d.unidad+' · '+catLbl(d.cat)}].concat(sections.map(s=>({label:s.title,meta:s.totalF})));
-      v.steps=stepDefs.map((s,i)=>({n:i+1,label:s.label,meta:s.meta,checked:step===i,onChange:()=>this.setState({step:i})}));
-      v.noPrev=step===0; v.hasNext=step<4; v.isLastStep=step===4; v.nextLabel=(stepDefs[step+1]||{}).label||'';
-      v.prevStep=()=>this.setState({step:Math.max(0,step-1)}); v.nextStep=()=>this.setState({step:Math.min(4,step+1)});
+      /* Sólo el lienzo (Mike, 8-oct: «Deja en cost101 solo la modalidad de
+       * lienzo. Ya quita las otras 2»). Se fueron «Hoja APU» y «Por pasos»
+       * con su selector: biblioteca a la izquierda, secciones a la derecha. */
+      v.isLienzo=true; v.showDatos=true; v.canvasSections=sections;
 
       const lt=S.libTipo, lq=S.libQ.toLowerCase();
       v.libQ=S.libQ; v.onLibQ=e=>this.setState({libQ:e.target.value});

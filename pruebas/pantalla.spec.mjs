@@ -224,12 +224,20 @@ try {
   /* ── el generador ── */
   console.log('\n-- Generador --');
   await ir(p, 'Generador');
+  /* Sólo el lienzo (Mike, 8-oct: «Deja en cost101 solo la modalidad de
+   * lienzo. Ya quita las otras 2»): ni selector ni «Hoja APU» ni «Por pasos»,
+   * y se agrega desde la biblioteca. */
+  const gen = p.locator('section[data-screen-label="Generador"]');
+  dice((await gen.getByText('Enfoque del generador').count()) === 0
+    && (await gen.getByText('Hoja APU').count()) === 0 && (await gen.getByText('Por pasos').count()) === 0,
+    'el generador ya no ofrece «Hoja APU» ni «Por pasos»: sólo el lienzo');
+  dice((await gen.getByRole('heading', { name: 'Biblioteca' }).count()) === 1, 'y abre directo en el lienzo, con su biblioteca');
   await p.getByPlaceholder('Ej. Muro de tablaroca').fill('Partida armada en la prueba');
-  const agregar = p.locator('select').filter({ hasText: /Agregar material/ }).first();
-  await agregar.selectOption({ index: 1 });
+  await gen.getByRole('button', { name: 'Materiales', exact: true }).click();
+  await gen.locator('[data-lib-item]').first().click();
   await espera(150);
-  const cuadrillaSel = p.locator('select').filter({ hasText: /Agregar oficio o cuadrilla/ }).first();
-  await cuadrillaSel.selectOption({ index: 1 });
+  await gen.getByRole('button', { name: 'Cuadrillas', exact: true }).click();
+  await gen.locator('[data-lib-item]').first().click();
   await espera(200);
   const puPantalla = (await p.getByText('Precio unitario').locator('..').innerText()).replace(/\s+/g, ' ');
   await p.getByRole('button', { name: 'Guardar y aprobar' }).click();
@@ -290,9 +298,8 @@ try {
   await ir(q, 'Generador');
   await q.getByPlaceholder('Ej. Muro de tablaroca').fill('Borrador del equipo');
   dice((await q.getByRole('button', { name: 'Guardar y aprobar' }).count()) === 0, 'en el generador sólo puede guardar borrador');
-  // En celular el generador va por pasos: Materiales es el paso 2.
-  if (await q.getByRole('button', { name: /Siguiente/ }).count()) await q.getByRole('button', { name: /Siguiente/ }).first().click();
-  await q.locator('select').filter({ hasText: /Agregar material/ }).first().selectOption({ index: 1 });
+  // En celular también es el lienzo: la biblioteca va arriba de las secciones.
+  await q.locator('section[data-screen-label="Generador"] [data-lib-item]').first().click();
   await espera(150);
   await q.getByRole('button', { name: 'Guardar borrador' }).first().click();
   await guardado(q);
@@ -304,7 +311,6 @@ try {
   await q.getByText('PAR-101').first().click();
   await q.getByRole('button', { name: 'Editar' }).first().click();
   await q.getByPlaceholder('Ej. Muro de tablaroca').fill("Concreto hecho en obra f'c=150 kg/cm², revisado");
-  if (await q.getByRole('button', { name: /Siguiente/ }).count()) await q.getByRole('button', { name: /Siguiente/ }).first().click();
   await q.getByRole('button', { name: 'Guardar borrador' }).first().click();
   await guardado(q);
   d = await costos();
