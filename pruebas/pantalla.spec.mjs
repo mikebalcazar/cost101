@@ -130,7 +130,7 @@ try {
   dice(!(await p.locator('body').innerText()).toLowerCase().includes('costeo101'), 'ya no dice costeo101');
   dice((await p.locator('input[name="rol"]').count()) === 0, 'ya no hay selector de rol: el rol viene de la sesión');
   const ligas = await p.locator('header nav a[aria-current]').allInnerTexts();
-  dice(ligas.length === 5, 'cinco secciones en la barra', ligas.join(' · '));
+  dice(ligas.length === 6 && ligas.at(-1).toLowerCase() === 'configuración', 'seis secciones en la barra, la última Configuración', ligas.join(' · '));
   dice((await costos()).costos_base.length === 0, 'la base de la empresa nace vacía (API)');
 
   // El catálogo de ejemplo
@@ -173,8 +173,11 @@ try {
   dice(!!nuevo && nuevo.clave === 'MAT-044' && nuevo.precio === 650 && !nuevo.id.startsWith('tmp-'), 'el insumo nuevo está en la base con su clave y su precio en centavos (API)', nuevo ? `${nuevo.clave} · ${nuevo.precio}` : 'no está');
   dice((await p.locator('[data-nombre="MAT-044"]').count()) === 1, 'y sigue en pantalla después de volver a leer del servidor');
 
-  /* ── actualizar el nombre ── */
+  /* ── actualizar el nombre ── (Mike, 8-oct: «no hay manera de corregir»: el
+   * campo estaba ahí pero sin borde, parecía texto) */
   const nombre = p.locator('[data-nombre="MAT-044"]');
+  const borde = await nombre.evaluate((el) => getComputedStyle(el).borderTopColor);
+  dice(!/rgba\(0, 0, 0, 0\)|transparent/.test(borde) && (await nombre.getAttribute('title')) === 'Corrige el nombre aquí', 'el nombre se ve como campo que se corrige (con borde)', borde);
   await nombre.fill('Yeso en polvo, saco 40 kg');
   await nombre.blur();
   await guardado(p);
@@ -265,6 +268,58 @@ try {
   const tras = (await p.locator('section[data-screen-label="Resumen"]').innerText()).replace(/\s+/g, ' ');
   dice(/Partidas aprobadas 13/i.test(tras) && /Insumos base 60/i.test(tras), 'con el navegador vaciado y recargado, todo sigue ahí: viene de la base', tras.match(/Partidas aprobadas \d+/i)?.[0] || '');
   dice(/Panel de yeso[^$]*\$245\.00[^$]*\$260\.00/.test(tras), 'y el cambio de precio sale en «Cambios recientes»');
+
+  /* ── mano de obra por hora o por unidad (Mike, 8-oct) ── */
+  console.log('\n-- Mano de obra: hora o unidad --');
+  await ir(p, 'Precios base');
+  await p.locator('label.seg-opt', { hasText: /Mano de obra/ }).click();
+  await espera(150);
+  const selUnidadNueva = p.locator('.field', { has: p.locator('label', { hasText: /^Unidad$/ }) }).locator('select').first();
+  const opcionesMo = await selUnidadNueva.locator('option').allInnerTexts();
+  dice(opcionesMo.join(',') === 'h,unidad', 'al dar de alta mano de obra se escoge hora o unidad', opcionesMo.join(','));
+  await p.getByPlaceholder('Descripción').fill('Colocación de chapa a destajo');
+  await selUnidadNueva.selectOption('unidad');
+  await p.getByPlaceholder('0.00').fill('85');
+  await p.getByRole('button', { name: 'Agregar', exact: true }).click();
+  await guardado(p);
+  d = await costos();
+  const destajo = d.costos_base.find((x) => x.nombre === 'Colocación de chapa a destajo');
+  dice(destajo?.tipo === 'mo' && destajo?.unidad === 'unidad' && destajo?.precio === 8500, 'quedó como mano de obra por unidad (API)', destajo ? `${destajo.clave} · ${destajo.unidad}` : 'no está');
+  await ir(p, 'Cuadrillas');
+  const enCuadrilla = await p.locator('section[data-screen-label="Cuadrillas"] select option', { hasText: 'Colocación de chapa a destajo' }).count();
+  dice(enCuadrilla === 0, 'en una cuadrilla sólo entran los oficios por hora');
+
+  /* ── configuración (Mike, 8-oct: «¿podríamos abrir un módulo de configuración?») ── */
+  console.log('\n-- Configuración --');
+  await ir(p, 'Configuración');
+  const conf = p.locator('section[data-screen-label="Configuración"]');
+  await conf.waitFor({ timeout: 10000 });
+  dice((await conf.locator('[data-ind-total]').getAttribute('data-ind-total')) === '12', 'los indirectos nacen en 12 % (oficina 6, campo 4, financiamiento 1, fianzas 1)');
+  await conf.getByLabel('Se considera Fianzas y seguros').uncheck();
+  await conf.getByLabel('Utilidad', { exact: true }).fill('12');
+  await guardado(p);
+  dice((await conf.locator('[data-ind-total]').getAttribute('data-ind-total')) === '11', 'quitar uno de la cuenta baja el total a 11 %');
+  const aj = await api(`/orgs/${ORG}/ajustes?clave=config`);
+  const guardada = aj.data?.filas?.[0]?.valor;
+  dice(guardada?.util === 12 && guardada?.indirectos?.find((x) => x.n === 'Fianzas y seguros')?.va === false, 'la configuración quedó en la base de la empresa (API)', JSON.stringify(guardada || {}).slice(0, 80));
+  dice((await conf.locator('[data-unidad="mo:h"]').count()) === 1 && (await conf.locator('[data-unidad="mo:unidad"]').count()) === 1, 'mano de obra: hora y unidad');
+  await conf.locator('[data-nueva-unidad="material"]').fill('cm');
+  await conf.locator('[data-nueva-unidad="material"]').press('Enter');
+  await guardado(p);
+  dice((await conf.locator('[data-unidad="material:cm"]').count()) === 1, 'se agrega una unidad de material');
+  await conf.locator('[data-aplicar]').click();
+  await conf.locator('[data-aplicar-si]').click();
+  await guardado(p);
+  d = await costos();
+  const conApu = d.productos.filter((x) => x.apu);
+  dice(conApu.length > 0 && conApu.every((x) => x.apu.ind === 11 && x.apu.util === 12), 'aplicar lleva los porcentajes a todas las partidas (API)', `${conApu.length} partidas`);
+  await ir(p, 'Resumen');
+  await p.getByRole('button', { name: 'Nueva partida' }).click();
+  const gen2 = p.locator('section[data-screen-label="Generador"]');
+  const campo = (etq) => gen2.locator('.field', { has: p.locator('label', { hasText: etq }) }).locator('input').first();
+  const [vInd, vUtil] = [await campo('Indirectos %').inputValue(), await campo('Utilidad %').inputValue()];
+  dice(vInd === '11' && vUtil === '12', 'una partida nueva nace con la configuración', `ind ${vInd} · util ${vUtil}`);
+  await ir(p, 'Resumen');
 
   /* ── quitar una partida ── */
   await ir(p, 'Catálogo');

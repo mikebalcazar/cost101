@@ -1,5 +1,25 @@
 # cost101 — por dónde va
 
+## 8-oct-2026 (noche) · Configuración, mano de obra por hora o unidad, nombre visible (0.3.0)
+
+- Mike: «necesito poder editar el nombre del material en los precios base».
+  Ya se podía, pero el campo no tenía borde y parecía texto: ahora se ve
+  como campo («Corrige el nombre aquí»).
+- Mike: «en mano de obra también debe haber tipos de unidades (…) solo hora
+  o unidad». Selector h/unidad al dar de alta y en la tabla (API 0.82.1 deja
+  de forzar `h`); las cuadrillas sólo ofrecen oficios por hora. OJO: los
+  destajos que se cargaron en forespot (MO-204/205/206, MO-304…) entraron
+  como hora por la regla vieja; Mike los cambia con el selector.
+- Mike: «¿Podríamos abrir un módulo de configuración?». Sección nueva
+  **Configuración** (sexta en la barra), guardada en `/ajustes` clave
+  `config` (de cost101 y de esa empresa): indirectos con casilla «se
+  considera» y % (la suma es el % de indirectos de cada partida nueva),
+  herramienta menor y utilidad por omisión, unidades de material y de mano
+  de obra, y las categorías. «Aplicar a las partidas existentes» pide
+  confirmación (recalcula precios y lo que lee quote101). Sólo quien
+  dirige la cambia.
+- 73/73 en local contra la API 0.82.1.
+
 ## 8-oct-2026 (noche) · título y descripción de la partida; cada empresa lo suyo (0.2.4)
 
 - Mike: «hay que agregar título de la partida, que es el nombre con que se
