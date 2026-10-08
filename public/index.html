@@ -464,6 +464,18 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
         <sc-if value="{{ cuadEmpty }}" hint-placeholder-val="{{ false }}"><div style="color:var(--color-neutral-700);font-size:14px">No hay cuadrillas en esta categoría.</div></sc-if>
       </section>
     </sc-if>
+
+    <!-- CONFIGURACIÓN (8-oct-2026): unidades, indirectos, porcentajes y categorías de la empresa -->
+    <sc-if value="{{ isConf }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Configuración" style="display:flex;flex-direction:column;gap:28px">
+        <div style="max-width:720px">
+          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:6px">Configuración · de esta empresa</div>
+          <h1 style="margin:0 0 6px;font-size:40px">Cómo <span style="color:var(--color-accent)">calcula</span> cost101</h1>
+          <p style="margin:0;color:var(--color-neutral-700);text-wrap:pretty">Las unidades que se ofrecen, los indirectos que se consideran, y la herramienta menor y la utilidad con las que nace cada partida nueva.</p>
+        </div>
+        {{ confBody }}
+      </section>
+    </sc-if>
   </main>
 
   <sc-if value="{{ hasDlg }}" hint-placeholder-val="{{ false }}">
@@ -511,6 +523,17 @@ const qty=n=>(isFinite(n)?n:0).toLocaleString('es-MX',{maximumFractionDigits:4})
 const fdate=f=>{const p=(f||HOY).split('-');return +p[2]+' '+MES[+p[1]-1]+' '+p[0];};
 const pct=n=>(n>0?'+':'')+n.toFixed(1)+'%';
 const UNIDADES=['m²','m³','ml','pza','kg','l','pt','h','lote','jgo'];
+/* La configuración de cada empresa (Mike, 8-oct-2026: «un módulo de
+ * configuración»). Vive en /ajustes con la clave `config`, que es sólo de
+ * cost101 y sólo de esa empresa. Lo que no traiga, sale de aquí. */
+const CONF_DEF={unidades:{material:['m²','m³','ml','pza','kg','l','pt','lote','jgo'],mo:['h','unidad']},herr:3,util:10,
+  indirectos:[{n:'Administración central (oficina)',p:6,va:true},{n:'Administración de obra (campo)',p:4,va:true},{n:'Financiamiento',p:1,va:true},{n:'Fianzas y seguros',p:1,va:true}]};
+const confDe=v=>{const d=JSON.parse(JSON.stringify(CONF_DEF)); if(!v||typeof v!=='object') return d;
+  const u=v.unidades||{}, lista=(x,def)=>Array.isArray(x)&&x.length?x.map(String):def;
+  return {unidades:{material:lista(u.material,d.unidades.material),mo:lista(u.mo,d.unidades.mo)},
+    herr:isFinite(+v.herr)?+v.herr:d.herr,util:isFinite(+v.util)?+v.util:d.util,
+    indirectos:Array.isArray(v.indirectos)?v.indirectos.map(x=>({n:String(x.n||''),p:num(x.p),va:x.va!==false})):d.indirectos};};
+const indTotal=c=>Math.round(c.indirectos.filter(x=>x.va).reduce((a,x)=>a+num(x.p),0)*100)/100;
 const CATS_DEF={material:['Tableros','Maderas','Cancelería','Eléctrico','Hidráulico','Obra civil','Mármoles','Pintura','Aislantes','Acero','Herrajes'],mo:['Albañilería','Electricidad','Carpintería','Cancelería','Tablaroca','Pintura','Plomería','General'],equipo:['Equipo menor','Andamios','Maquinaria'],cuadrilla:['Albañilería','Tablaroca','Pintura','Electricidad','Carpintería','Plomería'],partida:['Concretos','Morteros','Muros','Plafones','Pisos','Acabados','Eléctrico','Carpintería','Hidráulico','Instalaciones']};
 const CAT_NOUN={material:['insumo','insumos'],mo:['insumo','insumos'],equipo:['insumo','insumos'],cuadrilla:['cuadrilla','cuadrillas'],partida:['partida','partidas']};
 const DLG_T={material:'Categorías de materiales',mo:'Categorías de mano de obra',equipo:'Categorías de equipo',cuadrilla:'Categorías de cuadrillas',partida:'Categorías del catálogo'};
@@ -589,7 +612,7 @@ class Component extends DCLogic {
 
   init(){
     return {insumos:[],cuadrillas:[],partidas:[],cats:JSON.parse(JSON.stringify(CATS_DEF)),
-      listo:false,falla:null,sinLicencia:false,guardando:false,org:null,orgs:[],correo:'',porBorrar:null,sembrando:false,
+      listo:false,falla:null,sinLicencia:false,guardando:false,org:null,orgs:[],correo:'',porBorrar:null,sembrando:false,conf:confDe(null),confAplicar:false,nuevaUnidad:'',nuevaUnidadMo:'',
       catDlg:null,newCat:'',catEdits:{},baseCat:'',cuadCat:'',view:'dash',rol:'equipo',draft:null,step:0,err:null,
       q:'',cat:'',est:'todas',selId:null,baseTipo:'material',baseQ:'',libTipo:'material',libQ:'',toast:null,edits:{},
       nuevo:{nombre:'',unidad:'pza',precio:'',cat:''}};
@@ -620,11 +643,12 @@ class Component extends DCLogic {
   async recargar(primera){
     const a=this.state.insumos,b=this.state.cuadrillas,c=this.state.partidas,k=this.state.cats;
     const d=await pedir(this.ruta('/costos'));
-    let cats=null;
+    let cats=null, conf=null;
     if(primera){
       // Por la lista y no por id: si todavía no hay categorías guardadas, la lista
       // contesta vacía; por id contestaría 404, que es ruido en la consola.
       try{ const aj=await pedir(this.ruta('/ajustes?clave=categorias')); cats=aj&&aj.filas&&aj.filas[0]&&aj.filas[0].valor; }catch(_){ cats=null; }
+      try{ const aj=await pedir(this.ruta('/ajustes?clave=config')); conf=aj&&aj.filas&&aj.filas[0]?aj.filas[0].valor:null; }catch(_){ conf=null; }
     }
     const S=this.state;
     if(!primera&&(S.insumos!==a||S.cuadrillas!==b||S.partidas!==c||S.cats!==k)){ this.programarSync(); return; }
@@ -642,6 +666,7 @@ class Component extends DCLogic {
       Object.keys(cc).forEach(t=>{cc[t]=Array.isArray(base[t])?base[t].slice():[];});
       this._srv.cats=guardadas?JSON.stringify(cc):'';
       patch.cats=cc;
+      patch.conf=confDe(conf); this._srv.conf=JSON.stringify(patch.conf);
     }
     // Una categoría que algún renglón trae y no está en la lista, se agrega.
     const cc2=patch.cats||JSON.parse(JSON.stringify(S.cats)); let toco=false;
@@ -671,12 +696,16 @@ class Component extends DCLogic {
     V.cua.forEach((_,id)=>{ if(!vivos.cua.has(id)) ops.push({t:'cua',acc:'borrar',id}); });
     V.ins.forEach((_,id)=>{ if(!vivos.ins.has(id)) ops.push({t:'ins',acc:'borrar',id}); });
     if(JSON.stringify(S.cats)!==V.cats&&(V.cats||this._catsTocadas)) ops.push({t:'cats',acc:'cambiar'});
+    if(V.conf&&JSON.stringify(S.conf)!==V.conf) ops.push({t:'conf',acc:'cambiar'});
     return ops;
   }
 
   async ejecutar(op){
     const R=id=>this.real(id), V=this._srv, S=this.state;
     const TABLA={ins:'costos_base',cua:'cuadrillas',par:'productos'}[op.t];
+    if(op.t==='conf'){
+      const valor=S.conf; await pedir(this.ruta('/ajustes'),{method:'POST',body:{clave:'config',valor}}); V.conf=JSON.stringify(valor); return;
+    }
     if(op.t==='cats'){
       const valor=S.cats; await pedir(this.ruta('/ajustes'),{method:'POST',body:{clave:'categorias',valor}}); V.cats=JSON.stringify(valor); return;
     }
@@ -689,7 +718,7 @@ class Component extends DCLogic {
     else { cuerpo={codigo:x.sku,nombre:x.nombre,descripcion:x.desc||'',unidad:x.unidad,categoria:x.cat||'',estado:x.estado,
         apu:{herr:num(x.herr),ind:num(x.ind),util:num(x.util),comps:x.comps.map(c=>({k:c.k,tipo:c.tipo,ref:R(c.ref),cant:num(c.cant),desp:num(c.desp)}))}}; llave=kPar(x,R); }
     if(op.acc==='crear'){
-      if(op.t==='ins'&&x.tipo!=='material') cuerpo.unidad='h';
+      if(op.t==='ins'&&x.tipo==='equipo') cuerpo.unidad='h';
       const r=await pedir(this.ruta('/'+TABLA),{method:'POST',body:cuerpo});
       if(x.id!==r.id){ this._ids[x.id]=r.id; this.cambiarId(x.id,r.id); }
       V[op.t].set(r.id,llave);
@@ -790,6 +819,50 @@ class Component extends DCLogic {
     }catch(e){ this.toast(mensajeDe(e)); }
     finally{ this.setState({sembrando:false}); }
   }
+  unidadesDe(t,S){ return t==='equipo'?['h']:((S||this.state).conf.unidades[t==='mo'?'mo':'material']); }
+  setConf(fn){ this.setState(s=>({conf:fn(JSON.parse(JSON.stringify(s.conf))),confAplicar:false})); }
+  aplicarConf(){
+    const S=this.state, c=S.conf, ind=indTotal(c);
+    this.applyChange(s=>({partidas:s.partidas.map(p=>({...p,ind,util:num(c.util),herr:num(c.herr)}))}),'Configuración aplicada a las partidas');
+    this.setState({confAplicar:false});
+  }
+  confVista(S,admin){
+    const h=React.createElement, c=S.conf, ro=!admin, ind=indTotal(c);
+    const caja=(titulo,texto,...hijos)=>h('div',{className:'blueprint','data-conf':titulo,style:{padding:20,display:'flex',flexDirection:'column',gap:14}},
+      h('h3',{style:{margin:0,fontSize:22}},titulo),texto?h('p',{style:{margin:0,fontSize:14,color:'var(--color-neutral-700)',maxWidth:640}},texto):null,...hijos);
+    const numero=(valor,onChange,etq,ancho)=>h('input',{className:'input',type:'number',step:'any',min:0,value:valor,disabled:ro,'aria-label':etq,onChange,style:{width:ancho||90,textAlign:'right',fontVariantNumeric:'tabular-nums'}});
+    const chips=(t,llave)=>h('div',{style:{display:'flex',flexWrap:'wrap',gap:8,alignItems:'center'}},
+      ...c.unidades[t].map(u=>h('span',{key:u,className:'tag','data-unidad':t+':'+u,style:{display:'inline-flex',alignItems:'center',gap:6,padding:'4px 10px'}},u,
+        (!ro&&c.unidades[t].length>1)?h('button',{type:'button','aria-label':'Quitar '+u,onClick:()=>this.setConf(x=>{x.unidades[t]=x.unidades[t].filter(y=>y!==u);return x;}),style:{background:'none',border:0,color:'inherit',cursor:'pointer',padding:0,fontSize:15,lineHeight:1}},'×'):null)),
+      ro?null:h('input',{className:'input','data-nueva-unidad':t,value:S[llave],placeholder:'Otra unidad',onChange:e=>this.setState({[llave]:e.target.value}),style:{width:130,minHeight:30,padding:'4px 8px',fontSize:13},
+        onKeyDown:e=>{ if(e.key!=='Enter') return; const u=String(S[llave]||'').trim(); if(!u) return; if(!c.unidades[t].includes(u)) this.setConf(x=>{x.unidades[t].push(u);return x;}); this.setState({[llave]:''}); }}),
+      ro?null:h('button',{type:'button',className:'btn btn-secondary',onClick:()=>{ const u=String(S[llave]||'').trim(); if(!u) return; if(!c.unidades[t].includes(u)) this.setConf(x=>{x.unidades[t].push(u);return x;}); this.setState({[llave]:''}); }},'Agregar'));
+    const filasInd=c.indirectos.map((x,i)=>h('div',{key:i,'data-indirecto':i,style:{display:'grid',gridTemplateColumns:'28px minmax(0,1fr) 110px 36px',gap:10,alignItems:'center',padding:'8px 0',borderBottom:'1px solid var(--color-divider)'}},
+      h('input',{type:'checkbox',checked:x.va,disabled:ro,'aria-label':'Se considera '+x.n,onChange:e=>{const v=e.target.checked; this.setConf(y=>{y.indirectos[i].va=v;return y;});},style:{width:18,height:18,accentColor:'var(--color-accent)'}}),
+      h('input',{className:'input',value:x.n,disabled:ro,'aria-label':'Concepto',onChange:e=>{const v=e.target.value; this.setConf(y=>{y.indirectos[i].n=v;return y;});},style:{minHeight:32,padding:'4px 8px',opacity:x.va?1:.55}}),
+      h('span',{style:{display:'flex',alignItems:'center',gap:6,justifyContent:'flex-end'}},numero(x.p,e=>{const v=e.target.value; this.setConf(y=>{y.indirectos[i].p=num(v);return y;});},'Porcentaje de '+x.n,80),'%'),
+      ro?h('span'):h('button',{type:'button',className:'btn btn-ghost btn-icon','aria-label':'Quitar '+x.n,onClick:()=>this.setConf(y=>{y.indirectos.splice(i,1);return y;})},'×')));
+    const nPart=S.partidas.length, distintas=S.partidas.filter(p=>num(p.ind)!==ind||num(p.util)!==num(c.util)||num(p.herr)!==num(c.herr)).length;
+    return h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,420px),1fr))',gap:24,alignItems:'start'}},
+      caja('Indirectos','Palomea los que sí se consideran. La suma es el porcentaje de indirectos de cada partida nueva.',
+        h('div',null,...filasInd),
+        ro?null:h('button',{type:'button',className:'btn btn-secondary','data-agregar-indirecto':'1',style:{alignSelf:'flex-start'},onClick:()=>this.setConf(y=>{y.indirectos.push({n:'Nuevo indirecto',p:0,va:true});return y;})},'Agregar indirecto'),
+        h('div',{'data-ind-total':ind,style:{display:'flex',justifyContent:'space-between',alignItems:'baseline',fontSize:15}},h('span',null,'Indirectos que se consideran'),h('b',{style:{fontSize:26,fontFamily:'var(--font-heading)'}},ind+' %'))),
+      caja('Herramienta menor y utilidad','Con esto nace cada partida nueva; en el generador se puede cambiar partida por partida.',
+        h('label',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}},'Herramienta menor (% de la mano de obra)',h('span',{style:{display:'flex',alignItems:'center',gap:6}},numero(c.herr,e=>{const v=e.target.value; this.setConf(y=>{y.herr=num(v);return y;});},'Herramienta menor'),'%')),
+        h('label',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}},'Utilidad',h('span',{style:{display:'flex',alignItems:'center',gap:6}},numero(c.util,e=>{const v=e.target.value; this.setConf(y=>{y.util=num(v);return y;});},'Utilidad'),'%')),
+        (admin&&nPart)?h('div',{style:{display:'flex',flexDirection:'column',gap:8,paddingTop:8,borderTop:'1px solid var(--color-divider)'}},
+          h('span',{style:{fontSize:13,color:'var(--color-neutral-700)'}},distintas?(distintas+' de '+nPart+' partidas tienen otros porcentajes. Aplicarlos recalcula su precio, y el que leerá quote101.'):'Todas las partidas ya usan estos porcentajes.'),
+          distintas?(S.confAplicar
+            ?h('div',{style:{display:'flex',gap:8,flexWrap:'wrap'}},h('button',{type:'button',className:'btn btn-primary','data-aplicar-si':'1',onClick:()=>this.aplicarConf()},'Sí, aplicar a '+distintas),h('button',{type:'button',className:'btn btn-secondary',onClick:()=>this.setState({confAplicar:false})},'No'))
+            :h('button',{type:'button',className:'btn btn-secondary','data-aplicar':'1',style:{alignSelf:'flex-start'},onClick:()=>this.setState({confAplicar:true})},'Aplicar a las partidas existentes')):null):null),
+      caja('Unidades de materiales','Las que se ofrecen al capturar un material y al armar una partida.',chips('material','nuevaUnidad')),
+      caja('Unidades de mano de obra','Por hora (entra en cuadrillas) o por unidad (destajo).',chips('mo','nuevaUnidadMo')),
+      caja('Categorías','Para ordenar precios base, cuadrillas y el catálogo.',
+        h('div',{style:{display:'flex',flexWrap:'wrap',gap:8}},...[['material','Materiales'],['mo','Mano de obra'],['equipo','Equipo'],['cuadrilla','Cuadrillas'],['partida','Partidas']].map(([t,l])=>
+          h('button',{key:t,type:'button',className:'btn btn-secondary',onClick:()=>this.setState({catDlg:t,newCat:'',catEdits:{}})},l+' · '+S.cats[t].length)))),
+      ro?h('p',{style:{margin:0,fontSize:13,color:'var(--color-neutral-700)'}},'Sólo quien dirige la empresa cambia la configuración.'):null);
+  }
   cambiarEmpresa(id){
     try{ localStorage.setItem('cost101-org',id); }catch(_){}
     this._ids={}; this._srv={ins:new Map(),cua:new Map(),par:new Map(),cats:''}; this._catsTocadas=false;
@@ -799,8 +872,8 @@ class Component extends DCLogic {
 
   componentDidUpdate(pp,ps){
     const S=this.state;
-    if(S.insumos!==this._pi||S.cuadrillas!==this._pc||S.partidas!==this._pp||S.cats!==this._pk){
-      this._pi=S.insumos; this._pc=S.cuadrillas; this._pp=S.partidas; this._pk=S.cats;
+    if(S.insumos!==this._pi||S.cuadrillas!==this._pc||S.partidas!==this._pp||S.cats!==this._pk||S.conf!==this._pf){
+      this._pi=S.insumos; this._pc=S.cuadrillas; this._pp=S.partidas; this._pk=S.cats; this._pf=S.conf;
       this.programarSync();
     }
     const P=this.props||{};
@@ -857,7 +930,7 @@ class Component extends DCLogic {
 
   newPartida(){
     const S=this.state;
-    this.setState({view:'gen',step:0,err:null,draft:{id:null,sku:'PAR-'+Math.max(501,this.nextSku('PAR',S.partidas)),nombre:'',desc:'',unidad:'m²',cat:'Muros',ind:12,util:10,herr:3,comps:[],estado:'borrador',hist:[]}});
+    this.setState({view:'gen',step:0,err:null,draft:{id:null,sku:'PAR-'+Math.max(501,this.nextSku('PAR',S.partidas)),nombre:'',desc:'',unidad:'m²',cat:'Muros',ind:indTotal(S.conf),util:num(S.conf.util),herr:num(S.conf.herr),comps:[],estado:'borrador',hist:[]}});
   }
   editPartida(id){ const p=this.state.partidas.find(x=>x.id===id); if(p) this.setState({view:'gen',step:0,err:null,draft:JSON.parse(JSON.stringify(p))}); }
   dupPartida(id){
@@ -929,7 +1002,7 @@ class Component extends DCLogic {
     const pre=t==='material'?'MAT':t==='mo'?'MO':'EQ', list=S.insumos.filter(x=>x.tipo===t);
     const n=this.nextSku(pre,list), sku=pre+'-'+String(n).padStart(3,'0');
     const catSel=nv.cat||S.baseCat||'';
-    const ins={id:nuevoId(),sku,nombre:nv.nombre.trim(),tipo:t,unidad:t==='material'?nv.unidad:'h',precio:num(nv.precio),cat:catSel,hist:[{f:HOY,precio:num(nv.precio)}]};
+    const ins={id:nuevoId(),sku,nombre:nv.nombre.trim(),tipo:t,unidad:t==='equipo'?'h':(this.unidadesDe(t,S).includes(nv.unidad)?nv.unidad:this.unidadesDe(t,S)[0]),precio:num(nv.precio),cat:catSel,hist:[{f:HOY,precio:num(nv.precio)}]};
     this.setState({insumos:[...S.insumos,ins],nuevo:{nombre:'',unidad:nv.unidad,precio:'',cat:nv.cat}});
     this.toast(sku+' agregado');
   }
@@ -990,10 +1063,10 @@ class Component extends DCLogic {
     const usosIns=i=>S.partidas.filter(p=>p.comps.some(c=>(c.tipo==='insumo'&&c.ref===i.id)||(c.tipo==='cuadrilla'&&(cuadOf(c.ref)||{miembros:[]}).miembros.some(m=>m.ref===i.id)))).length;
     const plural=(n,a,b)=>n+' '+(n===1?a:b);
 
-    v.nav=[['dash','Resumen'],['gen','Generador'],['cat','Catálogo'],['base','Precios base'],['cuad','Cuadrillas']].map(([k,l])=>({label:l,current:S.view===k?'page':'false',
+    v.nav=[['dash','Resumen'],['gen','Generador'],['cat','Catálogo'],['base','Precios base'],['cuad','Cuadrillas'],['conf','Configuración']].map(([k,l])=>({label:l,current:S.view===k?'page':'false',
       onClick:e=>{e.preventDefault(); if(k==='gen'&&!S.draft) this.newPartida(); else this.setState({view:k});}}));
     const L=S.listo;
-    v.isDash=L&&S.view==='dash'; v.isGen=L&&S.view==='gen'&&!!S.draft; v.isCat=L&&S.view==='cat'; v.isBase=L&&S.view==='base'; v.isCuad=L&&S.view==='cuad';
+    v.isDash=L&&S.view==='dash'; v.isGen=L&&S.view==='gen'&&!!S.draft; v.isCat=L&&S.view==='cat'; v.isBase=L&&S.view==='base'; v.isCuad=L&&S.view==='cuad'; v.isConf=L&&S.view==='conf'; if(v.isConf) v.confBody=this.confVista(S,admin);
     const h=React.createElement;
     v.hoyF=fdate(HOY);
     const orgAct=S.orgs.find(o=>o.id===S.org);
@@ -1055,7 +1128,7 @@ class Component extends DCLogic {
     if(d){
       const r=this.calc(d,S), u=d.unidad||'u';
       const dh={}; ['nombre','desc','sku','herr','ind','util'].forEach(k=>{dh[k]=e=>this.setD({[k]:e.target.value});}); v.dh=dh;
-      v.selUnidad=this.sel(d.unidad,UNIDADES.map(x=>({v:x,l:x})),e=>this.setD({unidad:e.target.value}));
+      v.selUnidad=this.sel(d.unidad,S.conf.unidades.material.concat(S.conf.unidades.material.includes(d.unidad)?[]:[d.unidad]).map(x=>({v:x,l:x})),e=>this.setD({unidad:e.target.value}));
       v.selCat=this.sel(d.cat,catOpts('partida'),e=>this.setD({cat:e.target.value}),'Sin categoría');
       v.genKicker='Generador · '+(d.id?'Editando '+d.sku:'Nueva partida '+d.sku);
       v.genTitle=d.nombre.trim()||'Partida sin nombre';
@@ -1079,7 +1152,7 @@ class Component extends DCLogic {
         {key:'mat',title:'Materiales',cantHdr:'Cantidad',hint:'Cantidad por unidad de obra; el desperdicio se suma al importe.',
           opts:ins('material').map(i=>({v:'insumo:'+i.id,l:i.sku+' · '+i.nombre+' — '+money(i.precio)+'/'+i.unidad})),ph:'Agregar material…'},
         {key:'mo',title:'Mano de obra',cantHdr:'Horas / Rendim.',hint:'Horas de un oficio por unidad, o una cuadrilla con su rendimiento por jornada.',
-          opts:[...S.cuadrillas.map(q=>({v:'cuadrilla:'+q.id,l:'Cuadrilla · '+q.nombre+' — '+money(this.jornada(q,S))+'/jornada'})),...ins('mo').map(i=>({v:'insumo:'+i.id,l:i.sku+' · '+i.nombre+' — '+money(i.precio)+'/h'}))],ph:'Agregar oficio o cuadrilla…'},
+          opts:[...S.cuadrillas.map(q=>({v:'cuadrilla:'+q.id,l:'Cuadrilla · '+q.nombre+' — '+money(this.jornada(q,S))+'/jornada'})),...ins('mo').map(i=>({v:'insumo:'+i.id,l:i.sku+' · '+i.nombre+' — '+money(i.precio)+'/'+(i.unidad||'h')}))],ph:'Agregar oficio o cuadrilla…'},
         {key:'eq',title:'Equipo',cantHdr:'Horas',hint:'Horas de uso de equipo por unidad de obra.',
           opts:ins('equipo').map(i=>({v:'insumo:'+i.id,l:i.sku+' · '+i.nombre+' — '+money(i.precio)+'/h'})),ph:'Agregar equipo…'},
         {key:'sub',title:'Subpartidas',cantHdr:'Cantidad',hint:'Partidas del catálogo usadas como componente, a costo directo.',
@@ -1145,11 +1218,11 @@ class Component extends DCLogic {
     v.baseTabs=Object.keys(TIPOS).map(k=>({label:TIPOS[k],count:S.insumos.filter(i=>i.tipo===k).length,checked:bt===k,onChange:()=>this.setState({baseTipo:k,baseCat:'',nuevo:{...S.nuevo,cat:''}})}));
     v.selBaseCat=this.sel(S.baseCat,catOpts(bt),e=>this.setState({baseCat:e.target.value}),'Todas las categorías');
     v.selNuevoCat=this.sel(S.nuevo.cat||S.baseCat,catOpts(bt),e=>this.setState({nuevo:{...S.nuevo,cat:e.target.value}}),'Sin categoría');
-    v.baseTipoLbl=TIPOS[bt]; v.precioLbl=bt==='material'?'Precio / unidad':'Precio / hora';
+    v.baseTipoLbl=TIPOS[bt]; v.precioLbl=bt==='equipo'?'Precio / hora':'Precio / unidad';
     v.baseQ=S.baseQ; v.onBaseQ=e=>this.setState({baseQ:e.target.value});
     v.nuevo=S.nuevo;
     v.nh={nombre:e=>this.setState({nuevo:{...S.nuevo,nombre:e.target.value}}),precio:e=>this.setState({nuevo:{...S.nuevo,precio:e.target.value}}),cat:e=>this.setState({nuevo:{...S.nuevo,cat:e.target.value}})};
-    v.selNuevoUnidad=bt==='material'?this.sel(S.nuevo.unidad,UNIDADES.filter(x=>x!=='h').map(x=>({v:x,l:x})),e=>this.setState({nuevo:{...S.nuevo,unidad:e.target.value}})):this.sel('h',[{v:'h',l:'h'}],()=>{});
+    v.selNuevoUnidad=bt!=='equipo'?this.sel(this.unidadesDe(bt,S).includes(S.nuevo.unidad)?S.nuevo.unidad:this.unidadesDe(bt,S)[0],this.unidadesDe(bt,S).map(x=>({v:x,l:x})),e=>this.setState({nuevo:{...S.nuevo,unidad:e.target.value}})):this.sel('h',[{v:'h',l:'h'}],()=>{});
     v.addInsumo=()=>this.addInsumo();
     const bl=S.insumos.filter(i=>i.tipo===bt&&(!S.baseCat||i.cat===S.baseCat)&&(!bq||(i.nombre+' '+i.sku+' '+i.cat).toLowerCase().includes(bq)));
     v.baseRows=bl.map(i=>{const h=i.hist, l=h[h.length-1], a=h[h.length-2], us=usosIns(i);
@@ -1157,8 +1230,8 @@ class Component extends DCLogic {
       return {key:i.id,sku:i.sku,nombre:i.nombre,cat:i.cat,unidad:i.unidad,
         nombreInput:React.createElement('input',{className:'input','data-nombre':i.sku,value:S.edits[kn]!=null?S.edits[kn]:i.nombre,
           onChange:e=>this.setState({edits:{...this.state.edits,[kn]:e.target.value}}),onBlur:()=>this.commitNombre(i.id),onKeyDown:e=>{if(e.key==='Enter')e.target.blur();},
-          style:{width:'100%',minHeight:30,padding:'4px 8px',fontSize:14,background:'transparent',borderColor:'transparent'}}),
-        unidadSel:i.tipo==='material'?this.sel(i.unidad,UNIDADES.filter(x=>x!=='h').concat(UNIDADES.includes(i.unidad)?[]:[i.unidad]).map(x=>({v:x,l:x})),e=>{const val=e.target.value;this.setState(s=>({insumos:s.insumos.map(x=>x.id===i.id?{...x,unidad:val}:x)}));},null,true):'h',
+          title:'Corrige el nombre aquí',style:{width:'100%',minHeight:30,padding:'4px 8px',fontSize:14}}),
+        unidadSel:i.tipo!=='equipo'?this.sel(i.unidad,this.unidadesDe(i.tipo,S).concat(this.unidadesDe(i.tipo,S).includes(i.unidad)?[]:[i.unidad]).map(x=>({v:x,l:x})),e=>{const val=e.target.value;this.setState(s=>({insumos:s.insumos.map(x=>x.id===i.id?{...x,unidad:val}:x)}));},null,true):'h',
         quitar:this.botonQuitar('ins:'+i.id,()=>this.borrarInsumo(i.id),'Quitar '+i.sku),
         catSelect:this.sel(i.cat,catOpts(i.tipo),e=>{const val=e.target.value;this.setState(s=>({insumos:s.insumos.map(x=>x.id===i.id?{...x,cat:val}:x)}));},'Sin categoría',true),precio:S.edits[i.id]!=null?S.edits[i.id]:i.precio,
         lastF:fdate(l.f),deltaF:a?pct((l.precio/a.precio-1)*100):'',usos:plural(us,'partida','partidas'),
@@ -1167,7 +1240,7 @@ class Component extends DCLogic {
     v.baseEmpty=!bl.length;
 
     // Cuadrillas
-    const oficios=S.insumos.filter(i=>i.tipo==='mo');
+    const oficios=S.insumos.filter(i=>i.tipo==='mo'&&(i.unidad||'h')==='h');
     v.addCuadrilla=()=>this.addCuadrilla();
     v.selCuadCat=this.sel(S.cuadCat,catOpts('cuadrilla'),e=>this.setState({cuadCat:e.target.value}),'Todas las categorías');
     v.cuadEmpty=!S.cuadrillas.some(c=>!S.cuadCat||c.cat===S.cuadCat);
