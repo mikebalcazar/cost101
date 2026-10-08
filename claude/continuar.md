@@ -11,6 +11,8 @@
   Resumen «Costos base listos para cargar · Cargar los N» mientras falte
   alguna clave; la carga es `POST /costos/importar` (no duplica ni pisa).
   El chat no tiene la sesión de Mike: el clic en forespot lo da él.
+  **Mike los cargó en forespot el 8-oct-2026 («listo, cargados»).** El chat
+  no lo puede leer sin su sesión; no hay que volver a ofrecerlo.
 - 64/64 en local con la prueba nueva (carga, tipos, no pisa, el aviso se va,
   staff no lo ve).
 
