@@ -1,5 +1,19 @@
 # cost101 — por dónde va
 
+## 8-oct-2026 (tarde) · los 193 costos base, listos para cargar (0.2.3)
+
+- Precios revisados en tiendas en línea (Home Depot, Sodimac, Mercado Libre,
+  Alumer, Herrashop y otras). Mike decidió con su mensaje: **el precio más
+  alto** de lo encontrado; donde no hubo tienda (y la mano de obra y el
+  equipo), **el estimado más 15 %**. Tablaroca normal 1/2" (MAT-201) a $399.
+- Mike: «No le hagas caso a las marcas y ya agrega todo». Van los 193 en
+  `public/costos-base.json` (centavos con IVA). A quien dirige le sale en el
+  Resumen «Costos base listos para cargar · Cargar los N» mientras falte
+  alguna clave; la carga es `POST /costos/importar` (no duplica ni pisa).
+  El chat no tiene la sesión de Mike: el clic en forespot lo da él.
+- 64/64 en local con la prueba nueva (carga, tipos, no pisa, el aviso se va,
+  staff no lo ve).
+
 ## 8-oct-2026 · sólo el lienzo (0.2.2), y los costos base a revisión
 
 - Mike: «Deja en cost101 solo la modalidad de lienzo. Ya quita las otras 2».
