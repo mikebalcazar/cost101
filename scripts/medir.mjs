@@ -53,7 +53,7 @@ for (const ruta of ['/index.html', '/support.js', '/semilla.json', '/vendor/babe
 const entrar = await pide('/entrar.html');
 const html = await entrar.text();
 dice(entrar.status === 200 && html.includes('<title>cost101') && html.includes('id="b-google"'), 'la pantalla de entrada contesta y es la de la suite', `${entrar.status}, ${html.length} bytes`);
-for (const [ruta, minimo] of [['/entrar.js', 5000], ['/fonts/raleway-400.woff2', 10000], ['/fonts/sansation-700.woff2', 5000]]) {
+for (const [ruta, minimo] of [['/entrar.js', 5000], ['/fonts/raleway-400.woff2', 10000], ['/fonts/sansation-700.woff2', 5000], ['/favicon.ico', 4000], ['/icono.svg', 500], ['/apple-touch-icon.png', 4000]]) {
   const r = await pide(ruta);
   const n = (await r.arrayBuffer()).byteLength;
   dice(r.status === 200 && n >= minimo, `GET ${ruta}`, `${r.status}, ${n} bytes`);

@@ -24,7 +24,9 @@ const APP = 'cost101';
 const LLAVE = 'cost';
 
 /** Lo que se entrega sin sesión: la pantalla de entrada y lo que ella pide. */
-const ABIERTO = new Set(['/entrar.html', '/entrar.js', '/404.html', '/huella.txt', '/assets/logo-taller101.png', '/assets/cost101-claro.svg']);
+const ABIERTO = new Set(['/entrar.html', '/entrar.js', '/404.html', '/huella.txt', '/assets/logo-taller101.png', '/assets/cost101-claro.svg',
+  // El ícono de la pestaña y del celular: el navegador lo pide sin sesión.
+  '/favicon.ico', '/icono.svg', '/apple-touch-icon.png']);
 const esAbierto = (ruta) => ABIERTO.has(ruta) || ruta.startsWith('/fonts/');
 
 const archivo = (u) => {

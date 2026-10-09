@@ -113,6 +113,10 @@ try {
     dice(e.status === 200 && (await e.text()).includes('src="assets/cost101-claro.svg" alt="cost101"'), 'la pantalla de entrada sí es pública y dice cost101');
     const logo = await fetch(BASE + '/assets/cost101-claro.svg');
     dice(logo.status === 200 && (await logo.text()).includes('aria-label="cost101"'), 'y su logotipo también se entrega sin sesión', String(logo.status));
+    for (const f of ['/favicon.ico', '/icono.svg', '/apple-touch-icon.png']) {
+      const i = await fetch(BASE + f, { redirect: 'manual' });
+      dice(i.status === 200 && (await i.arrayBuffer()).byteLength > 500, `el ícono ${f} se entrega sin sesión`, String(i.status));
+    }
     const s = await fetch(BASE + '/s101/orgs/' + ORG + '/costos');
     dice(s.status === 401, 'sin sesión, los costos no se abren por el puente', String(s.status));
   }
