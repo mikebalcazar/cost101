@@ -246,6 +246,17 @@ try {
     && (await gen.getByText('Hoja APU').count()) === 0 && (await gen.getByText('Por pasos').count()) === 0,
     'el generador ya no ofrece «Hoja APU» ni «Por pasos»: sólo el lienzo');
   dice((await gen.getByRole('heading', { name: 'Biblioteca' }).count()) === 1, 'y abre directo en el lienzo, con su biblioteca');
+  /* 11-oct-2026 · «Todas»: la biblioteca busca en las cinco a la vez. */
+  await gen.locator('[data-lib-tipo="todas"]').click();
+  await espera(150);
+  const metas = await gen.locator('[data-lib-item]').allInnerTexts();
+  dice(['Materiales · ', 'Oficios · ', 'Cuadrillas · ', 'Equipo · '].every((l) => metas.some((m) => m.includes(l))), '«Todas» junta materiales, oficios, cuadrillas y equipo, y cada renglón dice de cuál es', String(metas.length));
+  const deEquipo = metas.find((m) => m.includes('Equipo · '))?.split('\n')[0] || '';
+  await gen.locator('input[placeholder="Buscar insumo o partida"]').fill(deEquipo);
+  await espera(150);
+  const hallados = await gen.locator('[data-lib-item]').allInnerTexts();
+  dice(hallados.length >= 1 && hallados.every((m) => m.toLowerCase().includes(deEquipo.toLowerCase())) && hallados.some((m) => m.includes('Equipo · ')), 'y buscar ahí encuentra el equipo sin cambiar de pestaña', `${deEquipo} → ${hallados.length}`);
+  await gen.locator('input[placeholder="Buscar insumo o partida"]').fill('');
   await p.locator('[data-titulo]').fill('Partida armada en la prueba');
   dice((await gen.getByText('Título de la partida').count()) === 1 && (await gen.getByText('Descripción para el catálogo').count()) === 1, 'el generador pide título y, aparte, la descripción para el catálogo');
   await p.locator('[data-descripcion]').fill('Lambrín de chapa natural de roble europeo, montaje directo sobre muro liso.\nMódulos de 1.20×2.40 como máximo.');

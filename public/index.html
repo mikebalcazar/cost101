@@ -211,7 +211,7 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
                   </div>
                   <div style="display:flex;flex-wrap:wrap;gap:6px">
                     <sc-for list="{{ libTabs }}" as="t" hint-placeholder-count="5">
-                      <button class="{{ t.cls }}" onClick="{{ t.onClick }}" style="padding:4px 10px;font-size:13px">{{ t.label }}</button>
+                      <button class="{{ t.cls }}" onClick="{{ t.onClick }}" data-lib-tipo="{{ t.tipo }}" style="padding:4px 10px;font-size:13px">{{ t.label }}</button>
                     </sc-for>
                   </div>
                   <div style="display:flex;flex-direction:column;max-height:560px;overflow-y:auto;border-top:1px solid var(--color-divider)">
@@ -1202,11 +1202,19 @@ class Component extends DCLogic {
 
       const lt=S.libTipo, lq=S.libQ.toLowerCase();
       v.libQ=S.libQ; v.onLibQ=e=>this.setState({libQ:e.target.value});
-      v.libTabs=[['material','Materiales'],['mo','Oficios'],['cuadrilla','Cuadrillas'],['equipo','Equipo'],['partida','Partidas']].map(([k,l])=>({label:l,cls:lt===k?'btn btn-primary':'btn btn-secondary',onClick:()=>this.setState({libTipo:k})}));
-      let lib;
-      if(lt==='cuadrilla') lib=S.cuadrillas.map(q=>({id:'cuadrilla:'+q.id,sku:q.sku,nombre:q.nombre,meta:q.sku+' · '+money(this.jornada(q,S))+' / jornada'}));
-      else if(lt==='partida') lib=subs.map(p=>({id:'partida:'+p.id,sku:p.sku,nombre:p.nombre,meta:p.sku+' · CD '+money(calcs[p.id].cd)+' / '+p.unidad}));
-      else lib=ins(lt).map(i=>({id:'insumo:'+i.id,sku:i.sku,nombre:i.nombre,meta:i.sku+' · '+money(i.precio)+' / '+i.unidad}));
+      /* 11-oct-2026 · Mike: «necesito que ahí pueda buscar en todas las
+       * categorías. Un botón de TODAS». Con «Todas» la lista junta las cinco
+       * y cada renglón dice de cuál es. */
+      const LIB=[['todas','Todas'],['material','Materiales'],['mo','Oficios'],['cuadrilla','Cuadrillas'],['equipo','Equipo'],['partida','Partidas']];
+      v.libTabs=LIB.map(([k,l])=>({label:l,cls:lt===k?'btn btn-primary':'btn btn-secondary',onClick:()=>this.setState({libTipo:k}),tipo:k}));
+      const deTipo=(t)=>{
+        if(t==='cuadrilla') return S.cuadrillas.map(q=>({id:'cuadrilla:'+q.id,sku:q.sku,nombre:q.nombre,meta:q.sku+' · '+money(this.jornada(q,S))+' / jornada'}));
+        if(t==='partida') return subs.map(p=>({id:'partida:'+p.id,sku:p.sku,nombre:p.nombre,meta:p.sku+' · CD '+money(calcs[p.id].cd)+' / '+p.unidad}));
+        return ins(t).map(i=>({id:'insumo:'+i.id,sku:i.sku,nombre:i.nombre,meta:i.sku+' · '+money(i.precio)+' / '+i.unidad}));
+      };
+      const lib=lt==='todas'
+        ?LIB.slice(1).flatMap(([t,l])=>deTipo(t).map(x=>({...x,meta:l+' · '+x.meta})))
+        :deTipo(lt);
       v.libItems=lib.filter(x=>!lq||(x.nombre+' '+x.sku).toLowerCase().includes(lq)).map(x=>({...x,onAdd:()=>this.addC(x.id)}));
       v.libEmpty=!v.libItems.length;
     }
