@@ -1,6 +1,6 @@
 # cost101 como Worker de Cloudflare. Mismo patrón que master101 (D1 y D2).
 # Dos Workers con el mismo código: `cost101-staging` (API de staging) y
-# `cost101` (producción, en cost101.taller101.com).
+# `cost101` (producción, en cost.suite101.app; cost101.taller101.com manda ahí).
 # Las llaves no están aquí: publica el corredor con los secretos de Actions.
 
 name = "cost101"
@@ -10,11 +10,15 @@ compatibility_date = "2026-09-01"
 # `workers_dev = true` va junto a `routes`: sin él wrangler apaga workers.dev.
 workers_dev = true
 routes = [
-  { pattern = "cost101.taller101.com", custom_domain = true }
+  { pattern = "cost101.taller101.com", custom_domain = true },
+  # 11-oct-2026 · suite101.app es la marca (Mike: «taller101 será una marca de
+  # FORESPOT»). Ésta es la buena; la de arriba manda aquí.
+  { pattern = "cost.suite101.app", custom_domain = true }
 ]
 
 [vars]
-DOMINIO_PROPIO = "cost101.taller101.com"
+DOMINIO_PROPIO = "cost.suite101.app"
+DOMINIO_ANTERIOR = "cost101.taller101.com"
 
 [assets]
 directory = "./public"

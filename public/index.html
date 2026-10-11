@@ -1108,11 +1108,11 @@ class Component extends DCLogic {
         ?h('select',{className:'input','data-empresa':'1',value:S.org||'',onChange:e=>this.cambiarEmpresa(e.target.value),style:{minHeight:30,padding:'4px 8px',fontSize:13,maxWidth:190}},S.orgs.map(o=>h('option',{key:o.id,value:o.id},o.nombre)))
         :h('span',{className:'empresa','data-empresa':'1'},orgAct?orgAct.nombre:''),
       h('span',{'data-rol':admin?'admin':'equipo',title:admin?'Puedes aprobar partidas':'Guardas borradores; aprueba quien dirige la empresa'},admin?'Aprueba':'Equipo'),
-      h('a',{href:'https://suite101.taller101.com',title:'El menú de la suite'},'Suite 101'),
+      h('a',{href:'https://app.suite101.app',title:'El menú de la suite'},'Suite 101'),
       h('button',{className:'liga','data-salir':'1',onClick:()=>this.salir(),title:S.correo},'Salir'));
     const tarjeta=(titulo,texto,extra)=>h('div',{className:'blueprint aviso101','data-aviso':titulo},h('h3',{style:{margin:0,fontSize:24}},titulo),h('p',{style:{margin:0,color:'var(--color-neutral-700)',maxWidth:640}},texto),extra||null);
     v.aviso=S.falla?tarjeta('No se pudo abrir',S.falla,h('button',{className:'btn btn-secondary',onClick:()=>location.reload()},'Reintentar'))
-      :S.sinLicencia?tarjeta('cost101 no está activo','Entraste a la suite como '+S.correo+', pero ninguna de tus empresas tiene cost101 prendido. Se activa por empresa; pídeselo a quien administra la suite.',h('a',{className:'btn btn-secondary',href:'https://suite101.taller101.com'},'Ir al menú de la suite'))
+      :S.sinLicencia?tarjeta('cost101 no está activo','Entraste a la suite como '+S.correo+', pero ninguna de tus empresas tiene cost101 prendido. Se activa por empresa; pídeselo a quien administra la suite.',h('a',{className:'btn btn-secondary',href:'https://app.suite101.app'},'Ir al menú de la suite'))
       :!L?tarjeta('Un momento','Leyendo los costos de tu empresa…'):null;
     v.vacioCard=(L&&!S.insumos.length&&!S.partidas.length&&!S.cuadrillas.length)
       ?tarjeta('Tu base de costos está vacía','Empieza capturando tus precios base (materiales, mano de obra y equipo) y arma con ellos tus partidas.'+(admin?' O carga un catálogo de ejemplo —60 insumos, 6 cuadrillas y 16 partidas con precios de referencia— y ajústalo a los tuyos.':''),

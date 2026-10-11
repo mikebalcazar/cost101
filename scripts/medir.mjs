@@ -74,6 +74,9 @@ if (esProd) {
   dice([301, 308].includes(h.status), 'http sube a https', `${h.status} → ${h.headers.get('location') || ''}`);
   const w = await fetch('https://cost101.mike-929.workers.dev/entrar.html', { redirect: 'manual' });
   dice(w.status === 301 && (w.headers.get('location') || '').startsWith(base), 'workers.dev manda al dominio', `${w.status} → ${w.headers.get('location') || ''}`);
+  // 11-oct-2026 · la dirección de taller101.com sigue viva y manda a suite101.app.
+  const v = await fetch('https://cost101.taller101.com/entrar.html?x=1', { redirect: 'manual' });
+  dice(v.status === 301 && v.headers.get('location') === base + '/entrar.html?x=1', 'cost101.taller101.com manda al dominio, con ruta y consulta', `${v.status} → ${v.headers.get('location') || ''}`);
 }
 console.log(fallas ? `${fallas} FALLA(S)` : 'TODO BIEN');
 process.exit(fallas ? 1 : 0);

@@ -7,6 +7,7 @@
   "scripts": {
     "servir": "node pruebas/servidor.mjs 8796 http://127.0.0.1:8787",
     "prueba": "node pruebas/pantalla.spec.mjs",
+    "prueba:dominio": "node --test pruebas/dominio.spec.mjs",
     "medir": "node scripts/medir.mjs"
   },
   "devDependencies": {
