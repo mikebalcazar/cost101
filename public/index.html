@@ -372,6 +372,8 @@ a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}input[type
                 <sc-if value="{{ sel.canApprove }}" hint-placeholder-val="{{ false }}"><button class="btn btn-primary" onClick="{{ sel.onApprove }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"></path></svg>Aprobar</button></sc-if>
                 <button class="btn btn-secondary" onClick="{{ sel.onEdit }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>Editar</button>
                 <button class="btn btn-secondary" onClick="{{ sel.onDup }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><rect width="14" height="14" x="8" y="8"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Duplicar</button>
+                <button class="btn btn-secondary" data-exportar="pdf" title="Abre la hoja del generador para imprimirla o guardarla como PDF" onClick="{{ sel.onPdf }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect width="12" height="8" x="6" y="14"></rect></svg>PDF</button>
+                <button class="btn btn-secondary" data-exportar="xlsx" title="Descarga el generador en Excel" onClick="{{ sel.onXlsx }}"><svg width="15" height="15" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>Excel</button>
               </div>
               {{ sel.quitar }}
               <sc-if value="{{ sel.pendNote }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--color-accent-800);background:var(--color-accent-100);padding:8px 10px">Borrador — pendiente de aprobación por un admin.</div></sc-if>
@@ -969,6 +971,84 @@ class Component extends DCLogic {
 
   toast(msg){ this.setState({toast:msg}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:null}),3400); }
 
+  /* ───── el generador de una partida, en PDF y en Excel ─────
+   * Mike, 11-oct-2026: «necesito poder exportar el generador del producto del
+   * catálogo en cost101 en formato PDF y excel». El PDF es una hoja para
+   * imprimir que arma esta pantalla con la misma cuenta que el generador
+   * (en el teléfono y en la compu, «Guardar como PDF» al imprimir). El Excel
+   * lo arma la API con lo guardado en la base: GET …/productos/:id/xlsx. */
+  hojaGenerador(p,S){
+    const r=this.calc(p,S), u=p.unidad||'u';
+    const e=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const org=(S.orgs.find(o=>o.id===S.org)||{}).nombre||'';
+    const SEC=[['mat','Materiales'],['art','Artículos comprados'],['mo','Mano de obra'],['eq','Equipo'],['sub','Subpartidas']];
+    const fila=x=>{const c=x.c,o=x.obj; let un,desp='';
+      if(c.tipo==='cuadrilla') un=u+' / jornada';
+      else if(c.tipo==='partida') un=o.unidad+' / '+u;
+      else if(o.tipo==='material'){un=o.unidad+' / '+u;desp=qty(num(c.desp))+' %';}
+      else if(o.tipo==='comprado') un=o.unidad+' / '+u;
+      else un='h / '+u;
+      const nombre=(c.tipo==='cuadrilla'?'Cuadrilla · ':'')+o.nombre;
+      return '<tr><td>'+e(o.sku)+'</td><td>'+e(nombre)+'</td><td>'+e(un)+'</td><td class="n">'+qty(num(c.cant))+'</td><td class="n">'+desp+'</td><td class="n">'+money(x.precio)+'</td><td class="n">'+money(x.imp)+'</td></tr>';};
+    let cuerpo='';
+    for(const [k,t] of SEC){
+      const rs=r.rows.filter(x=>x.cls===k);
+      if(!rs.length&&!(k==='mo'&&r.herr)) continue;
+      cuerpo+='<tr class="sec"><td colspan="6">'+t+'</td><td class="n">'+money(r[k]+(k==='mo'?r.herr:0))+'</td></tr>'+rs.map(fila).join('');
+      if(k==='mo'&&(rs.length||r.herr)) cuerpo+='<tr><td></td><td>Herramienta menor ('+qty(num(p.herr))+' % de la mano de obra)</td><td></td><td></td><td></td><td></td><td class="n">'+money(r.herr)+'</td></tr>';
+    }
+    if(!cuerpo) cuerpo='<tr><td colspan="7" style="color:#666">Sin componentes.</td></tr>';
+    const res=[['Materiales',r.mat],['Artículos comprados',r.art],['Mano de obra',r.mo],['Herramienta menor',r.herr],['Equipo',r.eq],['Subpartidas',r.sub]].filter(x=>x[1])
+      .map(x=>'<tr><td>'+x[0]+'</td><td class="n">'+money(x[1])+'</td></tr>').join('')
+      +'<tr class="t"><td>Costo directo</td><td class="n">'+money(r.cd)+'</td></tr>'
+      +'<tr><td>Indirectos ('+qty(num(p.ind))+' %)</td><td class="n">'+money(r.ind)+'</td></tr>'
+      +'<tr><td>Utilidad ('+qty(num(p.util))+' %)</td><td class="n">'+money(r.util)+'</td></tr>'
+      +'<tr class="pu"><td>Precio unitario por '+e(u)+', IVA incluido</td><td class="n">'+money(r.pu)+'</td></tr>'
+      +'<tr><td>IVA incluido</td><td class="n">'+money(r.iva)+'</td></tr>'
+      +'<tr><td>Precio sin IVA</td><td class="n">'+money(r.pu-r.iva)+'</td></tr>';
+    const titulo='Generador '+(p.sku?p.sku+' · ':'')+(p.nombre||'');
+    return '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+e(titulo)+'</title><style>'
+      +'body{margin:0;background:#fff;color:#111;font:13px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}'
+      +'.hoja{max-width:960px;margin:0 auto;padding:24px 16px}'
+      +'.enc{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:2px solid #111;padding-bottom:12px;margin-bottom:14px}'
+      +'.enc h1{margin:2px 0 4px;font-size:22px}.enc .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#555}'
+      +'.desc{white-space:pre-line;margin:0 0 6px}.meta{color:#555}'
+      +'table{width:100%;border-collapse:collapse;margin-top:6px}th,td{padding:5px 6px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}'
+      +'th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#555;border-bottom:1px solid #111}'
+      +'.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.sec td{font-weight:600;background:#f3f3f3}'
+      +'.res{width:auto;min-width:320px;margin:18px 0 0 auto}.res .t td{font-weight:600;border-top:1px solid #111}.res .pu td{font-weight:700;font-size:15px}'
+      +'.nota{margin-top:14px;font-size:11px;color:#555}'
+      +'@media print{.hoja{padding:0}tr{break-inside:avoid}}@page{margin:14mm}'
+      +'</style></head><body><div class="hoja" data-hoja="generador">'
+      +'<div class="enc"><div><div class="k">Generador de partida'+(org?' · '+e(org):'')+'</div><h1>'+e(p.nombre||'Partida sin nombre')+'</h1>'
+      +(String(p.desc||'').trim()?'<p class="desc">'+e(p.desc)+'</p>':'')
+      +'<div class="meta">'+e(p.sku)+' · '+e(p.cat||'Sin categoría')+' · por '+e(u)+' · '+(p.estado==='aprobado'?'Aprobada':'Borrador')+'</div></div>'
+      +'<div style="text-align:right;flex:none"><div class="k">Precio unitario</div><div style="font-size:22px;font-weight:700">'+money(r.pu)+'</div><div class="meta">por '+e(u)+' · IVA incluido</div><div class="meta">'+fdate(HOY)+'</div></div></div>'
+      +'<table><thead><tr><th>Clave</th><th>Concepto</th><th>Unidad</th><th class="n">Cantidad</th><th class="n">Desp.</th><th class="n">P. unitario</th><th class="n">Importe</th></tr></thead><tbody>'+cuerpo+'</tbody></table>'
+      +'<table class="res"><tbody>'+res+'</tbody></table>'
+      +'<p class="nota">Los precios base traen IVA; por eso el precio unitario lo incluye.</p>'
+      +'</div><script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script></body></html>';
+  }
+  imprimirGenerador(id){
+    const S=this.state, p=S.partidas.find(x=>x.id===id); if(!p) return;
+    const w=window.open('','_blank');
+    if(!w){ this.toast('El navegador no dejó abrir la hoja. Permite las ventanas emergentes de cost101.'); return; }
+    w.document.write(this.hojaGenerador(p,S)); w.document.close();
+  }
+  async excelGenerador(id){
+    const real=this.real(id);
+    if(String(real).startsWith('tmp-')){ this.toast('La partida todavía se está guardando. Intenta en un momento.'); return; }
+    let r;
+    try{ r=await fetch(API+this.ruta('/productos/'+encodeURIComponent(real)+'/xlsx'),{credentials:'same-origin'}); }
+    catch(_){ this.toast(ERR.sin_respuesta); return; }
+    if(r.status===401){ location.replace('/entrar.html'); return; }
+    if(!r.ok){ let d=null; try{ d=await r.json(); }catch(_){} this.toast(d&&d.error==='sin_receta'?'Esa partida no tiene receta que exportar.':mensajeDe({cual:(d&&d.error)||'sin_respuesta'})); return; }
+    const nombre=((r.headers.get('content-disposition')||'').match(/filename="?([^";]+)"?/)||[])[1]||'generador.xlsx';
+    const url=URL.createObjectURL(await r.blob());
+    const a=document.createElement('a'); a.href=url; a.download=nombre; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+  }
+
   nextSku(pre,list){ const ns=list.map(x=>parseInt((x.sku.match(/(\d+)$/)||[])[1]||0,10)); return ns.length?Math.max(...ns)+1:1; }
 
   newPartida(){
@@ -1273,7 +1353,7 @@ class Component extends DCLogic {
       v.sel={sku:sp.sku,nombre:sp.nombre,desc:sp.desc||'',hayDesc:!!(sp.desc||'').trim(),cat:catLbl(sp.cat),unidad:u,estadoLbl:sp.estado==='aprobado'?'Aprobada':'Borrador',tagClass:tagOf(sp.estado),
         puF:money(r.pu),cdF:money(r.cd),ind:sp.ind,util:sp.util,herr:sp.herr,herrF:money(r.herr),
         canApprove:admin&&sp.estado==='borrador',pendNote:!admin&&sp.estado==='borrador',
-        onApprove:()=>this.approve(sp.id),onEdit:()=>this.editPartida(sp.id),onDup:()=>this.dupPartida(sp.id),
+        onApprove:()=>this.approve(sp.id),onEdit:()=>this.editPartida(sp.id),onDup:()=>this.dupPartida(sp.id),onPdf:()=>this.imprimirGenerador(sp.id),onXlsx:()=>this.excelGenerador(sp.id),
         quitar:(admin||sp.estado==='borrador')?React.createElement('div',{style:{display:'flex',alignItems:'center',gap:8,fontSize:12,color:'var(--color-neutral-700)'}},this.botonQuitar('par:'+sp.id,()=>this.borrarPartida(sp.id),'Quitar del catálogo'),'Quitar del catálogo'):null,
         comps:r.rows.map(x=>{const c=x.c,o=x.obj; let cf;
           if(c.tipo==='cuadrilla') cf='Cuadrilla · rinde '+qty(num(c.cant))+' '+u+'/jornada';
