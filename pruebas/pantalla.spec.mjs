@@ -57,6 +57,10 @@ async function preparar() {
  *  contraseña», el código (en staging la API lo devuelve en la respuesta) y
  *  la contraseña nueva si la pide. */
 async function entrarPorPantalla(p, correo) {
+  /* 11-oct-2026 · en staging la empresa demo ya trae cost101 prendido, y sin
+   * empresa guardada la app abre la primera de la que se es miembro (la
+   * demo, con su catálogo): la prueba deja guardada la SUYA antes de entrar. */
+  await p.addInitScript((o) => { try { if (!localStorage.getItem('cost101-org')) localStorage.setItem('cost101-org', o); } catch (_) { /* sin almacenamiento */ } }, ORG);
   await p.goto(BASE + '/', { waitUntil: 'load' });
   await p.waitForURL(/entrar\.html/);
   await p.fill('#correo', correo);
