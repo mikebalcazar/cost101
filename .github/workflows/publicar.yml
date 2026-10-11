@@ -140,8 +140,7 @@ jobs:
         run: |
           set -uo pipefail
           # El certificado del dominio nuevo puede tardar la primera vez.
-          url="$PROD/huella.txt"
-          for i in $(seq 1 24); do curl -sf -o /dev/null "$url" && break; sleep 5; done
+          for i in $(seq 1 30); do curl -sf -o /dev/null "$PROD/huella.txt" && break; sleep 10; done
           node scripts/medir.mjs 2>&1 | tee /tmp/medido-prod.txt
 
       - name: Dejar lo medido en el commit
