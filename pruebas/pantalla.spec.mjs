@@ -159,6 +159,23 @@ try {
   const muro = d.productos.find((x) => x.codigo === 'PAR-302');
   dice(detalle.includes('$761.63') && muro.desglose.pu === 76163, 'PAR-302: la pantalla y la API dan el mismo precio unitario', `pantalla $761.63 · API ${muro.desglose.pu} centavos · a quote101 (sin IVA) ${muro.precio}`);
 
+  /* ── el generador en PDF y en Excel (Mike, 11-oct: «necesito poder exportar
+   * el generador del producto del catálogo en cost101 en formato PDF y
+   * excel») ── */
+  const [hoja] = await Promise.all([p.waitForEvent('popup'), p.locator('[data-exportar="pdf"]').click()]);
+  await hoja.locator('[data-hoja="generador"]').waitFor({ timeout: 10000 });
+  const textoHoja = (await hoja.locator('body').innerText()).replace(/\s+/g, ' ');
+  dice(/Generador de partida/i.test(textoHoja) && textoHoja.includes('PAR-302') && /Mano de obra/.test(textoHoja) && /Costo directo/.test(textoHoja) && textoHoja.includes('$761.63'),
+    'PDF: la hoja del generador abre con sus componentes, el resumen y el mismo precio unitario', textoHoja.slice(0, 120));
+  await hoja.close();
+  const [bajada] = await Promise.all([p.waitForEvent('download'), p.locator('[data-exportar="xlsx"]').click()]);
+  const archivo = await bajada.path();
+  const { readFile } = await import('node:fs/promises');
+  // El libro de la suite va sin comprimir (src/xlsx.ts): la hoja se lee tal cual dentro del archivo.
+  const crudo = await readFile(archivo);
+  dice(/^generador-PAR-302.*\.xlsx$/.test(bajada.suggestedFilename()) && crudo.subarray(0, 2).toString() === 'PK' && crudo.toString('latin1').includes('<v>761.63</v>'),
+    'Excel: baja el generador de PAR-302 con el precio unitario de la API', `${bajada.suggestedFilename()} · ${crudo.length} bytes`);
+
   /* ── actualizar un precio base ── */
   console.log('\n-- Precios base: actualizar, agregar, quitar --');
   await ir(p, 'Precios base');
