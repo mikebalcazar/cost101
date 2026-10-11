@@ -58,14 +58,18 @@ export const laSuiteLeAbre = (yo) =>
     (yo.orgs || []).some((o) => !o.apps?.length || o.apps.includes(LLAVE) || o.apps.includes(APP)));
 
 /* workers.dev redirige al dominio propio y http sube a https; sólo lecturas y
- * nunca la puerta a la suite. Staging no tiene DOMINIO_PROPIO y no redirige. */
+ * nunca la puerta a la suite. Staging no tiene DOMINIO_PROPIO y no redirige.
+ * 11-oct-2026 · lo mismo para DOMINIO_ANTERIOR (lista separada por comas):
+ * la suite se mudó a suite101.app y las ligas de taller101.com acaban aquí. */
 export function aDominioPropio(req, env, u) {
   const d = env.DOMINIO_PROPIO;
   const lectura = req.method === 'GET' || req.method === 'HEAD';
   if (d && u.protocol === 'http:' && u.hostname === d && lectura) {
     return Response.redirect(`https://${d}${u.pathname}${u.search}`, 301);
   }
-  if (!d || u.hostname === d || !u.hostname.endsWith('.workers.dev')) return null;
+  const anteriores = String(env.DOMINIO_ANTERIOR || '').split(',').map((s) => s.trim()).filter(Boolean);
+  const vieja = u.hostname.endsWith('.workers.dev') || anteriores.includes(u.hostname);
+  if (!d || u.hostname === d || !vieja) return null;
   if (!lectura) return null;
   if (u.pathname === PREFIJO || u.pathname.startsWith(PREFIJO + '/')) return null;
   return Response.redirect(`https://${d}${u.pathname}${u.search}`, 301);

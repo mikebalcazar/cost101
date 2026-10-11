@@ -4,7 +4,7 @@ Costos de obra por análisis de precio unitario (APU), de la suite 101.
 Precios base (materiales, mano de obra, equipo), cuadrillas, generador de
 partidas y catálogo con borrador → aprobado e historial de precio.
 
-- Producción: https://cost101.taller101.com (Worker `cost101`)
+- Producción: https://cost.suite101.app (Worker `cost101`); https://cost101.taller101.com redirige ahí
 - Staging: Worker `cost101-staging` (workers.dev)
 
 ## Estado (7-oct-2026) — versión 0.2.0

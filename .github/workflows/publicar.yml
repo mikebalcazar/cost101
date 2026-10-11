@@ -67,6 +67,7 @@ jobs:
           set -euo pipefail
           for f in worker/index.js scripts/*.mjs pruebas/*.mjs public/support.js public/entrar.js; do node --check "$f"; done
           node scripts/logica.mjs
+          node --test pruebas/dominio.spec.mjs
           echo "todo pasa node --check"
 
       - name: Traer el navegador
@@ -130,7 +131,7 @@ jobs:
         run: |
           set -euo pipefail
           npx wrangler deploy | tee /tmp/prod.txt
-          echo "url=https://cost101.taller101.com" >> "$GITHUB_OUTPUT"
+          echo "url=https://cost.suite101.app" >> "$GITHUB_OUTPUT"
 
       - name: Medir producción
         env:
@@ -139,7 +140,8 @@ jobs:
         run: |
           set -uo pipefail
           # El certificado del dominio nuevo puede tardar la primera vez.
-          for i in $(seq 1 30); do curl -sf -o /dev/null "$PROD/huella.txt" && break; sleep 10; done
+          url="$PROD/huella.txt"
+          for i in $(seq 1 24); do curl -sf -o /dev/null "$url" && break; sleep 5; done
           node scripts/medir.mjs 2>&1 | tee /tmp/medido-prod.txt
 
       - name: Dejar lo medido en el commit
