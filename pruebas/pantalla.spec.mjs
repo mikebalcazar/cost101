@@ -311,6 +311,36 @@ try {
   const enCuadrilla = await p.locator('section[data-screen-label="Cuadrillas"] select option', { hasText: 'Colocación de chapa a destajo' }).count();
   dice(enCuadrilla === 0, 'en una cuadrilla sólo entran los oficios por hora');
 
+  /* ── cambiar de tipo y los artículos comprados (Mike, 11-oct: «lo puse en
+   * Mano de Obra y quiero pasarlo a Materiales» y «uno que sea de artículos
+   * comprados») ── */
+  console.log('\n-- Cambiar de tipo · artículos comprados --');
+  await ir(p, 'Precios base');
+  await p.locator('label.seg-opt', { hasText: /Mano de obra/ }).click();
+  await espera(150);
+  await p.getByPlaceholder('Descripción').fill('Cajón prefabricado de prueba');
+  await p.getByPlaceholder('0.00').fill('1200');
+  await p.getByRole('button', { name: 'Agregar', exact: true }).click();
+  await guardado(p);
+  d = await costos();
+  const cajon = d.costos_base.find((x) => x.nombre === 'Cajón prefabricado de prueba');
+  dice(cajon?.tipo === 'mo', 'se capturó por error como mano de obra (API)', cajon ? cajon.clave : 'no está');
+  await p.locator(`[data-tipo-insumo="${cajon.clave}"]`).selectOption('comprado');
+  await guardado(p);
+  d = await costos();
+  const movido = d.costos_base.find((x) => x.id === cajon.id);
+  dice(movido?.tipo === 'comprado' && /^ART-\d{3}$/.test(movido?.clave) && movido?.unidad === 'pza', 'el tipo se cambia desde su renglón: queda como artículo comprado, con clave ART- y por pieza (API)', movido ? `${movido.tipo} · ${movido.clave} · ${movido.unidad}` : 'no está');
+  await p.locator('label.seg-opt', { hasText: /Comprados/ }).click();
+  await espera(150);
+  dice((await p.locator(`[data-nombre="${movido.clave}"]`).count()) === 1, 'y aparece en la pestaña «Comprados»');
+  await p.locator('label.seg-opt', { hasText: /Mano de obra/ }).click();
+  await espera(150);
+  await p.locator('[data-tipo-insumo="MO-002"]').selectOption('material');
+  await p.getByText(/está en una cuadrilla: sácalo de la cuadrilla/).waitFor({ timeout: 5000 });
+  await espera(600);
+  dice((await costos()).costos_base.find((x) => x.clave === 'MO-002')?.tipo === 'mo', 'un oficio que está en una cuadrilla no sale de la mano de obra, y la pantalla dice por qué');
+  dice(await p.locator('[data-tipo-insumo="MO-002"]').inputValue() === 'mo', 'y su renglón sigue diciendo mano de obra');
+
   /* ── configuración (Mike, 8-oct: «¿podríamos abrir un módulo de configuración?») ── */
   console.log('\n-- Configuración --');
   await ir(p, 'Configuración');
