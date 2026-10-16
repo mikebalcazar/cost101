@@ -68,6 +68,7 @@ jobs:
           for f in worker/index.js scripts/*.mjs pruebas/*.mjs public/support.js public/entrar.js; do node --check "$f"; done
           node scripts/logica.mjs
           node --test pruebas/dominio.spec.mjs
+          node pruebas/la-puerta-recuerda.mjs
           echo "todo pasa node --check"
 
       - name: Traer el navegador
